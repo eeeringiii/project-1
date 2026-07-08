@@ -16,6 +16,14 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Googleログイン (Gmail連携)
+
+このアプリはGoogleアカウント(Gmail)でのログインに対応しています。有効にするには:
+
+1. [Google Cloud Console](https://console.cloud.google.com/apis/credentials) でOAuthクライアントIDを作成し、承認済みのリダイレクトURIに `http://localhost:3000/api/auth/callback/google` を追加する
+2. `.env.example` を `.env.local` にコピーし、`AUTH_GOOGLE_ID` / `AUTH_GOOGLE_SECRET` を設定する
+3. `AUTH_SECRET` に `openssl rand -base64 33` の出力を設定する
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

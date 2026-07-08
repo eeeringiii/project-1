@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { useSession, signIn, signOut } from "next-auth/react";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import CalorieChart from "./components/CalorieChart";
 import WeightChart from "./components/WeightChart";
@@ -47,6 +48,7 @@ const today = () => new Date().toISOString().split("T")[0];
 function todayStr() { return today(); }
 
 export default function Home() {
+  const { data: session, status } = useSession();
   const [tab, setTab] = useState<"today" | "history" | "settings">("today");
   const [records, setRecords, recordsLoaded] = useLocalStorage<DayRecord[]>("food-records", []);
   const [favorites, setFavorites] = useLocalStorage<FoodItem[]>("favorites", []);
@@ -212,6 +214,29 @@ export default function Home() {
       <header className="bg-green-600 text-white p-4 shadow">
         <h1 className="text-2xl font-bold text-center">BodyMake Food Tracker</h1>
         <p className="text-center text-sm text-green-100 mt-1">カロリー管理・ボディメイクをサポート</p>
+        <div className="flex justify-center items-center gap-2 mt-3">
+          {status === "authenticated" ? (
+            <>
+              {session.user?.image && (
+                <img src={session.user.image} alt="" className="w-6 h-6 rounded-full" />
+              )}
+              <span className="text-xs text-green-100">{session.user?.email}</span>
+              <button
+                onClick={() => signOut()}
+                className="text-xs bg-green-700 hover:bg-green-800 px-2 py-1 rounded-full"
+              >
+                ログアウト
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => signIn("google")}
+              className="text-xs bg-white text-green-700 hover:bg-green-50 px-3 py-1 rounded-full font-semibold"
+            >
+              Googleでログイン
+            </button>
+          )}
+        </div>
       </header>
 
       <div className="max-w-2xl mx-auto p-4 space-y-4">
