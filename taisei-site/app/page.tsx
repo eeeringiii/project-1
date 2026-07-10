@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import Ticker from "@/components/Ticker";
 import Reveal from "@/components/Reveal";
 import SectionTitle from "@/components/SectionTitle";
+import SnsLinks from "@/components/SnsLinks";
 import { movies, newsItems, releases, siteMeta } from "@/lib/content";
 
 export default function Home() {
@@ -144,6 +145,21 @@ export default function Home() {
               </Link>
             </div>
           </Reveal>
+        </section>
+
+        {/* FOLLOW — ファン獲得の本命導線 */}
+        <section className="border-t border-line bg-paper-soft">
+          <div className="mx-auto max-w-6xl px-6 py-16 text-center md:px-9">
+            <Reveal>
+              <h2 className="mb-2 font-display text-xl tracking-[0.3em] md:text-2xl">
+                FOLLOW
+              </h2>
+              <p className="mb-8 text-[0.7rem] tracking-[0.2em] text-gold">
+                最新情報はSNSでいちはやく
+              </p>
+              <SnsLinks size={26} gap="gap-10" className="justify-center" />
+            </Reveal>
+          </div>
         </section>
 
         {/* CONTACT 2枚看板 */}

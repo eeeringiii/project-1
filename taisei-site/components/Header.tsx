@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import SnsLinks from "@/components/SnsLinks";
 import { siteMeta } from "@/lib/content";
 
 const navItems = [
@@ -28,22 +29,27 @@ export default function Header() {
           {siteMeta.artistNameEn}
         </Link>
 
-        <nav className="hidden md:block" aria-label="メインナビゲーション">
-          <ul className="flex items-center gap-7">
-            {navItems.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className={`nav-link text-[0.7rem] tracking-[0.22em] ${
-                    item.href === "/business" ? "text-gold" : ""
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        <div className="hidden items-center gap-8 md:flex">
+          <nav aria-label="メインナビゲーション">
+            <ul className="flex items-center gap-7">
+              {navItems.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className={`nav-link text-[0.7rem] tracking-[0.22em] ${
+                      item.href === "/business" ? "text-gold" : ""
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <div className="border-l border-line pl-6">
+            <SnsLinks size={15} gap="gap-4" />
+          </div>
+        </div>
 
         <button
           type="button"
@@ -82,6 +88,9 @@ export default function Header() {
               </li>
             ))}
           </ul>
+          <div className="px-8 py-5">
+            <SnsLinks size={19} gap="gap-7" />
+          </div>
         </nav>
       )}
     </header>
