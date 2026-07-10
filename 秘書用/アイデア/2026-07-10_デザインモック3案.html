@@ -1,0 +1,309 @@
+<title>福本大晴 OFFICIAL SITE — デザインモック3案</title>
+<style>
+  :root{
+    --chrome-bg:#f2f1ee; --chrome-ink:#232220; --chrome-sub:#6b6862; --chrome-line:#d8d5cf;
+    --chrome-card:#ffffff; --chrome-accent:#9a6b1f;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --chrome-bg:#191817; --chrome-ink:#eceae5; --chrome-sub:#9a968e; --chrome-line:#3a3833; --chrome-card:#232220; --chrome-accent:#d4a94e; }
+  }
+  :root[data-theme="dark"]{ --chrome-bg:#191817; --chrome-ink:#eceae5; --chrome-sub:#9a968e; --chrome-line:#3a3833; --chrome-card:#232220; --chrome-accent:#d4a94e; }
+  :root[data-theme="light"]{ --chrome-bg:#f2f1ee; --chrome-ink:#232220; --chrome-sub:#6b6862; --chrome-line:#d8d5cf; --chrome-card:#ffffff; --chrome-accent:#9a6b1f; }
+
+  *{box-sizing:border-box; margin:0}
+  body{background:var(--chrome-bg); color:var(--chrome-ink);
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;}
+
+  .chrome{max-width:1080px; margin:0 auto; padding:28px 20px 16px}
+  .chrome h1{font-size:1.05rem; font-weight:700; letter-spacing:.04em}
+  .chrome p.lead{color:var(--chrome-sub); font-size:.85rem; margin-top:6px; line-height:1.7}
+  .tabs{display:flex; gap:8px; margin-top:18px; flex-wrap:wrap}
+  .tabs button{
+    appearance:none; border:1px solid var(--chrome-line); background:var(--chrome-card); color:var(--chrome-ink);
+    padding:10px 18px; border-radius:2px; font-size:.85rem; font-weight:600; letter-spacing:.06em; cursor:pointer;
+  }
+  .tabs button[aria-selected="true"]{background:var(--chrome-ink); color:var(--chrome-bg); border-color:var(--chrome-ink)}
+  .tabs button:focus-visible{outline:2px solid var(--chrome-accent); outline-offset:2px}
+  .note{border:1px solid var(--chrome-line); background:var(--chrome-card); border-radius:2px;
+    padding:14px 16px; margin-top:14px; font-size:.82rem; line-height:1.8; color:var(--chrome-sub)}
+  .note strong{color:var(--chrome-ink)}
+  .stage{max-width:1080px; margin:18px auto 60px; padding:0 20px}
+  .frame{border:1px solid var(--chrome-line); border-radius:4px; overflow:hidden; box-shadow:0 12px 40px rgba(0,0,0,.10)}
+  .mock{display:none}
+  .mock.active{display:block}
+  .ph-note{font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; opacity:.55}
+
+  /* ============ A案 SINCERE — 正統エレガント（ベンチマーク直系） ============ */
+  .ma{background:#fdfdfb; color:#1d1c19;
+    font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif}
+  .ma .nav{display:flex; justify-content:space-between; align-items:center; padding:22px 34px; border-bottom:1px solid #e4e1d8}
+  .ma .nav .logo{font-size:.95rem; letter-spacing:.32em; font-weight:600}
+  .ma .nav ul{display:flex; gap:26px; list-style:none; font-size:.72rem; letter-spacing:.22em}
+  .ma .nav a{color:#1d1c19; text-decoration:none}
+  .ma .hero{position:relative; display:grid; grid-template-columns:1fr 1fr; min-height:430px}
+  .ma .hero .photo{background:linear-gradient(160deg,#cfc9bb 0%,#a39c8b 45%,#6f695c 100%); position:relative}
+  .ma .hero .photo::after{content:"ARTIST PHOTO"; position:absolute; inset:0; display:grid; place-items:center;
+    color:rgba(255,255,255,.65); font-size:.7rem; letter-spacing:.3em}
+  .ma .hero .intro{padding:64px 48px; display:flex; flex-direction:column; justify-content:center; gap:22px}
+  .ma .hero h2{font-size:2.5rem; font-weight:500; letter-spacing:.12em; line-height:1.3; text-wrap:balance}
+  .ma .hero .en{font-size:.78rem; letter-spacing:.4em; color:#9a6b1f}
+  .ma .hero p{font-size:.85rem; line-height:2.2; color:#55524a; max-width:34em}
+  .ma .tate{position:absolute; right:20px; top:50px; writing-mode:vertical-rl; font-size:.72rem; letter-spacing:.5em; color:#9a6b1f}
+  .ma section{padding:58px 48px; border-top:1px solid #e4e1d8}
+  .ma .sec-title{display:flex; align-items:baseline; gap:16px; margin-bottom:30px}
+  .ma .sec-title .en{font-size:1.3rem; letter-spacing:.3em}
+  .ma .sec-title .jp{font-size:.7rem; color:#9a6b1f; letter-spacing:.2em}
+  .ma .news li{display:grid; grid-template-columns:110px 90px 1fr; gap:18px; padding:16px 0; border-bottom:1px solid #ecead f; border-bottom:1px solid #eceade; font-size:.85rem; align-items:baseline}
+  .ma .news{list-style:none}
+  .ma .news time{color:#8b8578; font-size:.78rem; letter-spacing:.08em}
+  .ma .news .cat{font-size:.65rem; letter-spacing:.2em; color:#9a6b1f; border:1px solid #d9c9a4; text-align:center; padding:2px 0}
+  .ma .release{display:grid; grid-template-columns:220px 1fr; gap:36px; align-items:center}
+  .ma .jacket{aspect-ratio:1; background:linear-gradient(135deg,#20242c,#4a5468 60%,#8e94a4); display:grid; place-items:center; color:rgba(255,255,255,.6); font-size:.65rem; letter-spacing:.25em}
+  .ma .release h3{font-size:1.5rem; letter-spacing:.14em; margin-bottom:10px}
+  .ma .release .date{font-size:.75rem; letter-spacing:.2em; color:#9a6b1f; margin-bottom:14px}
+  .ma .release p{font-size:.83rem; line-height:2; color:#55524a}
+  .ma .cta{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:#e4e1d8}
+  .ma .cta a{display:block; padding:40px; background:#fdfdfb; text-decoration:none; color:#1d1c19; text-align:center}
+  .ma .cta a:hover{background:#f6f4ec}
+  .ma .cta .en{display:block; font-size:1.05rem; letter-spacing:.3em; margin-bottom:8px}
+  .ma .cta .jp{display:block; font-size:.72rem; color:#8b8578; letter-spacing:.12em}
+  .ma footer{padding:30px 48px; border-top:1px solid #e4e1d8; display:flex; justify-content:space-between; align-items:center; font-size:.68rem; letter-spacing:.2em; color:#8b8578}
+  .ma footer .sns{display:flex; gap:20px}
+  .ma footer a{color:#55524a; text-decoration:none}
+
+  /* ============ B案 CINEMA — シネマティック・ダーク ============ */
+  .mb{background:#0c0c0f; color:#ece8de;
+    font-family:"Hiragino Mincho ProN","Yu Mincho",serif}
+  .mb .nav{display:flex; justify-content:space-between; align-items:center; padding:22px 34px; position:relative; z-index:2}
+  .mb .nav .logo{font-size:.9rem; letter-spacing:.34em}
+  .mb .nav ul{display:flex; gap:24px; list-style:none; font-size:.68rem; letter-spacing:.24em}
+  .mb .nav a{color:#b9b4a6; text-decoration:none}
+  .mb .hero{position:relative; min-height:520px; display:flex; align-items:flex-end;
+    background:
+      radial-gradient(ellipse 60% 55% at 68% 30%, rgba(143,184,206,.28), transparent 65%),
+      radial-gradient(ellipse 45% 40% at 30% 75%, rgba(143,184,206,.10), transparent 70%),
+      linear-gradient(180deg,#101014 0%,#0c0c0f 100%)}
+  .mb .hero::before{content:"ARTIST PHOTO (全面)"; position:absolute; top:34%; left:0; right:0; text-align:center;
+    color:rgba(236,232,222,.25); font-size:.68rem; letter-spacing:.4em}
+  .mb .hero .block{padding:0 48px 56px; position:relative}
+  .mb .hero h2{font-size:4.4rem; line-height:1.02; letter-spacing:.04em; font-weight:500}
+  .mb .hero h2 .thin{display:block; font-size:1.05rem; letter-spacing:.5em; color:#8fb8ce; margin-bottom:18px}
+  .mb .hero p{margin-top:20px; font-size:.82rem; letter-spacing:.14em; color:#b9b4a6}
+  .mb .ticker{border-top:1px solid #26262c; border-bottom:1px solid #26262c; padding:14px 0; overflow:hidden; white-space:nowrap}
+  .mb .ticker span{display:inline-block; padding-left:100%; animation:mb-marquee 28s linear infinite;
+    font-size:.72rem; letter-spacing:.34em; color:#8fb8ce}
+  @keyframes mb-marquee{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+  @media (prefers-reduced-motion: reduce){ .mb .ticker span{animation:none; padding-left:0} }
+  .mb section{padding:58px 48px}
+  .mb .sec-title{font-size:1.2rem; letter-spacing:.34em; margin-bottom:28px; color:#ece8de}
+  .mb .sec-title small{display:block; font-size:.62rem; letter-spacing:.24em; color:#8fb8ce; margin-top:6px}
+  .mb .news{list-style:none; border-top:1px solid #26262c}
+  .mb .news li{display:grid; grid-template-columns:110px 1fr auto; gap:18px; padding:18px 0; border-bottom:1px solid #26262c; font-size:.84rem; align-items:baseline}
+  .mb .news time{color:#7d7869; font-size:.75rem; letter-spacing:.1em}
+  .mb .news .arrow{color:#8fb8ce}
+  .mb .movies{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
+  .mb .movies .v{aspect-ratio:16/9; background:linear-gradient(140deg,#1a1b22,#2c2f3c); display:grid; place-items:center; font-size:.62rem; letter-spacing:.3em; color:rgba(236,232,222,.4); position:relative}
+  .mb .movies .v::after{content:"▶"; position:absolute; font-size:1.4rem; color:#8fb8ce; opacity:.85}
+  .mb .cta{display:grid; grid-template-columns:1fr 1fr; gap:14px; padding:0 48px 58px}
+  .mb .cta a{border:1px solid #3a3d47; padding:34px; text-align:center; text-decoration:none; color:#ece8de}
+  .mb .cta a:hover{border-color:#8fb8ce; color:#8fb8ce}
+  .mb .cta .en{display:block; letter-spacing:.3em; font-size:1rem; margin-bottom:8px}
+  .mb .cta .jp{display:block; font-size:.68rem; letter-spacing:.14em; color:#7d7869}
+  .mb footer{padding:26px 48px; border-top:1px solid #26262c; display:flex; justify-content:space-between; font-size:.66rem; letter-spacing:.2em; color:#7d7869}
+  .mb footer .sns{display:flex; gap:20px}
+  .mb footer a{color:#b9b4a6; text-decoration:none}
+
+  /* ============ C案 PULSE — モダン・エディトリアル ============ */
+  .mc{background:#ffffff; color:#101013;
+    font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif}
+  .mc .nav{display:flex; justify-content:space-between; align-items:center; padding:20px 34px; border-bottom:3px solid #101013}
+  .mc .nav .logo{font-weight:800; font-size:1rem; letter-spacing:.1em}
+  .mc .nav ul{display:flex; gap:22px; list-style:none; font-size:.72rem; font-weight:700; letter-spacing:.14em}
+  .mc .nav a{color:#101013; text-decoration:none}
+  .mc .hero{display:grid; grid-template-columns:1.2fr 1fr; min-height:440px}
+  .mc .hero .left{padding:56px 44px; display:flex; flex-direction:column; justify-content:center; gap:20px}
+  .mc .hero h2{font-size:4.6rem; font-weight:800; line-height:.98; letter-spacing:-.01em}
+  .mc .hero h2 em{font-style:normal; color:#2743e3}
+  .mc .hero .kana{font-size:.85rem; font-weight:700; letter-spacing:.5em; color:#2743e3}
+  .mc .hero p{font-size:.85rem; line-height:2; color:#4a4a52; max-width:32em}
+  .mc .hero .photo{background:linear-gradient(200deg,#d8dbe4,#9aa0b4 55%,#5d6377); position:relative; clip-path:polygon(12% 0,100% 0,100% 100%,0 100%)}
+  .mc .hero .photo::after{content:"ARTIST PHOTO"; position:absolute; inset:0; display:grid; place-items:center; color:rgba(255,255,255,.7); font-size:.7rem; letter-spacing:.3em}
+  .mc .strip{background:#2743e3; color:#fff; padding:12px 0; overflow:hidden; white-space:nowrap; transform:rotate(-1.2deg); margin:26px -10px}
+  .mc .strip span{display:inline-block; padding-left:100%; animation:mc-marquee 22s linear infinite; font-weight:800; font-size:.8rem; letter-spacing:.28em}
+  @keyframes mc-marquee{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+  @media (prefers-reduced-motion: reduce){ .mc .strip span{animation:none; padding-left:0} }
+  .mc section{padding:54px 44px}
+  .mc .sec-title{font-size:1.5rem; font-weight:800; letter-spacing:.06em; margin-bottom:26px; display:flex; align-items:center; gap:14px}
+  .mc .sec-title::after{content:""; flex:1; height:3px; background:#101013}
+  .mc .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:18px}
+  .mc .card{border:2px solid #101013; padding:0 0 16px}
+  .mc .card .thumb{aspect-ratio:16/10; background:linear-gradient(120deg,#e8e9ee,#c3c7d4); border-bottom:2px solid #101013; display:grid; place-items:center; font-size:.62rem; letter-spacing:.26em; color:#6d7183}
+  .mc .card time{display:block; padding:12px 16px 4px; font-size:.7rem; font-weight:700; color:#2743e3; letter-spacing:.1em}
+  .mc .card p{padding:0 16px; font-size:.82rem; font-weight:600; line-height:1.7}
+  .mc .cta{display:grid; grid-template-columns:1fr 1fr; gap:18px; padding:0 44px 54px}
+  .mc .cta a{border:2px solid #101013; padding:30px; text-decoration:none; color:#101013; font-weight:800; text-align:center; letter-spacing:.16em; box-shadow:6px 6px 0 #2743e3}
+  .mc .cta a:hover{transform:translate(2px,2px); box-shadow:4px 4px 0 #2743e3}
+  .mc .cta small{display:block; margin-top:8px; font-weight:600; font-size:.68rem; color:#4a4a52; letter-spacing:.08em}
+  .mc footer{padding:24px 44px; border-top:3px solid #101013; display:flex; justify-content:space-between; font-size:.7rem; font-weight:700; letter-spacing:.14em}
+  .mc footer .sns{display:flex; gap:18px}
+  .mc footer a{color:#101013; text-decoration:none}
+
+  @media (max-width:760px){
+    .ma .hero,.mc .hero{grid-template-columns:1fr}
+    .ma .hero .photo{min-height:220px}
+    .mc .hero .photo{clip-path:none; min-height:220px}
+    .ma .release{grid-template-columns:1fr}
+    .mb .movies,.mc .cards{grid-template-columns:1fr}
+    .ma .cta,.mb .cta,.mc .cta{grid-template-columns:1fr}
+    .mb .hero h2{font-size:2.6rem}
+    .mc .hero h2{font-size:3rem}
+    .ma .nav ul,.mb .nav ul,.mc .nav ul{display:none}
+  }
+</style>
+
+<div class="chrome">
+  <h1>福本大晴 OFFICIAL SITE — トップページ デザインモック（3案）</h1>
+  <p class="lead">写真・文言はすべて仮です。ボタンで切り替えて、空気感を見比べてください。スマホ幅にも対応しています。</p>
+  <div class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-mock="a">A案 — SINCERE（正統エレガント）</button>
+    <button role="tab" aria-selected="false" data-mock="b">B案 — CINEMA（シネマティック）</button>
+    <button role="tab" aria-selected="false" data-mock="c">C案 — PULSE（モダン・エディトリアル）</button>
+  </div>
+  <div class="note" id="mock-note">
+    <strong>A案 SINCERE</strong>：ベンチマーク（中島健人さん公式）の直系。白基調×明朝体×余白で「上質・誠実」。
+    アーティスト写真が最も引き立つ構成で、お仕事の依頼窓口としての信頼感も最大。迷ったらこれ、の本命案です。
+  </div>
+</div>
+
+<div class="stage"><div class="frame">
+
+  <!-- ============ A案 ============ -->
+  <div class="mock ma active" id="mock-a">
+    <nav class="nav">
+      <span class="logo">TAISEI FUKUMOTO</span>
+      <ul><li><a href="#">NEWS</a></li><li><a href="#">PROFILE</a></li><li><a href="#">DISCOGRAPHY</a></li><li><a href="#">MOVIE</a></li><li><a href="#">LIVE</a></li><li><a href="#">CONTACT</a></li></ul>
+    </nav>
+    <div class="hero">
+      <div class="photo"></div>
+      <div class="intro">
+        <span class="en">TAISEI FUKUMOTO OFFICIAL SITE</span>
+        <h2>まっすぐに、<br>音と言葉を届ける。</h2>
+        <p>福本大晴オフィシャルサイト。最新のニュース、リリース、ライブ情報をお届けします。（キャッチコピーは仮です）</p>
+      </div>
+      <span class="tate">福本大晴 — 二〇二六</span>
+    </div>
+    <section>
+      <div class="sec-title"><span class="en">NEWS</span><span class="jp">最新情報</span></div>
+      <ul class="news">
+        <li><time>2026.07.01</time><span class="cat">LIVE</span><span>「TAISEI FUKUMOTO LIVE 2026」開催決定（サンプル）</span></li>
+        <li><time>2026.06.20</time><span class="cat">RELEASE</span><span>ニューシングル 配信リリース決定（サンプル）</span></li>
+        <li><time>2026.06.05</time><span class="cat">EVENT</span><span>ファンイベント開催のお知らせ（サンプル）</span></li>
+      </ul>
+    </section>
+    <section>
+      <div class="sec-title"><span class="en">RELEASE</span><span class="jp">リリース</span></div>
+      <div class="release">
+        <div class="jacket">JACKET</div>
+        <div>
+          <div class="date">2026.08.05 ON SALE</div>
+          <h3>New Single「タイトル未定」</h3>
+          <p>最新シングルの紹介文が入ります。各配信サービスへのリンクボタンをここに並べ、ワンタップで聴きに行ける導線にします。（サンプル）</p>
+        </div>
+      </div>
+    </section>
+    <div class="cta">
+      <a href="#"><span class="en">FAN CONTACT</span><span class="jp">ファンレター・応援メッセージはこちら</span></a>
+      <a href="#"><span class="en">BUSINESS</span><span class="jp">出演・タイアップ等のお仕事のご依頼</span></a>
+    </div>
+    <footer>
+      <span>© TAISEI FUKUMOTO</span>
+      <div class="sns"><a href="#">X</a><a href="#">INSTAGRAM</a><a href="#">TIKTOK</a><a href="#">YOUTUBE</a></div>
+    </footer>
+  </div>
+
+  <!-- ============ B案 ============ -->
+  <div class="mock mb" id="mock-b">
+    <nav class="nav">
+      <span class="logo">TAISEI FUKUMOTO</span>
+      <ul><li><a href="#">NEWS</a></li><li><a href="#">PROFILE</a></li><li><a href="#">DISCOGRAPHY</a></li><li><a href="#">MOVIE</a></li><li><a href="#">LIVE</a></li><li><a href="#">CONTACT</a></li></ul>
+    </nav>
+    <div class="hero">
+      <div class="block">
+        <h2><span class="thin">TAISEI FUKUMOTO — OFFICIAL</span>福本大晴</h2>
+        <p>ステージの熱をそのまま持ち帰るオフィシャルサイト。（キャッチコピーは仮です）</p>
+      </div>
+    </div>
+    <div class="ticker"><span>NEW SINGLE 2026.08.05 ON SALE — TAISEI FUKUMOTO LIVE 2026 開催決定 — NEW SINGLE 2026.08.05 ON SALE — TAISEI FUKUMOTO LIVE 2026 開催決定 —</span></div>
+    <section>
+      <div class="sec-title">NEWS<small>最新情報</small></div>
+      <ul class="news">
+        <li><time>2026.07.01</time><span>「TAISEI FUKUMOTO LIVE 2026」開催決定（サンプル）</span><span class="arrow">→</span></li>
+        <li><time>2026.06.20</time><span>ニューシングル 配信リリース決定（サンプル）</span><span class="arrow">→</span></li>
+        <li><time>2026.06.05</time><span>ファンイベント開催のお知らせ（サンプル）</span><span class="arrow">→</span></li>
+      </ul>
+    </section>
+    <section>
+      <div class="sec-title">MOVIE<small>ミュージックビデオ</small></div>
+      <div class="movies"><div class="v">MV THUMBNAIL</div><div class="v">MV THUMBNAIL</div><div class="v">MV THUMBNAIL</div></div>
+    </section>
+    <div class="cta">
+      <a href="#"><span class="en">FAN CONTACT</span><span class="jp">ファンレター・応援メッセージ</span></a>
+      <a href="#"><span class="en">BUSINESS</span><span class="jp">お仕事のご依頼はこちら</span></a>
+    </div>
+    <footer>
+      <span>© TAISEI FUKUMOTO</span>
+      <div class="sns"><a href="#">X</a><a href="#">INSTAGRAM</a><a href="#">TIKTOK</a><a href="#">YOUTUBE</a></div>
+    </footer>
+  </div>
+
+  <!-- ============ C案 ============ -->
+  <div class="mock mc" id="mock-c">
+    <nav class="nav">
+      <span class="logo">TAISEI FUKUMOTO</span>
+      <ul><li><a href="#">NEWS</a></li><li><a href="#">PROFILE</a></li><li><a href="#">DISCOGRAPHY</a></li><li><a href="#">MOVIE</a></li><li><a href="#">LIVE</a></li><li><a href="#">CONTACT</a></li></ul>
+    </nav>
+    <div class="hero">
+      <div class="left">
+        <span class="kana">フクモト タイセイ</span>
+        <h2>TAISEI<br><em>FUKUMOTO</em></h2>
+        <p>音楽も、言葉も、ぜんぶ全力。福本大晴オフィシャルサイト。（キャッチコピーは仮です）</p>
+      </div>
+      <div class="photo"></div>
+    </div>
+    <div class="strip"><span>NEW SINGLE 2026.08.05 ON SALE ★ TAISEI FUKUMOTO LIVE 2026 ★ NEW SINGLE 2026.08.05 ON SALE ★ TAISEI FUKUMOTO LIVE 2026 ★</span></div>
+    <section>
+      <div class="sec-title">NEWS</div>
+      <div class="cards">
+        <div class="card"><div class="thumb">PHOTO</div><time>2026.07.01 / LIVE</time><p>「TAISEI FUKUMOTO LIVE 2026」開催決定（サンプル）</p></div>
+        <div class="card"><div class="thumb">PHOTO</div><time>2026.06.20 / RELEASE</time><p>ニューシングル 配信リリース決定（サンプル）</p></div>
+        <div class="card"><div class="thumb">PHOTO</div><time>2026.06.05 / EVENT</time><p>ファンイベント開催のお知らせ（サンプル）</p></div>
+      </div>
+    </section>
+    <div class="cta">
+      <a href="#">FAN CONTACT<small>ファンレター・応援メッセージ</small></a>
+      <a href="#">BUSINESS<small>出演・タイアップ等のご依頼</small></a>
+    </div>
+    <footer>
+      <span>© TAISEI FUKUMOTO</span>
+      <div class="sns"><a href="#">X</a><a href="#">INSTAGRAM</a><a href="#">TIKTOK</a><a href="#">YOUTUBE</a></div>
+    </footer>
+  </div>
+
+</div></div>
+
+<script>
+  const notes = {
+    a: "<strong>A案 SINCERE</strong>：ベンチマーク（中島健人さん公式）の直系。白基調×明朝体×余白で「上質・誠実」。アーティスト写真が最も引き立つ構成で、お仕事の依頼窓口としての信頼感も最大。迷ったらこれ、の本命案です。",
+    b: "<strong>B案 CINEMA</strong>：黒基調×スポットライトの「ライブの熱」路線。かっこよさは3案で随一。写真の質に依存するため、暗めのトーンのアー写が用意できるなら強い案です。",
+    c: "<strong>C案 PULSE</strong>：白×黒×ブルーの雑誌風。若いファン層への訴求力と「動きのある楽しさ」が持ち味。ポップで親しみやすい人柄を前に出すならこの案です。"
+  };
+  document.querySelectorAll('.tabs button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected','false'));
+      btn.setAttribute('aria-selected','true');
+      document.querySelectorAll('.mock').forEach(m => m.classList.remove('active'));
+      document.getElementById('mock-' + btn.dataset.mock).classList.add('active');
+      document.getElementById('mock-note').innerHTML = notes[btn.dataset.mock];
+    });
+  });
+</script>
