@@ -49,6 +49,20 @@
   .ma .hero .en{font-size:.78rem; letter-spacing:.4em; color:#9a6b1f}
   .ma .hero p{font-size:.85rem; line-height:2.2; color:#55524a; max-width:34em}
   .ma .tate{position:absolute; right:20px; top:50px; writing-mode:vertical-rl; font-size:.72rem; letter-spacing:.5em; color:#9a6b1f}
+  .ma .ticker{border-top:1px solid #e4e1d8; border-bottom:1px solid #e4e1d8; padding:13px 0; overflow:hidden; white-space:nowrap; background:#faf9f5}
+  .ma .ticker span{display:inline-block; padding-left:100%; animation:ma-marquee 30s linear infinite; font-size:.72rem; letter-spacing:.34em; color:#9a6b1f}
+  @keyframes ma-marquee{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+  .ma .hero .intro > *{opacity:0; transform:translateY(14px); animation:ma-rise .9s ease forwards}
+  .ma .hero .intro > *:nth-child(2){animation-delay:.15s}
+  .ma .hero .intro > *:nth-child(3){animation-delay:.3s}
+  @keyframes ma-rise{to{opacity:1; transform:none}}
+  .ma .nav a{position:relative}
+  .ma .nav a::after{content:""; position:absolute; left:0; bottom:-4px; width:100%; height:1px; background:#9a6b1f; transform:scaleX(0); transform-origin:left; transition:transform .3s ease}
+  .ma .nav a:hover::after{transform:scaleX(1)}
+  @media (prefers-reduced-motion: reduce){
+    .ma .ticker span{animation:none; padding-left:0}
+    .ma .hero .intro > *{opacity:1; transform:none; animation:none}
+  }
   .ma section{padding:58px 48px; border-top:1px solid #e4e1d8}
   .ma .sec-title{display:flex; align-items:baseline; gap:16px; margin-bottom:30px}
   .ma .sec-title .en{font-size:1.3rem; letter-spacing:.3em}
@@ -165,13 +179,12 @@
   <h1>福本大晴 OFFICIAL SITE — トップページ デザインモック（3案）</h1>
   <p class="lead">写真・文言はすべて仮です。ボタンで切り替えて、空気感を見比べてください。スマホ幅にも対応しています。</p>
   <div class="tabs" role="tablist">
-    <button role="tab" aria-selected="true" data-mock="a">A案 — SINCERE（正統エレガント）</button>
+    <button role="tab" aria-selected="true" data-mock="a">A案 — SINCERE（採用方向：Bの動きを合体済み）</button>
     <button role="tab" aria-selected="false" data-mock="b">B案 — CINEMA（シネマティック）</button>
     <button role="tab" aria-selected="false" data-mock="c">C案 — PULSE（モダン・エディトリアル）</button>
   </div>
   <div class="note" id="mock-note">
-    <strong>A案 SINCERE</strong>：ベンチマーク（中島健人さん公式）の直系。白基調×明朝体×余白で「上質・誠実」。
-    アーティスト写真が最も引き立つ構成で、お仕事の依頼窓口としての信頼感も最大。迷ったらこれ、の本命案です。
+    <strong>A案 SINCERE（採用方向）</strong>：白基調×明朝体の上質路線に、B案の動き——流れる新着ティッカー、ページ表示時のふわっとした立ち上がり、ナビのホバー演出——を合体させた版です。実装ではスクロールに合わせた演出をさらに加えます。
   </div>
 </div>
 
@@ -192,6 +205,7 @@
       </div>
       <span class="tate">福本大晴 — 二〇二六</span>
     </div>
+    <div class="ticker"><span>NEW SINGLE 2026.08.05 ON SALE — TAISEI FUKUMOTO LIVE 2026 開催決定 — NEW SINGLE 2026.08.05 ON SALE — TAISEI FUKUMOTO LIVE 2026 開催決定 —</span></div>
     <section>
       <div class="sec-title"><span class="en">NEWS</span><span class="jp">最新情報</span></div>
       <ul class="news">
@@ -293,7 +307,7 @@
 
 <script>
   const notes = {
-    a: "<strong>A案 SINCERE</strong>：ベンチマーク（中島健人さん公式）の直系。白基調×明朝体×余白で「上質・誠実」。アーティスト写真が最も引き立つ構成で、お仕事の依頼窓口としての信頼感も最大。迷ったらこれ、の本命案です。",
+    a: "<strong>A案 SINCERE（採用方向）</strong>：白基調×明朝体の上質路線に、B案の動き——流れる新着ティッカー、ページ表示時のふわっとした立ち上がり、ナビのホバー演出——を合体させた版です。実装ではスクロールに合わせた演出をさらに加えます。",
     b: "<strong>B案 CINEMA</strong>：黒基調×スポットライトの「ライブの熱」路線。かっこよさは3案で随一。写真の質に依存するため、暗めのトーンのアー写が用意できるなら強い案です。",
     c: "<strong>C案 PULSE</strong>：白×黒×ブルーの雑誌風。若いファン層への訴求力と「動きのある楽しさ」が持ち味。ポップで親しみやすい人柄を前に出すならこの案です。"
   };
