@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PageShell from "@/components/PageShell";
-import { newsItems } from "@/lib/content";
+import { getNews } from "@/lib/news";
 
 export const metadata: Metadata = { title: "NEWS" };
 
@@ -9,7 +9,7 @@ export default function NewsPage() {
   return (
     <PageShell titleEn="NEWS" titleJp="最新情報">
       <ul>
-        {newsItems.map((item) => (
+        {getNews().map((item) => (
           <li key={item.slug} className="border-b border-line-soft">
             <Link
               href={`/news/${item.slug}`}

@@ -59,53 +59,6 @@ export const navItems = [
   { href: "/business", label: "BUSINESS", jp: "お仕事のご依頼" },
 ];
 
-export const newsItems: NewsItem[] = [
-  {
-    slug: "live-2026",
-    date: "2026.07.01",
-    category: "LIVE",
-    title: "「TAISEI FUKUMOTO LIVE 2026」開催決定（サンプル）",
-    body: [
-      "ライブ開催決定のお知らせ本文が入ります。日程・会場・チケット受付スケジュールなどをここに記載します。",
-      "この記事はデザイン確認用のサンプルです。",
-    ],
-  },
-  {
-    slug: "new-single",
-    date: "2026.06.20",
-    category: "RELEASE",
-    title: "ニューシングル 配信リリース決定（サンプル）",
-    body: [
-      "リリース情報の本文が入ります。収録曲・配信リンク・特典情報などをここに記載します。",
-      "この記事はデザイン確認用のサンプルです。",
-    ],
-  },
-  {
-    slug: "fan-event",
-    date: "2026.06.05",
-    category: "EVENT",
-    title: "ファンイベント開催のお知らせ（サンプル）",
-    body: [
-      "イベント概要の本文が入ります。",
-      "この記事はデザイン確認用のサンプルです。",
-    ],
-  },
-  {
-    slug: "media-appearance",
-    date: "2026.05.28",
-    category: "MEDIA",
-    title: "テレビ出演情報（サンプル）",
-    body: ["出演情報の本文が入ります。", "この記事はデザイン確認用のサンプルです。"],
-  },
-  {
-    slug: "site-open",
-    date: "2026.05.01",
-    category: "INFO",
-    title: "オフィシャルサイトをリニューアルしました（サンプル）",
-    body: ["リニューアルのご挨拶が入ります。", "この記事はデザイン確認用のサンプルです。"],
-  },
-];
-
 export const releases: Release[] = [
   {
     slug: "new-single-2026",
