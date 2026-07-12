@@ -13,7 +13,8 @@ export default function StudioPage() {
         <p className="mb-2 text-[0.68rem] tracking-[0.4em] text-gold">TAISEI FUKUMOTO — STUDIO</p>
         <h1 className="font-display text-2xl tracking-[0.2em]">NEWS入稿ページ</h1>
         <p className="mt-4 text-sm leading-loose text-sub">
-          ①〜⑤を上から順に入力して「公開する」を押すだけで、約2分後にオフィシャルサイトのNEWSへ反映されます。
+          ①〜⑥を上から順に入力して「公開する」を押すだけで、オフィシャルサイトのNEWSへ反映されます。
+          予約公開（日時指定）もできます。
           専用アプリやログインは不要です。
         </p>
       </div>

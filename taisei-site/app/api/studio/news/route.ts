@@ -14,6 +14,7 @@ export async function POST(req: Request) {
     category?: string;
     title?: string;
     body?: string;
+    publishAt?: string; // 予約公開日時 "YYYY-MM-DDTHH:mm"（JST）。省略時は即公開
   };
   try {
     payload = await req.json();
@@ -50,6 +51,18 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "本文は1〜8000文字で入力してください" }, { status: 400 });
   }
 
+  let publishAtIso: string | undefined;
+  const publishAtRaw = (payload.publishAt ?? "").trim();
+  if (publishAtRaw) {
+    if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(publishAtRaw)) {
+      return NextResponse.json({ error: "予約日時の形式が不正です" }, { status: 400 });
+    }
+    publishAtIso = `${publishAtRaw}:00+09:00`; // 日本時間として扱う
+    if (Number.isNaN(Date.parse(publishAtIso))) {
+      return NextResponse.json({ error: "予約日時を読み取れませんでした" }, { status: 400 });
+    }
+  }
+
   const token = process.env.GITHUB_CONTENT_TOKEN;
   if (!token) {
     return NextResponse.json(
@@ -66,6 +79,7 @@ export async function POST(req: Request) {
     title,
     // 空行区切りで段落に分割する
     body: bodyText.split(/\n\s*\n/).map((p) => p.replace(/\s+$/g, "").trim()).filter(Boolean),
+    ...(publishAtIso ? { publishAt: publishAtIso } : {}),
   };
 
   const res = await fetch(

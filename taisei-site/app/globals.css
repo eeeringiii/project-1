@@ -105,9 +105,72 @@ body {
   transform: scaleX(1);
 }
 
+/* オープニング演出（初回訪問時のみ） */
+.opening {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: var(--paper);
+  cursor: pointer;
+  animation: opening-out 0.7s ease 2.1s forwards;
+}
+
+.opening-en {
+  opacity: 0;
+  animation: opening-fade 0.9s ease 0.15s forwards;
+}
+
+.opening-char {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateY(0.2em) scale(1.06);
+  animation: opening-ink 0.9s ease forwards;
+}
+
+@keyframes opening-ink {
+  to { opacity: 1; filter: blur(0); transform: none; }
+}
+
+@keyframes opening-fade {
+  to { opacity: 1; }
+}
+
+@keyframes opening-out {
+  to { opacity: 0; visibility: hidden; }
+}
+
+/* ヒーロー写真のゆっくりズーム（Ken Burns） */
+.kenburns {
+  animation: kenburns 22s ease-in-out infinite alternate;
+}
+
+@keyframes kenburns {
+  from { transform: scale(1); }
+  to { transform: scale(1.08); }
+}
+
+/* 名前の一文字ずつ立ち上がるキネティックタイポ */
+.kinetic-char {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(0.35em);
+  animation: kinetic-rise 0.8s ease forwards;
+}
+
+@keyframes kinetic-rise {
+  to { opacity: 1; filter: blur(0); transform: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .ticker-track { animation: none; padding-left: 0; }
   .rise { opacity: 1; transform: none; animation: none; }
   .reveal { opacity: 1; transform: none; transition: none; }
+  .opening { display: none; }
+  .kenburns { animation: none; }
+  .kinetic-char { opacity: 1; filter: none; transform: none; animation: none; }
 }

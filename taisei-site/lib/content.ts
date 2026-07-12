@@ -10,6 +10,7 @@ export type NewsItem = {
   category: NewsCategory;
   title: string;
   body: string[];
+  publishAt?: string; // 予約公開日時（ISO 8601）。未設定なら即公開
 };
 
 export type Release = {

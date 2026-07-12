@@ -22,8 +22,11 @@ export default function StudioForm() {
   const [category, setCategory] = useState("INFO");
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
+  const [timing, setTiming] = useState<"now" | "scheduled">("now");
+  const [publishAt, setPublishAt] = useState("");
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
+  const [doneScheduled, setDoneScheduled] = useState("");
   const [error, setError] = useState("");
 
   async function submit() {
@@ -31,6 +34,11 @@ export default function StudioForm() {
     if (!password) return setError("パスワードを入力してください");
     if (!title.trim()) return setError("タイトルを入力してください");
     if (!body.trim()) return setError("本文を入力してください");
+    if (timing === "scheduled") {
+      if (!publishAt) return setError("予約日時を選択してください");
+      if (new Date(publishAt) <= new Date())
+        return setError("予約日時は未来の日時を選択してください");
+    }
     setSending(true);
     try {
       const res = await fetch("/api/studio/news", {
@@ -42,12 +50,14 @@ export default function StudioForm() {
           category,
           title,
           body,
+          ...(timing === "scheduled" ? { publishAt } : {}),
         }),
       });
       const json = await res.json();
       if (!res.ok) {
         setError(json.error ?? "エラーが発生しました");
       } else {
+        setDoneScheduled(timing === "scheduled" ? publishAt : "");
         setDone(true);
       }
     } catch {
@@ -60,9 +70,18 @@ export default function StudioForm() {
   if (done) {
     return (
       <div className="border border-gold-soft bg-paper-soft p-8 text-center">
-        <p className="mb-3 text-lg tracking-[0.1em] text-gold">公開を受け付けました</p>
+        <p className="mb-3 text-lg tracking-[0.1em] text-gold">
+          {doneScheduled ? "予約を受け付けました" : "公開を受け付けました"}
+        </p>
         <p className="mb-6 text-sm leading-loose text-sub">
-          約2分後にサイトのNEWSへ自動反映されます。
+          {doneScheduled ? (
+            <>
+              {doneScheduled.replace("T", " ")} ごろに自動で公開されます
+              （時刻から最大10分ほど遅れる場合があります）。
+            </>
+          ) : (
+            <>約2分後にサイトのNEWSへ自動反映されます。</>
+          )}
           <br />
           反映後、
           <a href="/news" className="mx-1 text-gold underline underline-offset-4">
@@ -156,8 +175,45 @@ export default function StudioForm() {
       </div>
 
       <div>
+        <span className={label}>⑤ 公開タイミング</span>
+        <div className="flex flex-col gap-2 border border-line p-4">
+          <label className="flex items-center gap-3 text-sm">
+            <input
+              type="radio"
+              name="timing"
+              checked={timing === "now"}
+              onChange={() => setTiming("now")}
+            />
+            すぐ公開する
+          </label>
+          <label className="flex items-center gap-3 text-sm">
+            <input
+              type="radio"
+              name="timing"
+              checked={timing === "scheduled"}
+              onChange={() => setTiming("scheduled")}
+            />
+            日時を指定して予約公開する
+          </label>
+          {timing === "scheduled" && (
+            <div className="mt-2">
+              <input
+                type="datetime-local"
+                className={field}
+                value={publishAt}
+                onChange={(e) => setPublishAt(e.target.value)}
+              />
+              <span className={hint}>
+                日本時間。指定時刻から最大10分ほど遅れて公開される場合があります
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div>
         <label className={label} htmlFor="studio-password">
-          ⑤ 公開パスワード
+          ⑥ 公開パスワード
         </label>
         <input
           id="studio-password"
