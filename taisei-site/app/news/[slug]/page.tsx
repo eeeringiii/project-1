@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PageShell from "@/components/PageShell";
-import { newsItems } from "@/lib/content";
+import { getNews } from "@/lib/news";
 
 export function generateStaticParams() {
-  return newsItems.map((item) => ({ slug: item.slug }));
+  return getNews().map((item) => ({ slug: item.slug }));
 }
 
 export async function generateMetadata({
@@ -14,7 +14,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const item = newsItems.find((n) => n.slug === slug);
+  const item = getNews().find((n) => n.slug === slug);
   return { title: item ? item.title : "NEWS" };
 }
 
@@ -24,7 +24,7 @@ export default async function NewsDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const item = newsItems.find((n) => n.slug === slug);
+  const item = getNews().find((n) => n.slug === slug);
   if (!item) notFound();
 
   return (

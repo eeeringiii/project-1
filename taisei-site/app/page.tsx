@@ -5,10 +5,11 @@ import Ticker from "@/components/Ticker";
 import Reveal from "@/components/Reveal";
 import SectionTitle from "@/components/SectionTitle";
 import SnsLinks from "@/components/SnsLinks";
-import { movies, newsItems, releases, siteMeta } from "@/lib/content";
+import { movies, releases, siteMeta } from "@/lib/content";
+import { getNews } from "@/lib/news";
 
 export default function Home() {
-  const latestNews = newsItems.slice(0, 3);
+  const latestNews = getNews().slice(0, 3);
   const release = releases[0];
 
   return (
