@@ -178,7 +178,7 @@ export default function Home() {
               <p className="mb-8 text-[0.7rem] tracking-[0.2em] text-gold">
                 最新情報はSNSでいちはやく
               </p>
-              <SnsLinks size={26} gap="gap-10" className="justify-center" />
+              <SnsLinks size={26} gap="gap-10" className="justify-center" location="follow-section" />
             </Reveal>
           </div>
         </section>
