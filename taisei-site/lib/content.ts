@@ -44,6 +44,7 @@ export const siteMeta = {
     instagram: "#",
     tiktok: "#",
     youtube: "#",
+    fanclub: "#",
   },
 };
 
