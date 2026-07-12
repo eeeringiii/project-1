@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Serif_JP, Gloock } from "next/font/google";
 import "./globals.css";
+import FloatingSns from "@/components/FloatingSns";
 import { siteMeta } from "@/lib/content";
 
 const notoSerifJp = Noto_Serif_JP({
@@ -36,7 +37,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja" className={`${notoSerifJp.variable} ${gloock.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <FloatingSns />
+      </body>
     </html>
   );
 }
