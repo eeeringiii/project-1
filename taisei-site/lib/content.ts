@@ -48,6 +48,17 @@ export const siteMeta = {
   },
 };
 
+// サイト共通ナビゲーション（ヘッダー・フッターで共用）
+export const navItems = [
+  { href: "/news", label: "NEWS", jp: "ニュース" },
+  { href: "/profile", label: "PROFILE", jp: "プロフィール" },
+  { href: "/discography", label: "DISCOGRAPHY", jp: "ディスコグラフィ" },
+  { href: "/movie", label: "MOVIE", jp: "ムービー" },
+  { href: "/live", label: "LIVE", jp: "ライブ・イベント" },
+  { href: "/contact", label: "CONTACT", jp: "ファンの皆さまへ" },
+  { href: "/business", label: "BUSINESS", jp: "お仕事のご依頼" },
+];
+
 export const newsItems: NewsItem[] = [
   {
     slug: "live-2026",

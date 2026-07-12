@@ -5,7 +5,7 @@
   --paper-soft: #faf9f5;
   --ink: #1d1c19;
   --sub: #55524a;
-  --muted: #8b8578;
+  --muted: #6f6a5e; /* 日付・補足文字。WCAG AA(4.5:1)を満たす濃さを維持すること */
   --line: #e4e1d8;
   --line-soft: #eceade;
   --gold: #9a6b1f;

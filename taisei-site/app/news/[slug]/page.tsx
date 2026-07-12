@@ -41,7 +41,7 @@ export default async function NewsDetailPage({
         </h2>
         <div className="space-y-5">
           {item.body.map((paragraph, i) => (
-            <p key={i} className="text-sm leading-loose text-sub">
+            <p key={i} className="text-[0.95rem] leading-loose text-sub">
               {paragraph}
             </p>
           ))}

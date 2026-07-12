@@ -19,7 +19,7 @@ export default function NewsPage() {
               <span className="border border-gold-soft px-2 py-0.5 text-center text-[0.6rem] tracking-[0.2em] text-gold">
                 {item.category}
               </span>
-              <span className="col-span-2 text-sm leading-relaxed transition-colors group-hover:text-gold md:col-span-1">
+              <span className="col-span-2 text-[0.92rem] leading-relaxed transition-colors group-hover:text-gold md:col-span-1">
                 {item.title}
               </span>
             </Link>
