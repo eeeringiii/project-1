@@ -37,7 +37,7 @@ export default function Header() {
             </ul>
           </nav>
           <div className="border-l border-line pl-6">
-            <SnsLinks size={15} gap="gap-4" />
+            <SnsLinks size={15} gap="gap-4" location="header" />
           </div>
         </div>
 
@@ -86,7 +86,7 @@ export default function Header() {
             ))}
           </ul>
           <div className="px-8 py-5">
-            <SnsLinks size={19} gap="gap-7" />
+            <SnsLinks size={19} gap="gap-7" location="mobile-menu" />
           </div>
         </nav>
       )}

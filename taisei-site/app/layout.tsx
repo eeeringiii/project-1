@@ -4,6 +4,7 @@ import { Noto_Serif_JP, Gloock } from "next/font/google";
 import "./globals.css";
 import FloatingSns from "@/components/FloatingSns";
 import { siteMeta } from "@/lib/content";
+import { BASE_URL } from "@/lib/site";
 
 const notoSerifJp = Noto_Serif_JP({
   variable: "--font-noto-serif-jp",
@@ -18,6 +19,7 @@ const gloock = Gloock({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(BASE_URL),
   title: {
     default: siteMeta.siteName,
     template: `%s | ${siteMeta.siteName}`,
@@ -29,6 +31,19 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ja_JP",
   },
+  twitter: {
+    card: "summary_large_image",
+  },
+};
+
+// 検索エンジンに「福本大晴の公式サイト」であることを正しく伝える構造化データ
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: siteMeta.artistName,
+  alternateName: siteMeta.artistNameEn,
+  url: BASE_URL,
+  sameAs: Object.values(siteMeta.sns).filter((u) => u !== "#"),
 };
 
 export default function RootLayout({
@@ -39,6 +54,10 @@ export default function RootLayout({
   return (
     <html lang="ja" className={`${notoSerifJp.variable} ${gloock.variable}`}>
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         {children}
         <FloatingSns />
         <Analytics />

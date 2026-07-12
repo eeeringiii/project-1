@@ -1,3 +1,6 @@
+"use client";
+
+import { track } from "@vercel/analytics";
 import { siteMeta } from "@/lib/content";
 
 const icons: Record<string, React.ReactNode> = {
@@ -41,10 +44,12 @@ export default function SnsLinks({
   size = 16,
   gap = "gap-5",
   className = "",
+  location = "unknown",
 }: {
   size?: number;
   gap?: string;
   className?: string;
+  location?: string; // どの場所のボタンが押されたかの計測用ラベル
 }) {
   return (
     <ul className={`flex items-center ${gap} ${className}`}>
@@ -54,6 +59,7 @@ export default function SnsLinks({
             href={sns.url}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => track("sns_click", { sns: sns.label, location })}
             aria-label={`${"jp" in sns && sns.jp ? sns.jp : sns.label}（外部サイト）`}
             className="block text-sub transition-colors hover:text-gold focus-visible:text-gold"
           >

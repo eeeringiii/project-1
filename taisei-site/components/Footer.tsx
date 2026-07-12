@@ -23,7 +23,7 @@ export default function Footer() {
           </ul>
         </nav>
         <div className="flex flex-col items-center gap-6 md:flex-row md:justify-between">
-          <SnsLinks size={17} gap="gap-6" />
+          <SnsLinks size={17} gap="gap-6" location="footer" />
           <small className="text-[0.62rem] tracking-[0.2em] text-muted">
             © {siteMeta.artistNameEn}
           </small>

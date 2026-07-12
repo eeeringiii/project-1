@@ -15,7 +15,7 @@ export default function FloatingSns() {
       className="fixed bottom-4 right-4 z-40 border border-line bg-paper/90 px-5 py-3 shadow-[0_4px_20px_rgba(0,0,0,0.10)] backdrop-blur md:hidden"
       style={{ marginBottom: "env(safe-area-inset-bottom)" }}
     >
-      <SnsLinks size={20} gap="gap-5" />
+      <SnsLinks size={20} gap="gap-5" location="floating-bar" />
     </div>
   );
 }
