@@ -3,17 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import SnsLinks from "@/components/SnsLinks";
-import { siteMeta } from "@/lib/content";
-
-const navItems = [
-  { href: "/news", label: "NEWS" },
-  { href: "/profile", label: "PROFILE" },
-  { href: "/discography", label: "DISCOGRAPHY" },
-  { href: "/movie", label: "MOVIE" },
-  { href: "/live", label: "LIVE" },
-  { href: "/contact", label: "CONTACT" },
-  { href: "/business", label: "BUSINESS" },
-];
+import { navItems, siteMeta } from "@/lib/content";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -78,12 +68,19 @@ export default function Header() {
               <li key={item.href} className="border-b border-line-soft">
                 <Link
                   href={item.href}
-                  className={`block px-8 py-4 text-xs tracking-[0.28em] ${
-                    item.href === "/business" ? "text-gold" : ""
-                  }`}
+                  className="flex items-baseline gap-4 px-8 py-4"
                   onClick={() => setOpen(false)}
                 >
-                  {item.label}
+                  <span
+                    className={`text-xs tracking-[0.28em] ${
+                      item.href === "/business" ? "text-gold" : ""
+                    }`}
+                  >
+                    {item.label}
+                  </span>
+                  <span className="text-[0.65rem] tracking-[0.1em] text-muted">
+                    {item.jp}
+                  </span>
                 </Link>
               </li>
             ))}

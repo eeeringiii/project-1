@@ -26,16 +26,17 @@ export default function Home() {
               ARTIST PHOTO
             </span>
           </div>
-          <div className="flex flex-col justify-center gap-6 px-6 py-14 md:px-12">
+          <div className="flex flex-col justify-center gap-5 px-6 py-14 md:px-12">
             <span className="rise text-[0.7rem] tracking-[0.4em] text-gold">
               {siteMeta.artistNameEn} OFFICIAL SITE
             </span>
-            <h1 className="rise rise-delay-1 text-3xl font-medium leading-snug tracking-[0.12em] md:text-4xl lg:text-5xl">
-              まっすぐに、
-              <br />
-              音と言葉を届ける。
+            <h1 className="rise rise-delay-1 text-4xl font-medium tracking-[0.2em] md:text-5xl lg:text-6xl">
+              {siteMeta.artistName}
             </h1>
-            <p className="rise rise-delay-2 max-w-[34em] text-sm leading-loose text-sub">
+            <p className="rise rise-delay-2 text-base leading-relaxed tracking-[0.14em] md:text-lg">
+              まっすぐに、音と言葉を届ける。
+            </p>
+            <p className="rise rise-delay-3 max-w-[34em] text-sm leading-loose text-sub">
               {siteMeta.description}（キャッチコピーは仮です）
             </p>
           </div>
@@ -67,7 +68,7 @@ export default function Home() {
                     <span className="border border-gold-soft px-2 py-0.5 text-center text-[0.6rem] tracking-[0.2em] text-gold">
                       {item.category}
                     </span>
-                    <span className="col-span-2 text-sm leading-relaxed transition-colors group-hover:text-gold md:col-span-1">
+                    <span className="col-span-2 text-[0.92rem] leading-relaxed transition-colors group-hover:text-gold md:col-span-1">
                       {item.title}
                     </span>
                   </Link>
