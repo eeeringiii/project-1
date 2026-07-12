@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import HeroGlow from "@/components/HeroGlow";
+import Opening from "@/components/Opening";
 import Ticker from "@/components/Ticker";
 import Reveal from "@/components/Reveal";
 import SectionTitle from "@/components/SectionTitle";
@@ -8,21 +10,26 @@ import SnsLinks from "@/components/SnsLinks";
 import { movies, releases, siteMeta } from "@/lib/content";
 import { getNews } from "@/lib/news";
 
+export const revalidate = 600;
+
 export default function Home() {
   const latestNews = getNews().slice(0, 3);
   const release = releases[0];
 
   return (
     <>
+      <Opening />
       <Header />
       <main>
         {/* ヒーロー */}
         <section className="relative grid min-h-[70vh] md:grid-cols-2">
           <div
-            className="relative min-h-[240px] bg-gradient-to-br from-[#cfc9bb] via-[#a39c8b] to-[#6f695c]"
+            className="relative min-h-[240px] overflow-hidden"
             role="img"
             aria-label="アーティスト写真（準備中）"
           >
+            <div className="kenburns absolute inset-0 bg-gradient-to-br from-[#cfc9bb] via-[#a39c8b] to-[#6f695c]" />
+            <HeroGlow />
             <span className="absolute inset-0 grid place-items-center text-[0.65rem] tracking-[0.3em] text-white/60">
               ARTIST PHOTO
             </span>
@@ -31,8 +38,20 @@ export default function Home() {
             <span className="rise text-[0.7rem] tracking-[0.4em] text-gold">
               {siteMeta.artistNameEn} OFFICIAL SITE
             </span>
-            <h1 className="rise rise-delay-1 text-4xl font-medium tracking-[0.2em] md:text-5xl lg:text-6xl">
-              {siteMeta.artistName}
+            <h1
+              className="text-4xl font-medium tracking-[0.2em] md:text-5xl lg:text-6xl"
+              aria-label={siteMeta.artistName}
+            >
+              {[...siteMeta.artistName].map((ch, i) => (
+                <span
+                  key={i}
+                  aria-hidden="true"
+                  className="kinetic-char"
+                  style={{ animationDelay: `${0.4 + i * 0.14}s` }}
+                >
+                  {ch}
+                </span>
+              ))}
             </h1>
             <p className="rise rise-delay-2 text-base leading-relaxed tracking-[0.14em] md:text-lg">
               まっすぐに、音と言葉を届ける。

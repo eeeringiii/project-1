@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { Noto_Serif_JP, Gloock } from "next/font/google";
 import "./globals.css";
 import FloatingSns from "@/components/FloatingSns";
@@ -40,6 +41,7 @@ export default function RootLayout({
       <body>
         {children}
         <FloatingSns />
+        <Analytics />
       </body>
     </html>
   );

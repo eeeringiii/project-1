@@ -3,6 +3,8 @@ import Link from "next/link";
 import PageShell from "@/components/PageShell";
 import { getNews } from "@/lib/news";
 
+export const revalidate = 600;
+
 export const metadata: Metadata = { title: "NEWS" };
 
 export default function NewsPage() {

@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import PageShell from "@/components/PageShell";
 import { getNews } from "@/lib/news";
 
+export const revalidate = 600;
+
 export function generateStaticParams() {
   return getNews().map((item) => ({ slug: item.slug }));
 }
