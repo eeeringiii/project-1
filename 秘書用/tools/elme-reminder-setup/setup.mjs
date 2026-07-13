@@ -47,28 +47,78 @@ async function connect() {
   return { browser, page };
 }
 
-// textarea / input / contenteditable のいずれでも本文を流し込む
-async function fillEditor(page, selector, text) {
-  if (!selector) {
-    console.log('\n--- セレクタ未設定のため、以下を手動で貼り付けてください ---');
-    console.log(text);
-    console.log('--- ここまで ---');
-    await ask('貼り付けたら Enter を押してください > ');
-    return;
+// 入力欄を自動検出（メインフレーム＋iframe を走査し、可視で最大の候補を返す）
+async function findEditor(page) {
+  const selectors = [
+    'textarea',
+    'div[contenteditable="true"]',
+    '[contenteditable="true"]',
+    '.ql-editor',
+    'div[role="textbox"]',
+  ];
+  let best = null;
+  for (const frame of page.frames()) {
+    for (const sel of selectors) {
+      let els = [];
+      try { els = await frame.$$(sel); } catch { continue; }
+      for (const el of els) {
+        let box;
+        try { box = await el.boundingBox(); } catch { continue; }
+        if (!box || box.width < 100 || box.height < 30) continue; // 小さすぎる欄は除外
+        const area = box.width * box.height;
+        if (!best || area > best.area) best = { el, area };
+      }
+    }
   }
-  const el = page.locator(selector).first();
-  await el.waitFor({ state: 'visible', timeout: 15000 });
+  return best ? best.el : null;
+}
+
+// textarea / input / contenteditable のいずれでも本文を流し込む
+async function typeInto(page, el, text) {
   const tag = await el.evaluate((n) => n.tagName.toLowerCase());
+  const editable = await el.evaluate((n) => n.isContentEditable);
+  await el.evaluate((n) => n.scrollIntoView({ block: 'center' }));
   if (tag === 'textarea' || tag === 'input') {
     await el.fill(text);
-  } else {
-    // contenteditable 想定: クリア→タイプ
+  } else if (editable) {
     await el.click();
     await page.keyboard.press(process.platform === 'darwin' ? 'Meta+A' : 'Control+A');
     await page.keyboard.press('Delete');
-    await el.type(text, { delay: 5 });
+    await el.type(text, { delay: 3 });
+  } else {
+    await el.fill(text).catch(async () => { await el.type(text, { delay: 3 }); });
   }
   log('本文を入力しました（下書き）。内容を目視で確認してください。');
+}
+
+// セレクタ指定 → 自動検出 → それでも無理なら手動貼付、の順で本文を入れる
+async function fillEditor(page, selector, text) {
+  // 1) セレクタが明示されていればそれを使う
+  if (selector) {
+    const el = page.locator(selector).first();
+    try {
+      await el.waitFor({ state: 'visible', timeout: 8000 });
+      await typeInto(page, el, text);
+      return;
+    } catch { /* 見つからなければ自動検出へ */ }
+  }
+  // 2) 入力欄を自動検出し、赤枠でハイライトして確認
+  const found = await findEditor(page);
+  if (found) {
+    await found.evaluate((n) => { n.style.outline = '3px solid #e11'; });
+    console.log('\n入力候補の欄を【赤枠】でハイライトしました。エルメ画面をご確認ください。');
+    const ans = await ask('この欄でよければ Enter / 違う・手動で貼るなら s + Enter > ');
+    await found.evaluate((n) => { n.style.outline = ''; });
+    if (ans.trim().toLowerCase() !== 's') {
+      await typeInto(page, found, text);
+      return;
+    }
+  }
+  // 3) フォールバック: 手動貼付
+  console.log('\n--- 自動入力できないので、以下を手動で貼り付けてください ---');
+  console.log(text);
+  console.log('--- ここまで ---');
+  await ask('貼り付けたら Enter を押してください > ');
 }
 
 async function goto(page, url) {
