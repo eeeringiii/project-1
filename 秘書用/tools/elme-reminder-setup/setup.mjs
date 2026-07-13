@@ -178,6 +178,70 @@ async function inspect(page) {
   console.log('\n↑ この出力を秘書に貼ってください。各画面用の自動化コードを作ります。');
 }
 
+// ①スコープ: ファネル段階タグ ＋ 制御_予約済 を一括作成
+const FUNNEL_TAGS = [
+  'F1_友だち追加',
+  'F2_予約ページ閲覧',
+  'F3_予約完了',
+  'F4_面談実施',
+  'F5_手続き中',
+  'F6_成約',
+  'F9_離脱_無反応',
+  'F9_キャンセル',
+  'F9_無断欠席',
+  'F9_対象外',
+  '制御_予約済',
+];
+
+// タグ管理画面(/basic/tag)で、複数タグ欄に一括入力して保存する
+async function tags(page) {
+  console.log('\n■ タグ一括作成:', page.url());
+  if (!page.url().includes('/basic/tag')) {
+    console.log('  タグ管理画面(左メニュー「データ管理」→「タグ管理」)を開いてから実行してください。');
+    return;
+  }
+  const inputSel = 'input[name^="tag-"]';
+  const addBtn = page.locator('button:has-text("タグを追加")').first();
+
+  // 入力欄が無ければ「新規作成」でモーダルを開く
+  let inputs = await page.locator(inputSel).all();
+  if (inputs.length === 0) {
+    log('入力欄が無いので「新規作成」を開きます。');
+    await page.locator('button:has-text("新規作成")').first().click().catch(() => {});
+    await page.waitForTimeout(700);
+    inputs = await page.locator(inputSel).all();
+  }
+  if (inputs.length === 0) {
+    console.log('  タグ名の入力欄が見つかりませんでした。「新規作成」を押して入力欄が出た状態で再実行してください。');
+    return;
+  }
+
+  // 1件ずつ入力。欄が足りなければ「タグを追加」で増やす
+  for (let i = 0; i < FUNNEL_TAGS.length; i++) {
+    inputs = await page.locator(inputSel).all();
+    if (i >= inputs.length) {
+      await addBtn.click();
+      await page.waitForTimeout(350);
+      inputs = await page.locator(inputSel).all();
+    }
+    if (i >= inputs.length) {
+      console.log(`  欄を増やせませんでした（${i + 1}件目）。手動で「タグを追加」を押してから再実行してください。`);
+      break;
+    }
+    await inputs[i].fill(FUNNEL_TAGS[i]);
+    log(`入力: ${FUNNEL_TAGS[i]}`);
+  }
+
+  console.log('\n入力が完了しました。エルメ画面で内容（全11件・誤字なし）をご確認ください。');
+  const ans = await ask('保存しますか？ Enter=保存する / s+Enter=保存せず終了 > ');
+  if (ans.trim().toLowerCase() === 's') {
+    console.log('保存せず終了しました。');
+    return;
+  }
+  await page.locator('button.btn-save, button:has-text("保存")').first().click();
+  log('保存しました。タグ一覧に11件反映されているか確認してください。');
+}
+
 async function goto(page, url) {
   if (url) {
     await page.goto(url, { waitUntil: 'domcontentloaded' });
@@ -238,6 +302,8 @@ async function main() {
       console.log('  node setup.mjs all         … 上を順に');
     } else if (step === 'inspect') {
       await inspect(page);
+    } else if (step === 'tags') {
+      await tags(page);
     } else if (step === 'all') {
       for (const fn of Object.values(STEPS)) await fn(page);
     } else if (STEPS[step]) {
