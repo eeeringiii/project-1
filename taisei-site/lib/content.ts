@@ -27,11 +27,17 @@ export type Movie = {
   youtubeId: string | null; // 未設定の間はプレースホルダー表示
 };
 
+export type LiveCategory = "LIVE" | "EVENT";
+
 export type LiveEvent = {
-  date: string;
+  date: string; // YYYY.MM.DD（公演日）
   title: string;
   venue: string;
   note: string;
+  category: LiveCategory;
+  applyStart?: string; // チケット受付開始 YYYY-MM-DD
+  applyEnd?: string; // チケット受付終了 YYYY-MM-DD
+  ticketUrl?: string; // 受付ページのURL
 };
 
 export const siteMeta = {
@@ -83,16 +89,31 @@ export const movies: Movie[] = [
 
 export const liveEvents: LiveEvent[] = [
   {
+    date: "2026.07.20",
+    title: "トークイベント（サンプル）",
+    venue: "会場名が入ります（東京）",
+    note: "入場無料・事前申込不要",
+    category: "EVENT",
+  },
+  {
     date: "2026.09.23",
     title: "TAISEI FUKUMOTO LIVE 2026（サンプル）",
     venue: "会場名が入ります（東京）",
-    note: "チケット情報準備中",
+    note: "",
+    category: "LIVE",
+    applyStart: "2026-07-01",
+    applyEnd: "2026-08-20",
+    ticketUrl: "#",
   },
   {
     date: "2026.10.12",
     title: "TAISEI FUKUMOTO LIVE 2026（サンプル）",
     venue: "会場名が入ります（大阪）",
-    note: "チケット情報準備中",
+    note: "",
+    category: "LIVE",
+    applyStart: "2026-08-25",
+    applyEnd: "2026-09-20",
+    ticketUrl: "#",
   },
 ];
 
