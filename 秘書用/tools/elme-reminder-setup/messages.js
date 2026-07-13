@@ -12,7 +12,7 @@ export const MESSAGES = {
 「話を聞いてみたい」という気持ちだけで十分です。お気軽にお申し込みください。
 
 ▼お申し込みはこちら
-〔予約ボタン／URL〕`,
+https://liff.line.me/2009580889-eaQ1z9ec?calendar_salon_id=24789`,
 
   // カレンダー予約の案内文
   calendarGuide: `面談はLINEの音声通話で行います。お時間になりましたら、こちらから発信いたします。
@@ -96,7 +96,7 @@ export const MESSAGES = {
 
 話してみるだけでも、少し楽になることがあります。ご希望のときに、下記からお申し込みください。
 ▼お申し込み
-〔予約URL〕`,
+https://liff.line.me/2009580889-eaQ1z9ec?calendar_salon_id=24789`,
 
   // B 3日後
   unbookedDay3: `〔お名前〕さん
@@ -110,7 +110,7 @@ export const MESSAGES = {
 「こんなこと相談していいのかな」と思うようなことでも大丈夫です。
 〔お名前〕さんのペースで構いませんので、気持ちが向いたときにお声がけください。
 ▼お申し込み
-〔予約URL〕`,
+https://liff.line.me/2009580889-eaQ1z9ec?calendar_salon_id=24789`,
 
   // C 7日後
   unbookedDay7: `〔お名前〕さん
@@ -121,5 +121,5 @@ export const MESSAGES = {
 急かすつもりはありません。ただ、〔お名前〕さんが一人で抱え込まずに済むよう、いつでもお話を聞ける準備をしています。
 必要になったとき、下記からいつでもお申し込みいただけます。
 ▼お申し込み
-〔予約URL〕`,
+https://liff.line.me/2009580889-eaQ1z9ec?calendar_salon_id=24789`,
 };
