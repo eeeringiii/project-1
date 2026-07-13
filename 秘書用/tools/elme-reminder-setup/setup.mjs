@@ -130,6 +130,54 @@ async function fillEditor(page, selector, text) {
   await ask('貼り付けたら Enter を押してください > ');
 }
 
+// 画面の入力欄・ボタンを一覧で吐き出す（自動化コードを書くための調査）
+async function inspect(page) {
+  console.log('\n■ 画面の入力欄・ボタンを調査します:', page.url());
+  const report = [];
+  let frameIdx = 0;
+  for (const frame of page.frames()) {
+    const items = await frame.evaluate(() => {
+      const out = [];
+      const vis = (el) => {
+        const r = el.getBoundingClientRect();
+        const s = getComputedStyle(el);
+        return r.width > 0 && r.height > 0 && s.visibility !== 'hidden' && s.display !== 'none';
+      };
+      const desc = (el) => {
+        const p = [el.tagName.toLowerCase()];
+        if (el.id) p.push('#' + el.id);
+        if (el.name) p.push('[name="' + el.name + '"]');
+        const ph = el.getAttribute && el.getAttribute('placeholder');
+        if (ph) p.push('[placeholder="' + ph + '"]');
+        if (typeof el.className === 'string' && el.className.trim())
+          p.push('.' + el.className.trim().split(/\s+/).slice(0, 3).join('.'));
+        return p.join(' ');
+      };
+      document.querySelectorAll('input, textarea, [contenteditable="true"], .ql-editor, [role="textbox"]').forEach((el) => {
+        if (!vis(el)) return;
+        const r = el.getBoundingClientRect();
+        out.push({ kind: 'input', desc: desc(el), type: el.type || '', w: Math.round(r.width), h: Math.round(r.height) });
+      });
+      document.querySelectorAll('button, a[role="button"], input[type="submit"], [role="button"]').forEach((el) => {
+        if (!vis(el)) return;
+        const label = (el.innerText || el.value || '').trim().replace(/\s+/g, ' ').slice(0, 30);
+        out.push({ kind: 'button', desc: desc(el), label });
+      });
+      return out;
+    }).catch(() => []);
+    if (items.length) {
+      report.push(`--- frame#${frameIdx} ${frame.url().slice(0, 70)} ---`);
+      for (const it of items) {
+        if (it.kind === 'input') report.push(`  [入力] ${it.desc}  (type=${it.type}, ${it.w}x${it.h})`);
+        else report.push(`  [ボタン] "${it.label}"  ${it.desc}`);
+      }
+    }
+    frameIdx++;
+  }
+  console.log(report.join('\n') || '（入力欄・ボタンが見つかりませんでした。対象画面が開いているか確認してください）');
+  console.log('\n↑ この出力を秘書に貼ってください。各画面用の自動化コードを作ります。');
+}
+
 async function goto(page, url) {
   if (url) {
     await page.goto(url, { waitUntil: 'domcontentloaded' });
@@ -188,6 +236,8 @@ async function main() {
       console.log('  node setup.mjs calendar    … カレンダー予約＋①');
       console.log('  node setup.mjs reminders   … ②③④⑤リマインド');
       console.log('  node setup.mjs all         … 上を順に');
+    } else if (step === 'inspect') {
+      await inspect(page);
     } else if (step === 'all') {
       for (const fn of Object.values(STEPS)) await fn(page);
     } else if (STEPS[step]) {
