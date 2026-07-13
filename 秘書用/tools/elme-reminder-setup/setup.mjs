@@ -42,8 +42,17 @@ async function connect() {
   const browser = await chromium.connectOverCDP(CONFIG.cdpUrl);
   const context = browser.contexts()[0];
   if (!context) throw new Error('コンテキストが見つかりません。Chromeがデバッグ起動しているか確認してください。');
-  const page = context.pages()[0] || (await context.newPage());
-  console.log('[接続] OK。現在のURL:', page.url());
+  const pages = context.pages();
+  // エルメ管理画面(step.lme.jp)のタブを最優先で選ぶ。広告LP等の別タブを掴まないため。
+  let page =
+    pages.find((p) => p.url().includes('step.lme.jp')) ||
+    pages.find((p) => p.url().includes('lme.jp/basic')) ||
+    pages[0] ||
+    (await context.newPage());
+  await page.bringToFront().catch(() => {});
+  console.log('[接続] OK。操作するタブ:', page.url());
+  const others = pages.filter((p) => p !== page).map((p) => p.url());
+  if (others.length) console.log('  （他のタブ: ' + others.join(' / ') + '）');
   return { browser, page };
 }
 
