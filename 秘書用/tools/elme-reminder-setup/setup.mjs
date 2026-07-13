@@ -13,7 +13,7 @@
 
 import { chromium } from 'playwright';
 import readline from 'node:readline';
-import { MESSAGES } from './messages.js';
+import { MESSAGES } from './messages.mjs';
 
 const CONFIG = {
   cdpUrl: process.env.CDP_URL || 'http://localhost:9222',
