@@ -1,8 +1,10 @@
 import Link from "next/link";
 import SnsLinks from "@/components/SnsLinks";
-import { navItems, siteMeta } from "@/lib/content";
+import { navItems, siteMeta, snsListFrom } from "@/lib/content";
+import { getSettings } from "@/lib/data";
 
 export default function Footer() {
+  const snsLinks = snsListFrom(getSettings().sns);
   return (
     <footer className="border-t border-line">
       <div className="mx-auto max-w-6xl px-6 py-10 md:px-9">
@@ -23,7 +25,7 @@ export default function Footer() {
           </ul>
         </nav>
         <div className="flex flex-col items-center gap-6 md:flex-row md:justify-between">
-          <SnsLinks size={17} gap="gap-6" location="footer" />
+          <SnsLinks links={snsLinks} size={17} gap="gap-6" location="footer" />
           <small className="text-[0.62rem] tracking-[0.2em] text-muted">
             © {siteMeta.artistNameEn}
           </small>

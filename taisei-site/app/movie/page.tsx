@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import PageShell from "@/components/PageShell";
 import Reveal from "@/components/Reveal";
-import { movies } from "@/lib/content";
+import { getMovies } from "@/lib/data";
 
 export const metadata: Metadata = { title: "MOVIE" };
 
@@ -9,8 +9,8 @@ export default function MoviePage() {
   return (
     <PageShell titleEn="MOVIE" titleJp="ミュージックビデオ">
       <div className="grid gap-8 md:grid-cols-2">
-        {movies.map((movie, i) => (
-          <Reveal key={i}>
+        {getMovies().map((movie) => (
+          <Reveal key={movie.id}>
             {movie.youtubeId ? (
               <iframe
                 className="aspect-video w-full"

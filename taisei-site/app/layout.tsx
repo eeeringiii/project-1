@@ -3,7 +3,8 @@ import { Analytics } from "@vercel/analytics/next";
 import { Noto_Serif_JP, Gloock } from "next/font/google";
 import "./globals.css";
 import FloatingSns from "@/components/FloatingSns";
-import { siteMeta } from "@/lib/content";
+import { siteMeta, snsListFrom } from "@/lib/content";
+import { getSettings } from "@/lib/data";
 import { BASE_URL } from "@/lib/site";
 
 const notoSerifJp = Noto_Serif_JP({
@@ -36,21 +37,23 @@ export const metadata: Metadata = {
   },
 };
 
-// 検索エンジンに「福本大晴の公式サイト」であることを正しく伝える構造化データ
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: siteMeta.artistName,
-  alternateName: siteMeta.artistNameEn,
-  url: BASE_URL,
-  sameAs: Object.values(siteMeta.sns).filter((u) => u !== "#"),
-};
+
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settings = getSettings();
+  // 検索エンジンに「福本大晴の公式サイト」であることを正しく伝える構造化データ
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: siteMeta.artistName,
+    alternateName: siteMeta.artistNameEn,
+    url: BASE_URL,
+    sameAs: Object.values(settings.sns).filter((u) => u !== "#"),
+  };
   return (
     <html lang="ja" className={`${notoSerifJp.variable} ${gloock.variable}`}>
       <body>
@@ -59,7 +62,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         {children}
-        <FloatingSns />
+        <FloatingSns snsLinks={snsListFrom(settings.sns)} />
         <Analytics />
       </body>
     </html>

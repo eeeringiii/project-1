@@ -1,7 +1,7 @@
 "use client";
 
 import { track } from "@vercel/analytics";
-import { siteMeta } from "@/lib/content";
+import type { SnsLink } from "@/lib/content";
 
 const icons: Record<string, React.ReactNode> = {
   X: (
@@ -31,21 +31,15 @@ const icons: Record<string, React.ReactNode> = {
   ),
 };
 
-export const snsList = [
-  { label: "X", url: siteMeta.sns.x },
-  { label: "Instagram", url: siteMeta.sns.instagram },
-  { label: "TikTok", url: siteMeta.sns.tiktok },
-  { label: "YouTube", url: siteMeta.sns.youtube },
-  { label: "FanClub", url: siteMeta.sns.fanclub, jp: "ファンクラブ" },
-];
-
-// SNSアイコンの並び。size は Tailwind の h-/w- に渡すピクセル値
+// SNSアイコンの並び。リンク先は設定ファイル由来のpropsで受け取る
 export default function SnsLinks({
+  links,
   size = 16,
   gap = "gap-5",
   className = "",
   location = "unknown",
 }: {
+  links: SnsLink[];
   size?: number;
   gap?: string;
   className?: string;
@@ -53,14 +47,14 @@ export default function SnsLinks({
 }) {
   return (
     <ul className={`flex items-center ${gap} ${className}`}>
-      {snsList.map((sns) => (
+      {links.map((sns) => (
         <li key={sns.label}>
           <a
             href={sns.url}
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => track("sns_click", { sns: sns.label, location })}
-            aria-label={`${"jp" in sns && sns.jp ? sns.jp : sns.label}（外部サイト）`}
+            aria-label={`${sns.jp ?? sns.label}（外部サイト）`}
             className="block text-sub transition-colors hover:text-gold focus-visible:text-gold"
           >
             <svg

@@ -1,11 +1,14 @@
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { snsListFrom } from "@/lib/content";
+import { getSettings } from "@/lib/data";
 
 export default function NotFound() {
+  const snsLinks = snsListFrom(getSettings().sns);
   return (
     <>
-      <Header />
+      <Header snsLinks={snsLinks} />
       <main className="mx-auto grid min-h-[60vh] max-w-2xl place-items-center px-6 py-20 text-center">
         <div>
           <p className="mb-3 font-display text-3xl tracking-[0.3em] text-gold">404</p>
