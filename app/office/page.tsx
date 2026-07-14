@@ -30,6 +30,9 @@ const accentRing: Record<string, string> = {
   sky: "ring-sky-500/40",
   orange: "ring-orange-500/40",
   violet: "ring-violet-500/40",
+  rose: "ring-rose-500/40",
+  pink: "ring-pink-500/40",
+  teal: "ring-teal-500/40",
 };
 const accentText: Record<string, string> = {
   emerald: "text-emerald-300",
@@ -37,6 +40,9 @@ const accentText: Record<string, string> = {
   sky: "text-sky-300",
   orange: "text-orange-300",
   violet: "text-violet-300",
+  rose: "text-rose-300",
+  pink: "text-pink-300",
+  teal: "text-teal-300",
 };
 
 function StatusBadge({ status }: { status: StaffStatus }) {
