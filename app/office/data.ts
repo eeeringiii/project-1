@@ -45,7 +45,7 @@ export const COMPANY = {
   ownerRole: "代表（あなた）",
   chief: "マカミ",
   chiefRole: "AIオフィス長（Claude Code）",
-  artist: "福本大成",
+  artist: "アーティスト名",
   updated: "2026-07-14",
 };
 
