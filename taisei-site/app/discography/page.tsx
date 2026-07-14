@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import PageShell from "@/components/PageShell";
 import Reveal from "@/components/Reveal";
-import { releases } from "@/lib/content";
+import { getReleases } from "@/lib/data";
 
 export const metadata: Metadata = { title: "DISCOGRAPHY" };
 
@@ -9,16 +9,25 @@ export default function DiscographyPage() {
   return (
     <PageShell titleEn="DISCOGRAPHY" titleJp="ディスコグラフィ">
       <div className="space-y-12">
-        {releases.map((release) => (
-          <Reveal key={release.slug}>
+        {getReleases().map((release) => (
+          <Reveal key={release.id}>
             <div className="grid items-center gap-9 border-b border-line-soft pb-12 md:grid-cols-[220px_1fr]">
-              <div
-                className="grid aspect-square place-items-center bg-gradient-to-br from-[#20242c] via-[#4a5468] to-[#8e94a4] text-[0.6rem] tracking-[0.26em] text-white/60"
-                role="img"
-                aria-label="ジャケット写真（準備中）"
-              >
-                JACKET
-              </div>
+              {release.jacket ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={release.jacket}
+                  alt={`${release.title} ジャケット`}
+                  className="aspect-square w-full object-cover"
+                />
+              ) : (
+                <div
+                  className="grid aspect-square place-items-center bg-gradient-to-br from-[#20242c] via-[#4a5468] to-[#8e94a4] text-[0.6rem] tracking-[0.26em] text-white/60"
+                  role="img"
+                  aria-label="ジャケット写真（準備中）"
+                >
+                  JACKET
+                </div>
+              )}
               <div>
                 <p className="mb-2 text-[0.62rem] tracking-[0.26em] text-muted">
                   {release.type}

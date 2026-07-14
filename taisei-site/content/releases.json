@@ -1,0 +1,20 @@
+[
+  {
+    "id": "sample-1",
+    "title": "New Single「タイトル未定」",
+    "type": "SINGLE",
+    "date": "2026.08.05",
+    "description": "最新シングルの紹介文が入ります。各配信サービスへのリンクボタンをここに並べ、ワンタップで聴きに行ける導線にします。（サンプル）",
+    "links": [
+      {
+        "label": "STREAMING / DOWNLOAD",
+        "url": "#"
+      },
+      {
+        "label": "MUSIC VIDEO",
+        "url": "#"
+      }
+    ],
+    "jacket": ""
+  }
+]

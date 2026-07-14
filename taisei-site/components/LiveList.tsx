@@ -98,9 +98,9 @@ export default function LiveList({ events }: { events: LiveEvent[] }) {
             ただいまチケット受付中
           </h2>
           <ul className="space-y-3">
-            {openEvents.map((event, i) => (
+            {openEvents.map((event) => (
               <li
-                key={i}
+                key={event.id}
                 className="flex flex-wrap items-center justify-between gap-3 border-b border-line-soft pb-3 last:border-0 last:pb-0"
               >
                 <span className="text-sm">
@@ -149,8 +149,8 @@ export default function LiveList({ events }: { events: LiveEvent[] }) {
       {/* 一覧 */}
       {filtered.length > 0 ? (
         <div className="space-y-6">
-          {filtered.map((event, i) => (
-            <EventCard key={i} event={event} nowMs={nowMs} />
+          {filtered.map((event) => (
+            <EventCard key={event.id} event={event} nowMs={nowMs} />
           ))}
         </div>
       ) : (

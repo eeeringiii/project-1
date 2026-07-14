@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { useState } from "react";
 import SnsLinks from "@/components/SnsLinks";
-import { navItems, siteMeta } from "@/lib/content";
+import { navItems, siteMeta, type SnsLink } from "@/lib/content";
 
-export default function Header() {
+export default function Header({ snsLinks }: { snsLinks: SnsLink[] }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -37,7 +37,7 @@ export default function Header() {
             </ul>
           </nav>
           <div className="border-l border-line pl-6">
-            <SnsLinks size={15} gap="gap-4" location="header" />
+            <SnsLinks links={snsLinks} size={15} gap="gap-4" location="header" />
           </div>
         </div>
 
@@ -86,7 +86,7 @@ export default function Header() {
             ))}
           </ul>
           <div className="px-8 py-5">
-            <SnsLinks size={19} gap="gap-7" location="mobile-menu" />
+            <SnsLinks links={snsLinks} size={19} gap="gap-7" location="mobile-menu" />
           </div>
         </nav>
       )}

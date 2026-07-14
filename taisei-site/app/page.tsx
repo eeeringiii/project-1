@@ -7,32 +7,45 @@ import Ticker from "@/components/Ticker";
 import Reveal from "@/components/Reveal";
 import SectionTitle from "@/components/SectionTitle";
 import SnsLinks from "@/components/SnsLinks";
-import { movies, releases, siteMeta } from "@/lib/content";
+import { siteMeta, snsListFrom } from "@/lib/content";
+import { getMovies, getReleases, getSettings } from "@/lib/data";
 import { getNews } from "@/lib/news";
 
 export const revalidate = 600;
 
 export default function Home() {
+  const settings = getSettings();
+  const snsLinks = snsListFrom(settings.sns);
   const latestNews = getNews().slice(0, 3);
-  const release = releases[0];
+  const release = getReleases()[0];
+  const movies = getMovies().slice(0, 3);
 
   return (
     <>
       <Opening />
-      <Header />
+      <Header snsLinks={snsLinks} />
       <main>
         {/* ヒーロー */}
         <section className="relative grid min-h-[70vh] md:grid-cols-2">
           <div
             className="relative min-h-[240px] overflow-hidden"
             role="img"
-            aria-label="アーティスト写真（準備中）"
+            aria-label={settings.images.hero ? "アーティスト写真" : "アーティスト写真（準備中）"}
           >
-            <div className="kenburns absolute inset-0 bg-gradient-to-br from-[#cfc9bb] via-[#a39c8b] to-[#6f695c]" />
+            {settings.images.hero ? (
+              <div
+                className="kenburns absolute inset-0 bg-cover bg-center"
+                style={{ backgroundImage: `url(${settings.images.hero})` }}
+              />
+            ) : (
+              <>
+                <div className="kenburns absolute inset-0 bg-gradient-to-br from-[#cfc9bb] via-[#a39c8b] to-[#6f695c]" />
+                <span className="absolute inset-0 grid place-items-center text-[0.65rem] tracking-[0.3em] text-white/60">
+                  ARTIST PHOTO
+                </span>
+              </>
+            )}
             <HeroGlow />
-            <span className="absolute inset-0 grid place-items-center text-[0.65rem] tracking-[0.3em] text-white/60">
-              ARTIST PHOTO
-            </span>
           </div>
           <div className="flex flex-col justify-center gap-5 px-6 py-14 md:px-12">
             <span className="rise text-[0.7rem] tracking-[0.4em] text-gold">
@@ -54,10 +67,10 @@ export default function Home() {
               ))}
             </h1>
             <p className="rise rise-delay-2 text-base leading-relaxed tracking-[0.14em] md:text-lg">
-              まっすぐに、音と言葉を届ける。
+              {settings.catchCopy}
             </p>
             <p className="rise rise-delay-3 max-w-[34em] text-sm leading-loose text-sub">
-              {siteMeta.description}（キャッチコピーは仮です）
+              {settings.description}
             </p>
           </div>
           <span
@@ -69,7 +82,7 @@ export default function Home() {
           </span>
         </section>
 
-        <Ticker />
+        <Ticker text={settings.tickerText} />
 
         {/* NEWS */}
         <section className="mx-auto max-w-6xl px-6 py-16 md:px-9">
@@ -104,58 +117,88 @@ export default function Home() {
         </section>
 
         {/* RELEASE */}
-        <section className="border-t border-line bg-paper-soft">
-          <div className="mx-auto max-w-6xl px-6 py-16 md:px-9">
-            <Reveal>
-              <SectionTitle en="RELEASE" jp="リリース" />
-              <div className="grid items-center gap-9 md:grid-cols-[220px_1fr]">
-                <div
-                  className="grid aspect-square place-items-center bg-gradient-to-br from-[#20242c] via-[#4a5468] to-[#8e94a4] text-[0.6rem] tracking-[0.26em] text-white/60"
-                  role="img"
-                  aria-label="ジャケット写真（準備中）"
-                >
-                  JACKET
-                </div>
-                <div>
-                  <p className="mb-3 text-[0.7rem] tracking-[0.2em] text-gold">
-                    {release.date} ON SALE
-                  </p>
-                  <h3 className="mb-4 text-2xl tracking-[0.14em]">{release.title}</h3>
-                  <p className="mb-6 max-w-[40em] text-sm leading-loose text-sub">
-                    {release.description}
-                  </p>
-                  <div className="flex flex-wrap gap-3">
-                    {release.links.map((link) => (
-                      <a
-                        key={link.label}
-                        href={link.url}
-                        className="border border-ink px-6 py-3 text-[0.68rem] tracking-[0.2em] transition-colors hover:border-gold hover:text-gold"
-                      >
-                        {link.label}
-                      </a>
-                    ))}
+        {release && (
+          <section className="border-t border-line bg-paper-soft">
+            <div className="mx-auto max-w-6xl px-6 py-16 md:px-9">
+              <Reveal>
+                <SectionTitle en="RELEASE" jp="リリース" />
+                <div className="grid items-center gap-9 md:grid-cols-[220px_1fr]">
+                  {release.jacket ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={release.jacket}
+                      alt={`${release.title} ジャケット`}
+                      className="aspect-square w-full object-cover"
+                    />
+                  ) : (
+                    <div
+                      className="grid aspect-square place-items-center bg-gradient-to-br from-[#20242c] via-[#4a5468] to-[#8e94a4] text-[0.6rem] tracking-[0.26em] text-white/60"
+                      role="img"
+                      aria-label="ジャケット写真（準備中）"
+                    >
+                      JACKET
+                    </div>
+                  )}
+                  <div>
+                    <p className="mb-3 text-[0.7rem] tracking-[0.2em] text-gold">
+                      {release.date} ON SALE
+                    </p>
+                    <h3 className="mb-4 text-2xl tracking-[0.14em]">{release.title}</h3>
+                    <p className="mb-6 max-w-[40em] text-sm leading-loose text-sub">
+                      {release.description}
+                    </p>
+                    <div className="flex flex-wrap gap-3">
+                      {release.links.map((link) => (
+                        <a
+                          key={link.label}
+                          href={link.url}
+                          className="border border-ink px-6 py-3 text-[0.68rem] tracking-[0.2em] transition-colors hover:border-gold hover:text-gold"
+                        >
+                          {link.label}
+                        </a>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Reveal>
-          </div>
-        </section>
+              </Reveal>
+            </div>
+          </section>
+        )}
 
         {/* MOVIE */}
         <section className="mx-auto max-w-6xl px-6 py-16 md:px-9">
           <Reveal>
             <SectionTitle en="MOVIE" jp="ミュージックビデオ" />
             <div className="grid gap-4 md:grid-cols-3">
-              {movies.map((movie, i) => (
-                <div key={i}>
-                  <div className="relative grid aspect-video place-items-center bg-gradient-to-br from-[#1a1b22] to-[#2c2f3c]">
-                    <span className="text-[0.6rem] tracking-[0.3em] text-white/40">
-                      MV THUMBNAIL
-                    </span>
-                    <span className="absolute text-2xl text-gold-soft" aria-hidden="true">
-                      ▶
-                    </span>
-                  </div>
+              {movies.map((movie) => (
+                <div key={movie.id}>
+                  {movie.youtubeId ? (
+                    <a
+                      href={`https://www.youtube.com/watch?v=${movie.youtubeId}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="relative block"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={`https://i.ytimg.com/vi/${movie.youtubeId}/hqdefault.jpg`}
+                        alt={movie.title}
+                        className="aspect-video w-full object-cover"
+                      />
+                      <span className="absolute inset-0 grid place-items-center text-3xl text-white/90">
+                        ▶
+                      </span>
+                    </a>
+                  ) : (
+                    <div className="relative grid aspect-video place-items-center bg-gradient-to-br from-[#1a1b22] to-[#2c2f3c]">
+                      <span className="text-[0.6rem] tracking-[0.3em] text-white/40">
+                        MV THUMBNAIL
+                      </span>
+                      <span className="absolute text-2xl text-gold-soft" aria-hidden="true">
+                        ▶
+                      </span>
+                    </div>
+                  )}
                   <p className="mt-3 text-xs leading-relaxed text-sub">{movie.title}</p>
                 </div>
               ))}
@@ -178,7 +221,7 @@ export default function Home() {
               <p className="mb-8 text-[0.7rem] tracking-[0.2em] text-gold">
                 最新情報はSNSでいちはやく
               </p>
-              <SnsLinks size={26} gap="gap-10" className="justify-center" location="follow-section" />
+              <SnsLinks links={snsLinks} size={26} gap="gap-10" className="justify-center" location="follow-section" />
             </Reveal>
           </div>
         </section>
