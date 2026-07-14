@@ -10,6 +10,7 @@ export type NewsItem = {
   category: NewsCategory;
   title: string;
   body: string[];
+  images?: string[]; // 記事内に表示する写真（/uploads/xxx.jpg）
   publishAt?: string; // 予約公開日時（ISO 8601）。未設定なら即公開
 };
 

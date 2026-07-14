@@ -48,6 +48,19 @@ export default async function NewsDetailPage({
             </p>
           ))}
         </div>
+        {item.images && item.images.length > 0 && (
+          <div className="mt-10 space-y-5">
+            {item.images.map((src, i) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={i}
+                src={src}
+                alt={`${item.title} 写真${i + 1}`}
+                className="w-full border border-line-soft"
+              />
+            ))}
+          </div>
+        )}
         <div className="mt-12 border-t border-line pt-6">
           <Link href="/news" className="nav-link text-[0.7rem] tracking-[0.24em] text-sub">
             ← NEWS一覧へ戻る

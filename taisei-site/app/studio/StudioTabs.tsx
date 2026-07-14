@@ -81,6 +81,7 @@ function NewsTab({ password }: { password: string }) {
   const [category, setCategory] = useState("INFO");
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
+  const [photoFiles, setPhotoFiles] = useState<File[]>([]);
   const [timing, setTiming] = useState<"now" | "scheduled">("now");
   const [publishAt, setPublishAt] = useState("");
   const [sending, setSending] = useState(false);
@@ -92,17 +93,35 @@ function NewsTab({ password }: { password: string }) {
     setDone(false);
     if (!title.trim()) return setError("タイトルを入力してください");
     if (!body.trim()) return setError("本文を入力してください");
+    if (photoFiles.length > 3) return setError("写真は3枚までです");
     if (timing === "scheduled") {
       if (!publishAt) return setError("予約日時を選択してください");
       if (new Date(publishAt) <= new Date()) return setError("予約日時は未来の日時にしてください");
     }
     setSending(true);
+    // 写真を先にアップロードして、記事にパスを紐づける
+    const images: string[] = [];
+    for (const file of photoFiles) {
+      try {
+        const dataUrl = await resizeImage(file, 1600);
+        const up = await post("/api/studio/image", { password, role: "news", dataUrl });
+        if (!up.ok) {
+          setSending(false);
+          return setError(up.error ?? "写真のアップロードに失敗しました");
+        }
+        images.push(up.path ?? "");
+      } catch {
+        setSending(false);
+        return setError("写真の読み込みに失敗しました。別の写真でお試しください");
+      }
+    }
     const res = await post("/api/studio/news", {
       password,
       date: toDot(date),
       category,
       title,
       body,
+      ...(images.length > 0 ? { images } : {}),
       ...(timing === "scheduled" ? { publishAt } : {}),
     });
     setSending(false);
@@ -110,6 +129,7 @@ function NewsTab({ password }: { password: string }) {
     setDone(true);
     setTitle("");
     setBody("");
+    setPhotoFiles([]);
   }
 
   return (
@@ -136,6 +156,22 @@ function NewsTab({ password }: { password: string }) {
       <div>
         <label className={labelCls}>本文</label>
         <textarea className={`${field} min-h-48`} maxLength={8000} value={body} onChange={(e) => setBody(e.target.value)} placeholder={"1行空けると段落が変わります。"} />
+      </div>
+      <div>
+        <label className={labelCls}>写真（あれば・3枚まで）</label>
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          className={field}
+          onChange={(e) => setPhotoFiles(Array.from(e.target.files ?? []).slice(0, 3))}
+        />
+        {photoFiles.length > 0 && (
+          <span className={hintCls}>{photoFiles.length}枚選択中（記事の本文の下に表示されます）</span>
+        )}
+        {photoFiles.length === 0 && (
+          <span className={hintCls}>自動で軽量化されるので、スマホの写真そのままで大丈夫です</span>
+        )}
       </div>
       <div>
         <span className={labelCls}>公開タイミング</span>
