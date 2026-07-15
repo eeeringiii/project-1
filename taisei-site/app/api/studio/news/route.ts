@@ -14,6 +14,7 @@ export async function POST(req: Request) {
     category?: string;
     title?: string;
     body?: string;
+    images?: string[]; // 記事内写真のパス（/uploads/...）最大3枚
     publishAt?: string; // 予約公開日時 "YYYY-MM-DDTHH:mm"（JST）。省略時は即公開
   };
   try {
@@ -51,6 +52,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "本文は1〜8000文字で入力してください" }, { status: 400 });
   }
 
+  const images = payload.images ?? [];
+  if (!Array.isArray(images) || images.length > 3)
+    return NextResponse.json({ error: "写真は3枚までです" }, { status: 400 });
+  for (const img of images) {
+    if (typeof img !== "string" || !img.startsWith("/uploads/"))
+      return NextResponse.json({ error: "写真の指定が不正です" }, { status: 400 });
+  }
+
   let publishAtIso: string | undefined;
   const publishAtRaw = (payload.publishAt ?? "").trim();
   if (publishAtRaw) {
@@ -79,6 +88,7 @@ export async function POST(req: Request) {
     title,
     // 空行区切りで段落に分割する
     body: bodyText.split(/\n\s*\n/).map((p) => p.replace(/\s+$/g, "").trim()).filter(Boolean),
+    ...(images.length > 0 ? { images } : {}),
     ...(publishAtIso ? { publishAt: publishAtIso } : {}),
   };
 
