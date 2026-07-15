@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import {
   COMPANY,
   DEPARTMENTS,
@@ -65,7 +64,7 @@ export default function OfficePage() {
   const totalOutputs = k.outputs;
 
   return (
-    <main className="min-h-screen bg-[#0b0d12] text-zinc-100">
+    <main>
       <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
         {/* ===== ヘッダー ===== */}
         <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
@@ -80,17 +79,9 @@ export default function OfficePage() {
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Link
-              href="/office/chart"
-              className="rounded-full border border-zinc-700 px-3 py-1 text-xs text-zinc-300 transition hover:bg-zinc-800"
-            >
-              🗂 組織図
-            </Link>
-            <span className="rounded-full border border-zinc-700 px-3 py-1 text-xs text-zinc-400">
-              更新 {COMPANY.updated}
-            </span>
-          </div>
+          <span className="rounded-full border border-zinc-700 px-3 py-1 text-xs text-zinc-400">
+            更新 {COMPANY.updated}
+          </span>
         </header>
 
         {/* ===== KPI 行 ===== */}

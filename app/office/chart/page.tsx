@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import {
   COMPANY,
   DEPARTMENTS,
@@ -28,7 +27,7 @@ export default function ChartPage() {
   const k = kpis();
 
   return (
-    <main className="min-h-screen bg-[#0b0d12] text-zinc-100">
+    <main>
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
         {/* ヘッダー */}
         <header className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-zinc-800 bg-zinc-900/60 px-4 py-3">
@@ -54,12 +53,6 @@ export default function ChartPage() {
               <b className="text-zinc-100">{k.review}</b>名
             </span>
             <span>📦 成果物 <b className="text-zinc-100">{k.outputs}</b>件</span>
-            <Link
-              href="/office"
-              className="rounded-full border border-zinc-700 px-3 py-1.5 text-zinc-300 transition hover:bg-zinc-800"
-            >
-              ← ダッシュボード
-            </Link>
           </div>
         </header>
 

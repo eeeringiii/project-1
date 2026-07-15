@@ -486,6 +486,67 @@ export const AI_COST: { total: number; items: CostItem[] } = {
   ],
 };
 
+// スケジュール（正本）。今週・今月・四半期のロードマップ。
+export interface ScheduleItem {
+  title: string;
+  owner: string;
+}
+
+export const SCHEDULE: {
+  id: string;
+  label: string;
+  sub: string;
+  items: ScheduleItem[];
+}[] = [
+  {
+    id: "week",
+    label: "🗓 今週（7/14〜）",
+    sub: "直近の山場",
+    items: [
+      { title: "HP実素材（写真・本文・SNSリンク）の受け渡し", owner: "えりんぎさん → HP担当" },
+      { title: "インスタのアカウント設計5点のレビュー・確定", owner: "Instagram担当" },
+      { title: "解禁告知テンプレの運用開始（次の解禁から適用）", owner: "広報担当" },
+      { title: "載せたい項目の確定（NEWS/PROFILE/LIVE 等）", owner: "えりんぎさん" },
+    ],
+  },
+  {
+    id: "month",
+    label: "📆 今月（2026年7月）",
+    sub: "仕込み",
+    items: [
+      { title: "FCプラットフォーム比較表（4案）と会費試算", owner: "FC運営担当" },
+      { title: "YouTube企画テンプレ・投稿頻度の確定", owner: "YouTube担当" },
+      { title: "ドメイン方針の決定（taiseifukumoto.net 継続か）", owner: "えりんぎさん" },
+      { title: "AIオフィスのVercel常設URL化", owner: "マカミ" },
+    ],
+  },
+  {
+    id: "quarter",
+    label: "🎯 四半期（〜9月）",
+    sub: "ゴール",
+    items: [
+      { title: "HPフルリニューアル公開（現行Wix廃止）", owner: "Web部" },
+      { title: "FC開設（プラットフォーム決定 → 開設）", owner: "ファンクラブ部" },
+      { title: "グッズ・EC販売導線の設計", owner: "物販担当" },
+      { title: "SNS→HP→FC/サブスクの導線計測を開始", owner: "SEO・解析担当" },
+    ],
+  },
+];
+
+// 収益の柱（正本）。設計状況と次の一手。
+export const REVENUE_PILLARS: {
+  name: string;
+  status: string;
+  next: string;
+  owner: string;
+}[] = [
+  { name: "FC会費", status: "設計中", next: "プラットフォーム比較表 → 会費3案で試算", owner: "FC運営担当" },
+  { name: "ライブ・チケット", status: "設計中", next: "FC先行 → 一般発売の受付フロー確定", owner: "チケッティング担当" },
+  { name: "グッズ・EC", status: "稼働中", next: "ライブ物販とEC導線の設計", owner: "物販・グッズ担当" },
+  { name: "配信・サブスク", status: "整理中", next: "ディスコグラフィからの導線改善", owner: "楽曲リリース担当" },
+  { name: "タイアップ・広告", status: "準備前", next: "案件管理表とPR表記ルールの整備", owner: "タイアップ担当" },
+];
+
 // 集計ヘルパー
 export function allStaff(): Staff[] {
   return DEPARTMENTS.flatMap((d) => d.staff);
