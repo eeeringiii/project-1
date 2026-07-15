@@ -166,12 +166,12 @@ function NewsTab({ password }: { password: string }) {
           className={field}
           onChange={(e) => setPhotoFiles(Array.from(e.target.files ?? []).slice(0, 3))}
         />
-        {photoFiles.length > 0 && (
-          <span className={hintCls}>{photoFiles.length}枚選択中（記事の本文の下に表示されます）</span>
-        )}
-        {photoFiles.length === 0 && (
-          <span className={hintCls}>自動で軽量化されるので、スマホの写真そのままで大丈夫です</span>
-        )}
+        <span className={hintCls}>
+          自動で軽量化されるので、スマホの写真そのままで大丈夫です。
+          ふつうは本文の下にまとめて表示されます。本文中の好きな位置に置きたいときは、
+          本文の行に「[写真1]」「[写真2]」とだけ書くと、その位置に表示されます
+          {photoFiles.length > 0 && `（現在${photoFiles.length}枚選択中）`}
+        </span>
       </div>
       <div>
         <span className={labelCls}>公開タイミング</span>
