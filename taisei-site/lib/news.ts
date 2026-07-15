@@ -6,6 +6,14 @@ import type { NewsItem } from "@/lib/content";
 // 入稿ページ（/studio）が同じ形式のファイルをGitHub経由で追加する。
 const newsDir = path.join(process.cwd(), "content", "news");
 
+// 入稿ページ用：予約中（公開時刻前）も含めた全記事
+export function getAllNews(): NewsItem[] {
+  const files = fs.readdirSync(newsDir).filter((f) => f.endsWith(".json"));
+  return files
+    .map((f) => JSON.parse(fs.readFileSync(path.join(newsDir, f), "utf8")) as NewsItem)
+    .sort((a, b) => (a.date < b.date ? 1 : -1));
+}
+
 export function getNews(): NewsItem[] {
   const files = fs.readdirSync(newsDir).filter((f) => f.endsWith(".json"));
   const now = Date.now();
