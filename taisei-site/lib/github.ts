@@ -55,6 +55,26 @@ export async function putRepoFile(
   }
 }
 
+export async function deleteRepoFile(
+  repoPath: string,
+  message: string,
+  sha: string,
+): Promise<void> {
+  const res = await fetch(
+    `https://api.github.com/repos/${REPO}/contents/${repoPath}`,
+    {
+      method: "DELETE",
+      headers: headers(),
+      body: JSON.stringify({ message, sha, branch: BRANCH }),
+    },
+  );
+  if (!res.ok) {
+    const detail = await res.text();
+    console.error("GitHub削除失敗:", res.status, detail.slice(0, 400));
+    throw new Error(`GitHub削除失敗: ${res.status}`);
+  }
+}
+
 export function toBase64(text: string): string {
   return Buffer.from(text).toString("base64");
 }

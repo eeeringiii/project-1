@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type {
   LiveEvent,
   Movie,
+  NewsItem,
   Profile,
   Release,
   SiteSettings,
@@ -76,7 +77,14 @@ async function resizeImage(file: File, maxSize = 1600): Promise<string> {
 
 // ---- NEWS ---------------------------------------------------------------
 
-function NewsTab({ password }: { password: string }) {
+// "2026-07-20T18:00:00+09:00" → "2026/7/20 18:00"
+function fmtPublishAt(iso: string): string {
+  const m = iso.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
+  if (!m) return iso;
+  return `${m[1]}/${Number(m[2])}/${Number(m[3])} ${m[4]}:${m[5]}`;
+}
+
+function NewsTab({ password, initial }: { password: string; initial: NewsItem[] }) {
   const [date, setDate] = useState(today());
   const [category, setCategory] = useState("INFO");
   const [title, setTitle] = useState("");
@@ -86,7 +94,62 @@ function NewsTab({ password }: { password: string }) {
   const [publishAt, setPublishAt] = useState("");
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
+  const [doneText, setDoneText] = useState("");
   const [error, setError] = useState("");
+
+  // 一覧・編集の状態
+  const [nowMs, setNowMs] = useState<number | null>(null);
+  useEffect(() => setNowMs(Date.now()), []);
+  const [removed, setRemoved] = useState<string[]>([]);
+  const [editingSlug, setEditingSlug] = useState<string | null>(null);
+  const [keepImages, setKeepImages] = useState<string[]>([]);
+  const [listError, setListError] = useState("");
+
+  function resetForm() {
+    setEditingSlug(null);
+    setKeepImages([]);
+    setDate(today());
+    setCategory("INFO");
+    setTitle("");
+    setBody("");
+    setPhotoFiles([]);
+    setTiming("now");
+    setPublishAt("");
+    setError("");
+  }
+
+  function startEdit(item: NewsItem) {
+    setDone(false);
+    setError("");
+    setEditingSlug(item.slug);
+    setDate(item.date.replaceAll(".", "-"));
+    setCategory(item.category);
+    setTitle(item.title);
+    setBody(item.body.join("\n\n"));
+    setKeepImages(item.images ?? []);
+    setPhotoFiles([]);
+    if (item.publishAt && Date.parse(item.publishAt) > Date.now()) {
+      setTiming("scheduled");
+      setPublishAt(item.publishAt.slice(0, 16));
+    } else {
+      setTiming("now");
+      setPublishAt("");
+    }
+    document.getElementById("news-form")?.scrollIntoView({ behavior: "smooth" });
+  }
+
+  async function removeItem(item: NewsItem) {
+    setListError("");
+    if (!window.confirm(`「${item.title}」を削除します。よろしいですか？`)) return;
+    const res = await post("/api/studio/news", {
+      password,
+      action: "delete",
+      slug: item.slug,
+    });
+    if (!res.ok) return setListError(res.error ?? "削除に失敗しました");
+    setRemoved((r) => [...r, item.slug]);
+    if (editingSlug === item.slug) resetForm();
+  }
 
   async function submit() {
     setError("");
@@ -99,24 +162,28 @@ function NewsTab({ password }: { password: string }) {
       if (new Date(publishAt) <= new Date()) return setError("予約日時は未来の日時にしてください");
     }
     setSending(true);
-    // 写真を先にアップロードして、記事にパスを紐づける
-    const images: string[] = [];
-    for (const file of photoFiles) {
-      try {
-        const dataUrl = await resizeImage(file, 1600);
-        const up = await post("/api/studio/image", { password, role: "news", dataUrl });
-        if (!up.ok) {
+    // 新しい写真を選んだ場合はアップロードして差し替え。選ばなければ元の写真を維持
+    let images: string[] = editingSlug ? keepImages : [];
+    if (photoFiles.length > 0) {
+      images = [];
+      for (const file of photoFiles) {
+        try {
+          const dataUrl = await resizeImage(file, 1600);
+          const up = await post("/api/studio/image", { password, role: "news", dataUrl });
+          if (!up.ok) {
+            setSending(false);
+            return setError(up.error ?? "写真のアップロードに失敗しました");
+          }
+          images.push(up.path ?? "");
+        } catch {
           setSending(false);
-          return setError(up.error ?? "写真のアップロードに失敗しました");
+          return setError("写真の読み込みに失敗しました。別の写真でお試しください");
         }
-        images.push(up.path ?? "");
-      } catch {
-        setSending(false);
-        return setError("写真の読み込みに失敗しました。別の写真でお試しください");
       }
     }
     const res = await post("/api/studio/news", {
       password,
+      ...(editingSlug ? { slug: editingSlug } : {}),
       date: toDot(date),
       category,
       title,
@@ -126,73 +193,173 @@ function NewsTab({ password }: { password: string }) {
     });
     setSending(false);
     if (!res.ok) return setError(res.error ?? "エラーが発生しました");
+    setDoneText(
+      editingSlug
+        ? "記事の更新を受け付けました"
+        : timing === "scheduled"
+          ? "予約を受け付けました"
+          : "NEWSの公開を受け付けました",
+    );
     setDone(true);
-    setTitle("");
-    setBody("");
-    setPhotoFiles([]);
+    resetForm();
   }
 
+  const visible = initial.filter((n) => !removed.includes(n.slug));
+  const scheduled =
+    nowMs === null
+      ? []
+      : visible.filter((n) => n.publishAt && Date.parse(n.publishAt) > nowMs);
+  const published =
+    nowMs === null
+      ? visible
+      : visible.filter((n) => !n.publishAt || Date.parse(n.publishAt) <= nowMs);
+
+  const listRow = (item: NewsItem, badge: React.ReactNode) => (
+    <li key={item.slug} className="flex flex-wrap items-center justify-between gap-2 px-4 py-3">
+      <span className="text-sm leading-relaxed">
+        <span className="mr-3 text-xs text-muted">{item.date}</span>
+        {item.title}
+        <span className="ml-2">{badge}</span>
+      </span>
+      <span className="flex gap-2">
+        <button
+          type="button"
+          className="border border-line px-3 py-1.5 text-[0.66rem] tracking-[0.1em] text-sub transition-colors hover:border-gold hover:text-gold"
+          onClick={() => startEdit(item)}
+        >
+          編集
+        </button>
+        <button type="button" className={dangerBtn} onClick={() => removeItem(item)}>
+          削除
+        </button>
+      </span>
+    </li>
+  );
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
+      {/* 記事一覧 */}
       <div>
-        <label className={labelCls}>日付</label>
-        <input type="date" className={field} value={date} onChange={(e) => setDate(e.target.value)} />
+        <span className={labelCls}>予約中の記事</span>
+        {scheduled.length === 0 ? (
+          <p className="border border-line bg-paper-soft px-4 py-3 text-sm text-muted">
+            予約中の記事はありません
+          </p>
+        ) : (
+          <ul className="divide-y divide-line-soft border border-gold-soft bg-paper-soft">
+            {scheduled.map((item) =>
+              listRow(
+                item,
+                <span className="border border-gold px-2 py-0.5 text-[0.6rem] tracking-[0.1em] text-gold">
+                  予約中 {item.publishAt ? fmtPublishAt(item.publishAt) : ""} 公開
+                </span>,
+              ),
+            )}
+          </ul>
+        )}
       </div>
       <div>
-        <label className={labelCls}>カテゴリ</label>
-        <select className={field} value={category} onChange={(e) => setCategory(e.target.value)}>
-          <option value="LIVE">LIVE（ライブ・公演）</option>
-          <option value="RELEASE">RELEASE（CD・配信リリース）</option>
-          <option value="EVENT">EVENT（イベント）</option>
-          <option value="MEDIA">MEDIA（TV・雑誌・WEB出演）</option>
-          <option value="INFO">INFO（その他のお知らせ）</option>
-        </select>
-        <span className={hintCls}>迷ったら「INFO」で大丈夫です</span>
-      </div>
-      <div>
-        <label className={labelCls}>タイトル</label>
-        <input type="text" className={field} maxLength={120} value={title} onChange={(e) => setTitle(e.target.value)} />
-      </div>
-      <div>
-        <label className={labelCls}>本文</label>
-        <textarea className={`${field} min-h-48`} maxLength={8000} value={body} onChange={(e) => setBody(e.target.value)} placeholder={"1行空けると段落が変わります。"} />
-      </div>
-      <div>
-        <label className={labelCls}>写真（あれば・3枚まで）</label>
-        <input
-          type="file"
-          accept="image/*"
-          multiple
-          className={field}
-          onChange={(e) => setPhotoFiles(Array.from(e.target.files ?? []).slice(0, 3))}
-        />
+        <span className={labelCls}>公開済みの記事</span>
+        {published.length === 0 ? (
+          <p className="border border-line bg-paper-soft px-4 py-3 text-sm text-muted">
+            公開済みの記事はありません
+          </p>
+        ) : (
+          <ul className="divide-y divide-line-soft border border-line">
+            {published.map((item) => listRow(item, null))}
+          </ul>
+        )}
+        {listError && <p className="mt-2 text-sm text-red-700">{listError}</p>}
         <span className={hintCls}>
-          自動で軽量化されるので、スマホの写真そのままで大丈夫です。
-          ふつうは本文の下にまとめて表示されます。本文中の好きな位置に置きたいときは、
-          本文の行に「[写真1]」「[写真2]」とだけ書くと、その位置に表示されます
-          {photoFiles.length > 0 && `（現在${photoFiles.length}枚選択中）`}
+          「編集」を押すと下のフォームに内容が入ります。一覧への反映は最新の公開から約2分ずれることがあります
         </span>
       </div>
-      <div>
-        <span className={labelCls}>公開タイミング</span>
-        <div className="flex flex-col gap-2 border border-line p-4">
-          <label className="flex items-center gap-3 text-sm">
-            <input type="radio" checked={timing === "now"} onChange={() => setTiming("now")} />
-            すぐ公開する
-          </label>
-          <label className="flex items-center gap-3 text-sm">
-            <input type="radio" checked={timing === "scheduled"} onChange={() => setTiming("scheduled")} />
-            日時を指定して予約公開する
-          </label>
-          {timing === "scheduled" && (
-            <input type="datetime-local" className={field} value={publishAt} onChange={(e) => setPublishAt(e.target.value)} />
+
+      {/* 入稿フォーム */}
+      <div id="news-form" className="border-t border-line pt-6">
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="text-[0.8rem] tracking-[0.2em] text-gold">
+            {editingSlug ? "記事を編集中" : "新しい記事を書く"}
+          </h3>
+          {editingSlug && (
+            <button
+              type="button"
+              className="border border-line px-3 py-1.5 text-[0.66rem] tracking-[0.1em] text-sub hover:border-gold hover:text-gold"
+              onClick={resetForm}
+            >
+              編集をやめて新規作成に戻る
+            </button>
           )}
         </div>
+        <div className="space-y-6">
+          <div>
+            <label className={labelCls}>日付</label>
+            <input type="date" className={field} value={date} onChange={(e) => setDate(e.target.value)} />
+          </div>
+          <div>
+            <label className={labelCls}>カテゴリ</label>
+            <select className={field} value={category} onChange={(e) => setCategory(e.target.value)}>
+              <option value="LIVE">LIVE（ライブ・公演）</option>
+              <option value="RELEASE">RELEASE（CD・配信リリース）</option>
+              <option value="EVENT">EVENT（イベント）</option>
+              <option value="MEDIA">MEDIA（TV・雑誌・WEB出演）</option>
+              <option value="INFO">INFO（その他のお知らせ）</option>
+            </select>
+            <span className={hintCls}>迷ったら「INFO」で大丈夫です</span>
+          </div>
+          <div>
+            <label className={labelCls}>タイトル</label>
+            <input type="text" className={field} maxLength={120} value={title} onChange={(e) => setTitle(e.target.value)} />
+          </div>
+          <div>
+            <label className={labelCls}>本文</label>
+            <textarea className={`${field} min-h-48`} maxLength={8000} value={body} onChange={(e) => setBody(e.target.value)} placeholder={"1行空けると段落が変わります。"} />
+          </div>
+          <div>
+            <label className={labelCls}>写真（あれば・3枚まで）</label>
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              className={field}
+              onChange={(e) => setPhotoFiles(Array.from(e.target.files ?? []).slice(0, 3))}
+            />
+            <span className={hintCls}>
+              自動で軽量化されるので、スマホの写真そのままで大丈夫です。
+              ふつうは本文の下にまとめて表示されます。本文中の好きな位置に置きたいときは、
+              本文の行に「[写真1]」「[写真2]」とだけ書くと、その位置に表示されます
+              {editingSlug && keepImages.length > 0 && photoFiles.length === 0 &&
+                `。現在この記事には写真が${keepImages.length}枚ついています（そのまま維持。新しく選ぶと差し替え）`}
+              {photoFiles.length > 0 && `（現在${photoFiles.length}枚選択中）`}
+            </span>
+          </div>
+          <div>
+            <span className={labelCls}>公開タイミング</span>
+            <div className="flex flex-col gap-2 border border-line p-4">
+              <label className="flex items-center gap-3 text-sm">
+                <input type="radio" checked={timing === "now"} onChange={() => setTiming("now")} />
+                すぐ公開する
+              </label>
+              <label className="flex items-center gap-3 text-sm">
+                <input type="radio" checked={timing === "scheduled"} onChange={() => setTiming("scheduled")} />
+                日時を指定して予約公開する
+              </label>
+              {timing === "scheduled" && (
+                <input type="datetime-local" className={field} value={publishAt} onChange={(e) => setPublishAt(e.target.value)} />
+              )}
+            </div>
+            {editingSlug && (
+              <span className={hintCls}>
+                予約中の記事を「すぐ公開する」に変えて保存すると、即公開に切り替わります
+              </span>
+            )}
+          </div>
+          <Notice error={error} done={done} doneText={doneText} />
+          <button type="button" className={primaryBtn} disabled={sending} onClick={submit}>
+            {sending ? "送信中…" : editingSlug ? "この内容で更新する" : "この内容で公開する"}
+          </button>
+        </div>
       </div>
-      <Notice error={error} done={done} doneText="NEWSの公開を受け付けました" />
-      <button type="button" className={primaryBtn} disabled={sending} onClick={submit}>
-        {sending ? "送信中…" : "この内容で公開する"}
-      </button>
     </div>
   );
 }
@@ -682,12 +849,14 @@ const TABS = [
 type TabKey = (typeof TABS)[number]["key"];
 
 export default function StudioTabs({
+  news,
   releases,
   live,
   movies,
   settings,
   profile,
 }: {
+  news: NewsItem[];
   releases: Release[];
   live: LiveEvent[];
   movies: Movie[];
@@ -740,7 +909,7 @@ export default function StudioTabs({
       )}
 
       <div className={password ? "" : "pointer-events-none opacity-40"}>
-        {tab === "news" && <NewsTab password={password} />}
+        {tab === "news" && <NewsTab password={password} initial={news} />}
         {tab === "releases" && <ReleaseTab password={password} initial={releases} />}
         {tab === "live" && <LiveTab password={password} initial={live} />}
         {tab === "movies" && <MovieTab password={password} initial={movies} />}

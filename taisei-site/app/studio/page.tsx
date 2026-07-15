@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import StudioTabs from "./StudioTabs";
 import { getLiveEvents, getMovies, getProfile, getReleases, getSettings } from "@/lib/data";
+import { getAllNews } from "@/lib/news";
 
 export const metadata: Metadata = {
   title: "入稿ページ",
@@ -19,6 +20,7 @@ export default function StudioPage() {
         </p>
       </div>
       <StudioTabs
+        news={getAllNews()}
         releases={getReleases()}
         live={getLiveEvents()}
         movies={getMovies()}
