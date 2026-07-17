@@ -10,6 +10,7 @@
  */
 import { getBrowserClient } from "@/lib/supabase/client";
 import type {
+  AiGenerationLog,
   Artist,
   BrandRule,
   Campaign,
@@ -21,6 +22,8 @@ import type {
   User,
 } from "@/types/domain";
 import {
+  aiLogFromRow,
+  aiLogToRow,
   artistFromRow,
   brandRuleFromRow,
   brandRuleToRow,
@@ -49,6 +52,7 @@ export interface RepoSnapshot {
   brandRules: BrandRule[];
   postVersions: PostVersion[];
   statusHistories: StatusHistory[];
+  aiLogs: AiGenerationLog[];
 }
 
 /** 画面表示に必要な全データをまとめて取得（RLSで許可された範囲のみ返る） */
@@ -65,6 +69,7 @@ export async function loadAll(): Promise<RepoSnapshot> {
     versions,
     histories,
     rules,
+    aiLogs,
   ] = await Promise.all([
     sb.from("users").select("*"),
     sb.from("artists").select("*"),
@@ -76,6 +81,7 @@ export async function loadAll(): Promise<RepoSnapshot> {
     sb.from("post_versions").select("*"),
     sb.from("status_histories").select("*"),
     sb.from("brand_rules").select("*"),
+    sb.from("ai_generation_logs").select("*"),
   ]);
 
   const err =
@@ -88,7 +94,8 @@ export async function loadAll(): Promise<RepoSnapshot> {
     postMedia.error ||
     versions.error ||
     histories.error ||
-    rules.error;
+    rules.error ||
+    aiLogs.error;
   if (err) throw new Error(err.message);
 
   // post_media から mediaAssetIds を投稿へ結合
@@ -118,6 +125,7 @@ export async function loadAll(): Promise<RepoSnapshot> {
     brandRules: (rules.data ?? []).map(brandRuleFromRow),
     postVersions: (versions.data ?? []).map(postVersionFromRow),
     statusHistories: (histories.data ?? []).map(statusHistoryFromRow),
+    aiLogs: (aiLogs.data ?? []).map(aiLogFromRow),
   };
 }
 
@@ -203,5 +211,12 @@ export async function upsertCampaign(c: Campaign): Promise<void> {
   const { error } = await getBrowserClient()
     .from("campaigns")
     .upsert(campaignToRow(c));
+  if (error) throw new Error(error.message);
+}
+
+export async function insertAiLog(l: AiGenerationLog): Promise<void> {
+  const { error } = await getBrowserClient()
+    .from("ai_generation_logs")
+    .insert(aiLogToRow(l));
   if (error) throw new Error(error.message);
 }

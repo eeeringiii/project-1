@@ -2,31 +2,44 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { RefreshCw, Sparkles, Save, ChevronDown } from "lucide-react";
+import {
+  RefreshCw,
+  Sparkles,
+  Save,
+  ChevronDown,
+  AlertTriangle,
+  History,
+} from "lucide-react";
 import { Card, CardHeader, Button, Input, Textarea } from "@/components/ui/primitives";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { PlatformIcon } from "@/components/ui/PlatformIcon";
 import { Spinner } from "@/components/ui/primitives";
+import { Badge } from "@/components/ui/StatusBadge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useStore } from "@/repositories/store";
 import { useToast } from "@/components/ui/Toast";
-import { generateMockDrafts, type GeneratedDraft } from "@/services/ai-generation";
+import type { GeneratedDraft } from "@/services/ai-generation";
+import { generateDrafts } from "@/services/ai-client";
 import {
   PLATFORM_LABELS,
   POST_TYPE_LABELS,
 } from "@/constants";
-import { formatDateTimeJa } from "@/lib/date";
+import { formatDateTimeJa, relativeJa } from "@/lib/date";
 
 export function GenerateView({ sourceId }: { sourceId: string }) {
   const router = useRouter();
   const toast = useToast();
-  const { state, createPostsFromDrafts } = useStore();
+  const { state, createPostsFromDrafts, addAiLog } = useStore();
   const source = state.contentSources.find((c) => c.id === sourceId);
   const brandRules = state.brandRules;
+  const logs = state.aiLogs.filter((l) => l.contentSourceId === sourceId);
 
   const [drafts, setDrafts] = useState<GeneratedDraft[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [usedMock, setUsedMock] = useState(false);
+  const [regenerating, setRegenerating] = useState<string | null>(null);
 
   const grouped = useMemo(() => {
     if (!drafts) return {};
@@ -55,13 +68,52 @@ export function GenerateView({ sourceId }: { sourceId: string }) {
     );
   }
 
+  function platformSummary(list: GeneratedDraft[]): string {
+    const platforms = Array.from(new Set(list.map((d) => d.platform)));
+    return platforms.map((p) => PLATFORM_LABELS[p]).join(" / ");
+  }
+
   async function generate() {
+    if (!source) return;
     setLoading(true);
-    // モック生成（Phase 3 でサーバー経由の Anthropic 呼び出しに差し替え）
-    await new Promise((r) => setTimeout(r, 650));
-    setDrafts(generateMockDrafts(source!, brandRules));
-    setLoading(false);
-    toast.show("AIが投稿案を生成しました（モック）", "success");
+    setError(null);
+    try {
+      const { posts, meta } = await generateDrafts(source, brandRules);
+      setDrafts(posts);
+      setUsedMock(meta.usedMock);
+      addAiLog({
+        contentSourceId: sourceId,
+        platformSummary: platformSummary(posts) || "—",
+        model: meta.model,
+        usedMock: meta.usedMock,
+        postCount: posts.length,
+        ok: true,
+        errorMessage: null,
+      });
+      toast.show(
+        meta.usedMock
+          ? "AIが投稿案を生成しました（モック / APIキー未設定）"
+          : `AIが投稿案を生成しました（${meta.model}）`,
+        "success",
+      );
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "生成に失敗しました";
+      setError(msg);
+      addAiLog({
+        contentSourceId: sourceId,
+        platformSummary: source.targetPlatforms
+          .map((p) => PLATFORM_LABELS[p])
+          .join(" / "),
+        model: null,
+        usedMock: false,
+        postCount: 0,
+        ok: false,
+        errorMessage: msg,
+      });
+      toast.show("AI生成に失敗しました。再実行してください。", "error");
+    } finally {
+      setLoading(false);
+    }
   }
 
   function updateDraft(index: number, patch: Partial<GeneratedDraft>) {
@@ -70,18 +122,32 @@ export function GenerateView({ sourceId }: { sourceId: string }) {
     );
   }
 
-  function regenerateOne(index: number) {
-    if (!drafts) return;
+  async function regenerateOne(index: number) {
+    if (!drafts || !source) return;
     const d = drafts[index];
-    const fresh = generateMockDrafts(source!, brandRules).find(
-      (x) => x.platform === d.platform && x.postType === d.postType,
-    );
-    if (fresh) {
-      updateDraft(index, {
-        body: fresh.body + "\n（再生成）",
-        title: fresh.title,
+    const key = `${d.platform}-${d.postType}`;
+    setRegenerating(key);
+    try {
+      const { posts } = await generateDrafts(source, brandRules, {
+        only: { platform: d.platform, postType: d.postType },
       });
-      toast.show("この投稿案を再生成しました", "info");
+      const fresh = posts[0];
+      if (fresh) {
+        updateDraft(index, {
+          title: fresh.title,
+          body: fresh.body,
+          hashtags: fresh.hashtags,
+          imageTextSuggestions: fresh.imageTextSuggestions,
+        });
+        toast.show("この投稿案を再生成しました", "info");
+      }
+    } catch (e) {
+      toast.show(
+        e instanceof Error ? e.message : "再生成に失敗しました",
+        "error",
+      );
+    } finally {
+      setRegenerating(null);
     }
   }
 
@@ -130,6 +196,21 @@ export function GenerateView({ sourceId }: { sourceId: string }) {
         </div>
       </Card>
 
+      {error && (
+        <div className="mb-4 flex items-start gap-2 rounded-xl border border-[var(--danger)]/30 bg-[var(--danger-bg)] px-4 py-3 text-sm text-[var(--danger)]">
+          <AlertTriangle size={16} className="mt-0.5 shrink-0" />
+          <div className="flex-1">
+            <p>{error}</p>
+            <button
+              onClick={generate}
+              className="mt-1 font-medium underline"
+            >
+              再実行する
+            </button>
+          </div>
+        </div>
+      )}
+
       {!drafts && !loading && (
         <Card>
           <div className="flex flex-col items-center gap-3 px-6 py-12 text-center">
@@ -139,7 +220,8 @@ export function GenerateView({ sourceId }: { sourceId: string }) {
             <p className="text-sm font-medium">AI投稿案を生成しましょう</p>
             <p className="max-w-md text-xs text-[var(--muted)]">
               対象媒体（{source.targetPlatforms.length}媒体）ごとに、投稿タイプ別の草案をまとめて生成します。
-              ※ Anthropic API 未設定でも動作するモック生成です。
+              ブランドルール（口調・NGワード・必須表記）を反映します。
+              ※ Anthropic API 未設定でも動作するモック生成にフォールバックします。
             </p>
             <Button variant="primary" onClick={generate}>
               <Sparkles size={15} />
@@ -157,11 +239,21 @@ export function GenerateView({ sourceId }: { sourceId: string }) {
 
       {drafts && (
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-[var(--muted)]">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <p className="flex items-center gap-2 text-sm text-[var(--muted)]">
               {drafts.length}件の投稿案を生成しました。編集して保存してください。
+              {usedMock ? (
+                <Badge tone="warning">モック生成</Badge>
+              ) : (
+                <Badge tone="success">AI生成</Badge>
+              )}
             </p>
-            <Button variant="ghost" size="sm" onClick={generate}>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={generate}
+              disabled={loading}
+            >
               <RefreshCw size={14} />
               すべて再生成
             </Button>
@@ -186,10 +278,12 @@ export function GenerateView({ sourceId }: { sourceId: string }) {
               <div className="divide-y divide-[var(--border)]">
                 {list.map((d) => {
                   const index = drafts.indexOf(d);
+                  const key = `${d.platform}-${d.postType}`;
                   return (
                     <DraftEditor
-                      key={`${d.platform}-${d.postType}`}
+                      key={key}
                       draft={d}
+                      busy={regenerating === key}
                       onChange={(patch) => updateDraft(index, patch)}
                       onRegenerate={() => regenerateOne(index)}
                     />
@@ -199,6 +293,43 @@ export function GenerateView({ sourceId }: { sourceId: string }) {
             </Card>
           ))}
         </div>
+      )}
+
+      {/* AI生成履歴 */}
+      {logs.length > 0 && (
+        <Card className="mt-4">
+          <CardHeader title="AI生成履歴" icon={<History size={16} />} />
+          <ul className="divide-y divide-[var(--border)]">
+            {logs.slice(0, 8).map((l) => (
+              <li
+                key={l.id}
+                className="flex flex-wrap items-center gap-2 px-5 py-2.5 text-sm"
+              >
+                {l.ok ? (
+                  <Badge tone={l.usedMock ? "warning" : "success"}>
+                    {l.usedMock ? "モック" : l.model ?? "AI"}
+                  </Badge>
+                ) : (
+                  <Badge tone="danger">失敗</Badge>
+                )}
+                <span className="text-[var(--ink-2)]">{l.platformSummary}</span>
+                {l.ok && (
+                  <span className="text-xs text-[var(--muted)]">
+                    {l.postCount}件生成
+                  </span>
+                )}
+                {l.errorMessage && (
+                  <span className="text-xs text-[var(--danger)]">
+                    {l.errorMessage}
+                  </span>
+                )}
+                <span className="ml-auto text-xs text-[var(--muted)]">
+                  {relativeJa(l.createdAt)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </Card>
       )}
     </div>
   );
@@ -215,10 +346,12 @@ function Info({ label, value }: { label: string; value: string }) {
 
 function DraftEditor({
   draft,
+  busy,
   onChange,
   onRegenerate,
 }: {
   draft: GeneratedDraft;
+  busy: boolean;
   onChange: (patch: Partial<GeneratedDraft>) => void;
   onRegenerate: () => void;
 }) {
@@ -237,9 +370,9 @@ function DraftEditor({
           />
           {POST_TYPE_LABELS[draft.postType] ?? draft.postType}
         </button>
-        <Button variant="ghost" size="sm" onClick={onRegenerate}>
-          <RefreshCw size={13} />
-          再生成
+        <Button variant="ghost" size="sm" onClick={onRegenerate} disabled={busy}>
+          <RefreshCw size={13} className={busy ? "animate-spin" : ""} />
+          {busy ? "生成中…" : "再生成"}
         </Button>
       </div>
       {open && (

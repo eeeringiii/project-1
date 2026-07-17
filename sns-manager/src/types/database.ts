@@ -170,6 +170,20 @@ export interface BrandRuleRow {
   updated_at: string;
 }
 
+export interface AiGenerationLogRow {
+  id: string;
+  artist_id: string;
+  content_source_id: string | null;
+  platform_summary: string;
+  model: string | null;
+  used_mock: boolean;
+  post_count: number;
+  ok: boolean;
+  error_message: string | null;
+  created_by: string | null;
+  created_at: string;
+}
+
 export interface PublishingJobRow {
   id: string;
   social_post_id: string;

@@ -18,6 +18,7 @@ import {
   useState,
 } from "react";
 import type {
+  AiGenerationLog,
   Approval,
   Artist,
   BrandRule,
@@ -53,6 +54,7 @@ interface StoreState {
   postVersions: PostVersion[];
   approvals: Approval[];
   publishingJobs: PublishingJob[];
+  aiLogs: AiGenerationLog[];
   currentUserId: string;
 }
 
@@ -69,6 +71,7 @@ function buildSeedState(): StoreState {
     postVersions: seed.seedPostVersions,
     approvals: seed.seedApprovals,
     publishingJobs: seed.seedPublishingJobs,
+    aiLogs: [],
     currentUserId: seed.CURRENT_USER_ID,
   };
 }
@@ -123,6 +126,10 @@ interface StoreApi {
 
   createCampaign: (
     campaign: Omit<Campaign, "id" | "artistId" | "createdAt" | "updatedAt">,
+  ) => void;
+
+  addAiLog: (
+    log: Omit<AiGenerationLog, "id" | "artistId" | "createdBy" | "createdAt">,
   ) => void;
 }
 
@@ -469,6 +476,21 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     [artistId],
   );
 
+  const addAiLog = useCallback(
+    (log: Omit<AiGenerationLog, "id" | "artistId" | "createdBy" | "createdAt">) => {
+      const full: AiGenerationLog = {
+        ...log,
+        id: genId("ailog"),
+        artistId,
+        createdBy: state.currentUserId,
+        createdAt: new Date().toISOString(),
+      };
+      setState((s) => ({ ...s, aiLogs: [full, ...s.aiLogs] }));
+      persist(() => repo.insertAiLog(full));
+    },
+    [artistId, state.currentUserId],
+  );
+
   const api: StoreApi = {
     state,
     currentUser,
@@ -488,6 +510,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     upsertBrandRule,
     deleteBrandRule,
     createCampaign,
+    addAiLog,
   };
 
   return <StoreContext.Provider value={api}>{children}</StoreContext.Provider>;

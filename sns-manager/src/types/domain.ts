@@ -209,6 +209,20 @@ export interface BrandRule {
   updatedAt: string;
 }
 
+export interface AiGenerationLog {
+  id: string;
+  artistId: string;
+  contentSourceId: string | null;
+  platformSummary: string;
+  model: string | null;
+  usedMock: boolean;
+  postCount: number;
+  ok: boolean;
+  errorMessage: string | null;
+  createdBy: string;
+  createdAt: string;
+}
+
 export interface PublishingJob {
   id: string;
   socialPostId: string;

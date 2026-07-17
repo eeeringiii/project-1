@@ -3,6 +3,7 @@
  * repository の境界でのみ使用する。
  */
 import type {
+  AiGenerationLog,
   Artist,
   BrandRule,
   Campaign,
@@ -14,6 +15,7 @@ import type {
   User,
 } from "@/types/domain";
 import type {
+  AiGenerationLogRow,
   ArtistRow,
   BrandRuleRow,
   CampaignRow,
@@ -253,6 +255,34 @@ export const brandRuleToRow = (r: BrandRule): BrandRuleRow => ({
   is_active: r.isActive,
   created_at: r.createdAt,
   updated_at: r.updatedAt,
+});
+
+export const aiLogFromRow = (r: AiGenerationLogRow): AiGenerationLog => ({
+  id: r.id,
+  artistId: r.artist_id,
+  contentSourceId: r.content_source_id,
+  platformSummary: r.platform_summary,
+  model: r.model,
+  usedMock: r.used_mock,
+  postCount: r.post_count,
+  ok: r.ok,
+  errorMessage: r.error_message,
+  createdBy: r.created_by ?? "",
+  createdAt: r.created_at,
+});
+
+export const aiLogToRow = (l: AiGenerationLog): AiGenerationLogRow => ({
+  id: l.id,
+  artist_id: l.artistId,
+  content_source_id: l.contentSourceId,
+  platform_summary: l.platformSummary,
+  model: l.model,
+  used_mock: l.usedMock,
+  post_count: l.postCount,
+  ok: l.ok,
+  error_message: l.errorMessage,
+  created_by: l.createdBy || null,
+  created_at: l.createdAt,
 });
 
 export const campaignToRow = (c: Campaign): CampaignRow => ({

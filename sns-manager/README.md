@@ -15,6 +15,8 @@
 
 Supabase接続の手順は [`docs/phase2-supabase.md`](./docs/phase2-supabase.md) を参照してください（マイグレーション適用・ユーザー登録・バケット作成込み）。
 
+**AI生成（Phase 3）**：`ANTHROPIC_API_KEY` を設定すると、サーバー(`/api/generate`)経由で Anthropic API を媒体ごとに呼び出し、ブランドルールを反映した投稿案を生成します（Zod検証・一部再生成・生成履歴つき）。未設定時はモック生成にフォールバックするため、キーなしでも動作確認できます。APIキーはサーバーサイドのみで扱い、クライアントには露出しません。
+
 ## Phase 1（モックMVP）で実装済みの機能
 
 外部SNS API・Supabase・Anthropic API に未接続でも、**モックデータで一通り操作できる**状態です。
@@ -100,7 +102,7 @@ UI / ドメインロジック / データアクセス / バリデーション / 
 | --- | --- | --- |
 | Phase 1 | 画面とモックデータ | ✅ 完了 |
 | Phase 2 | Supabase 連携（Auth/DB/Storage/RLS/CRUD） | ✅ 接続レディ（`.env.local` 設定で有効化） |
-| Phase 3 | Anthropic API 連携（媒体別プロンプト/Zod検証/再生成/履歴） | 予定 |
+| Phase 3 | Anthropic API 連携（媒体別プロンプト/Zod検証/再生成/履歴） | ✅ 実装済み（`ANTHROPIC_API_KEY` 未設定時はモック生成） |
 | Phase 4 | 予約投稿ジョブ基盤（モック実行・リトライ・結果保存） | 予定 |
 | Phase 5 | 外部SNS API 連携（**設計のみ**、`docs/phase5-external-apis.md`） | 設計 |
 
