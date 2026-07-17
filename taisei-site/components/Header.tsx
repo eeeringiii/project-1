@@ -4,6 +4,11 @@ import Link from "next/link";
 import { useState } from "react";
 import SnsLinks from "@/components/SnsLinks";
 import { navItems, siteMeta, type SnsLink } from "@/lib/content";
+import { shopEnabled, shopHref } from "@/lib/shop";
+
+// GOODS はサブドメイン運用時のみ shop.ドメインへ（外部リンク扱い）。
+const isExternalGoods = (href: string) => href === "/goods" && shopEnabled;
+const hrefFor = (href: string) => (isExternalGoods(href) ? shopHref() : href);
 
 export default function Header({ snsLinks }: { snsLinks: SnsLink[] }) {
   const [open, setOpen] = useState(false);
@@ -25,7 +30,7 @@ export default function Header({ snsLinks }: { snsLinks: SnsLink[] }) {
               {navItems.map((item) => (
                 <li key={item.href}>
                   <Link
-                    href={item.href}
+                    href={hrefFor(item.href)}
                     className={`nav-link text-[0.7rem] tracking-[0.22em] ${
                       item.href === "/business" ? "text-gold" : ""
                     }`}
@@ -67,7 +72,7 @@ export default function Header({ snsLinks }: { snsLinks: SnsLink[] }) {
             {navItems.map((item) => (
               <li key={item.href} className="border-b border-line-soft">
                 <Link
-                  href={item.href}
+                  href={hrefFor(item.href)}
                   className="flex items-baseline gap-4 px-8 py-4"
                   onClick={() => setOpen(false)}
                 >

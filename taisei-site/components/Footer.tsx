@@ -2,6 +2,10 @@ import Link from "next/link";
 import SnsLinks from "@/components/SnsLinks";
 import { navItems, siteMeta, snsListFrom } from "@/lib/content";
 import { getSettings } from "@/lib/data";
+import { shopEnabled, shopHref } from "@/lib/shop";
+
+// GOODS はサブドメイン運用時のみ shop.ドメインへ
+const hrefFor = (href: string) => (href === "/goods" && shopEnabled ? shopHref() : href);
 
 export default function Footer() {
   const snsLinks = snsListFrom(getSettings().sns);
@@ -13,7 +17,7 @@ export default function Footer() {
             {navItems.map((item) => (
               <li key={item.href}>
                 <Link
-                  href={item.href}
+                  href={hrefFor(item.href)}
                   className={`nav-link text-[0.66rem] tracking-[0.2em] ${
                     item.href === "/business" ? "text-gold" : "text-sub"
                   }`}
