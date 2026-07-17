@@ -5,10 +5,17 @@
     "category": "APPAREL",
     "price": 4200,
     "description": "アーティストロゴを箔押し風にあしらったヘビーウェイトTシャツ。\n生地はコットン100%（5.6oz）で、ライブ会場でもタウンユースでも使える上質な肌ざわり。\nユニセックス対応なので、普段のサイズよりゆったり着たい方はワンサイズ上もおすすめです。",
-    "image": "",
+    "image": "/uploads/sample-tshirt-front.svg",
+    "images": [
+      "/uploads/sample-tshirt-back.svg"
+    ],
     "stock": 30,
     "variantLabel": "サイズ",
-    "variants": ["M", "L", "XL"],
+    "variants": [
+      "M",
+      "L",
+      "XL"
+    ],
     "active": true
   },
   {
@@ -17,7 +24,7 @@
     "category": "MUSIC",
     "price": 1650,
     "description": "デビューシングル「序章」。表題曲を含む全3曲＋インストゥルメンタルを収録。\n初回盤には限定ステッカーを封入しています。\n発送は発売日以降、順次お届けとなります。",
-    "image": "",
+    "image": "/uploads/sample-cd.svg",
     "stock": 50,
     "active": true
   },
@@ -27,7 +34,7 @@
     "category": "GOODS",
     "price": 2500,
     "description": "ライブ必携のマフラータオル。約20×110cmのジャガード織りで、しっかりとした厚み。\n汗をよく吸い、コンサートでの応援にも普段使いにも。",
-    "image": "",
+    "image": "/uploads/sample-towel.svg",
     "stock": 40,
     "active": true
   },
@@ -37,7 +44,7 @@
     "category": "ACCESSORY",
     "price": 1800,
     "description": "描き下ろしビジュアルのアクリルスタンド（高さ約12cm）。\nデスクや棚に飾れるコレクションアイテム。数量限定生産です。",
-    "image": "",
+    "image": "/uploads/sample-acrylic.svg",
     "stock": 20,
     "active": true
   }
