@@ -18,7 +18,8 @@ function bad(message: string, status = 400) {
 const str = (s: unknown, max: number) =>
   typeof s === "string" && s.trim().length > 0 && s.trim().length <= max;
 
-type RawItem = { id?: unknown; qty?: unknown };
+type RawItem = { id?: unknown; qty?: unknown; variant?: unknown };
+type WantedLine = { id: string; variant?: string; qty: number };
 
 function makeOrderId(): string {
   const d = new Date();
@@ -62,15 +63,20 @@ export async function POST(req: Request) {
   if (rawItems.length === 0) return bad("カートに商品がありません");
   if (rawItems.length > 50) return bad("商品点数が多すぎます");
 
-  // 入力を id→数量 に正規化
-  const wanted = new Map<string, number>();
+  // 入力を明細（id・バリエーション・数量）に正規化
+  const lines: WantedLine[] = [];
   for (const it of rawItems) {
     if (typeof it.id !== "string") return bad("商品の指定が不正です");
     const qty = Number(it.qty);
     if (!Number.isInteger(qty) || qty < 1 || qty > 99)
       return bad("数量は1〜99で指定してください");
-    wanted.set(it.id, (wanted.get(it.id) ?? 0) + qty);
+    const variant =
+      typeof it.variant === "string" && it.variant.trim() ? it.variant.trim() : undefined;
+    lines.push({ id: it.id, variant, qty });
   }
+  // 同一商品の合計数（在庫チェック用）
+  const totalQtyById = new Map<string, number>();
+  for (const l of lines) totalQtyById.set(l.id, (totalQtyById.get(l.id) ?? 0) + l.qty);
 
   if (!process.env.GITHUB_CONTENT_TOKEN)
     return bad("サーバー設定が未完了です。お手数ですが管理者にご連絡ください", 500);
@@ -81,14 +87,31 @@ export async function POST(req: Request) {
     const goods = JSON.parse(text) as Goods[];
     const goodsById = new Map(goods.map((g) => [g.id, g]));
 
-    const items: OrderItem[] = [];
-    for (const [id, qty] of wanted) {
+    // 商品ごとの在庫チェック（バリエーション横断の合計で判定）
+    for (const [id, qty] of totalQtyById) {
       const g = goodsById.get(id);
       if (!g || !g.active) return bad("販売が終了した商品が含まれています");
       if (g.externalUrl) return bad("この商品は外部ショップでのお取り扱いです");
       if (g.stock < qty)
         return bad(`「${g.name}」の在庫が不足しています（残り${g.stock}点）`);
-      items.push({ id: g.id, name: g.name, price: g.price, qty });
+    }
+
+    // 明細を組み立て（バリエーションの妥当性も検証）
+    const items: OrderItem[] = [];
+    for (const l of lines) {
+      const g = goodsById.get(l.id)!;
+      const hasVariants = (g.variants?.length ?? 0) > 0;
+      if (hasVariants) {
+        if (!l.variant || !g.variants!.includes(l.variant))
+          return bad(`「${g.name}」の${g.variantLabel ?? "種類"}を選択してください`);
+      }
+      items.push({
+        id: g.id,
+        name: g.name,
+        price: g.price,
+        qty: l.qty,
+        ...(hasVariants && l.variant ? { variant: l.variant } : {}),
+      });
     }
 
     const total = items.reduce((sum, it) => sum + it.price * it.qty, 0);

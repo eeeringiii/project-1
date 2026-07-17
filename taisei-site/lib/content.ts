@@ -47,6 +47,9 @@ export type LiveEvent = {
 // ---- グッズ（物販） ----
 export type GoodsCategory = "APPAREL" | "MUSIC" | "ACCESSORY" | "GOODS" | "OTHER";
 
+// 価格表示（¥1,234）。サーバー/クライアント両用。
+export const formatYen = (n: number) => `¥${new Intl.NumberFormat("ja-JP").format(n)}`;
+
 export const GOODS_CATEGORY_LABEL: Record<GoodsCategory, string> = {
   APPAREL: "アパレル",
   MUSIC: "音源・CD",
@@ -61,8 +64,11 @@ export type Goods = {
   category: GoodsCategory;
   price: number; // 税込・円
   description: string;
-  image?: string; // /uploads/xxx.jpg
+  image?: string; // メイン画像 /uploads/xxx.jpg
+  images?: string[]; // 追加の商品写真（詳細ページのギャラリー用）
   stock: number; // 在庫数。0 で SOLD OUT 表示
+  variantLabel?: string; // バリエーションの種類名（例：サイズ / カラー）
+  variants?: string[]; // 選択肢（例：["M","L","XL"]）。あれば購入時に選択必須
   externalUrl?: string; // BASE / STORES など外部ショップで販売する場合のリンク
   active: boolean; // false の間はサイトに出さない
 };
@@ -76,6 +82,7 @@ export type OrderItem = {
   name: string;
   price: number;
   qty: number;
+  variant?: string; // 選択したサイズ・カラー等
 };
 
 export type OrderCustomer = {

@@ -862,6 +862,8 @@ function GoodsTab({ password, initial }: { password: string; initial: Goods[] })
   const [price, setPrice] = useState("");
   const [stock, setStock] = useState("");
   const [description, setDescription] = useState("");
+  const [variantLabel, setVariantLabel] = useState("");
+  const [variants, setVariants] = useState("");
   const [externalUrl, setExternalUrl] = useState("");
   const [active, setActive] = useState(true);
   const [keepImage, setKeepImage] = useState("");
@@ -879,6 +881,8 @@ function GoodsTab({ password, initial }: { password: string; initial: Goods[] })
     setPrice("");
     setStock("");
     setDescription("");
+    setVariantLabel("");
+    setVariants("");
     setExternalUrl("");
     setActive(true);
     setKeepImage("");
@@ -895,6 +899,8 @@ function GoodsTab({ password, initial }: { password: string; initial: Goods[] })
     setPrice(String(g.price));
     setStock(String(g.stock));
     setDescription(g.description);
+    setVariantLabel(g.variantLabel ?? "");
+    setVariants((g.variants ?? []).join(", "));
     setExternalUrl(g.externalUrl ?? "");
     setActive(g.active);
     setKeepImage(g.image ?? "");
@@ -938,12 +944,18 @@ function GoodsTab({ password, initial }: { password: string; initial: Goods[] })
         return setError("画像の読み込みに失敗しました。別の画像でお試しください");
       }
     }
+    const variantList = variants
+      .split(/[,、\n]/)
+      .map((v) => v.trim())
+      .filter(Boolean);
     const item = {
       name,
       category,
       price: priceNum,
       stock: stockNum,
       description,
+      variantLabel,
+      variants: variantList,
       externalUrl,
       image,
       active,
@@ -966,6 +978,9 @@ function GoodsTab({ password, initial }: { password: string; initial: Goods[] })
       stock: stockNum,
       active,
       ...(image ? { image } : {}),
+      ...(variantList.length > 0
+        ? { variantLabel: variantLabel || "種類", variants: variantList }
+        : {}),
       ...(externalUrl ? { externalUrl } : {}),
     };
     setItems((prev) =>
@@ -1092,6 +1107,32 @@ function GoodsTab({ password, initial }: { password: string; initial: Goods[] })
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
+        </div>
+        <div className="grid gap-6 md:grid-cols-3">
+          <div>
+            <label className={labelCls}>バリエーションの種類（任意）</label>
+            <input
+              type="text"
+              className={field}
+              maxLength={20}
+              value={variantLabel}
+              onChange={(e) => setVariantLabel(e.target.value)}
+              placeholder="例：サイズ / カラー"
+            />
+          </div>
+          <div className="md:col-span-2">
+            <label className={labelCls}>選択肢（任意）</label>
+            <input
+              type="text"
+              className={field}
+              value={variants}
+              onChange={(e) => setVariants(e.target.value)}
+              placeholder="例：M, L, XL（カンマ区切り）"
+            />
+            <span className={hintCls}>
+              入力すると購入時に選択が必須になります。不要な商品は空のままでOKです
+            </span>
+          </div>
         </div>
         <div>
           <label className={labelCls}>商品写真（あれば）</label>
@@ -1305,10 +1346,11 @@ function OrdersTab({ password }: { password: string }) {
                   </p>
                 </div>
                 <ul className="mb-3 border-y border-line-soft py-2 text-[0.82rem]">
-                  {o.items.map((it) => (
-                    <li key={it.id} className="flex justify-between py-0.5">
+                  {o.items.map((it, idx) => (
+                    <li key={`${it.id}-${it.variant ?? ""}-${idx}`} className="flex justify-between py-0.5">
                       <span>
-                        {it.name} × {it.qty}
+                        {it.name}
+                        {it.variant ? `（${it.variant}）` : ""} × {it.qty}
                       </span>
                       <span className="tabular-nums text-sub">{yen(it.price * it.qty)}</span>
                     </li>

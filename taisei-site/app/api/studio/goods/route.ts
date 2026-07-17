@@ -41,6 +41,19 @@ function buildGoods(raw: Record<string, unknown>, id: string): Goods | string {
   if (externalUrl && !isUrl(externalUrl)) return "外部ショップのURLが不正です";
   const active = raw.active !== false;
 
+  // バリエーション（サイズ等）。カンマ/改行区切りの文字列 or 配列を受け付ける
+  const variantLabel =
+    typeof raw.variantLabel === "string" ? raw.variantLabel.trim() : "";
+  if (variantLabel.length > 20) return "バリエーションの種類名は20文字以内で入力してください";
+  let variants: string[] = [];
+  if (Array.isArray(raw.variants)) {
+    variants = raw.variants.filter((v): v is string => typeof v === "string");
+  } else if (typeof raw.variants === "string") {
+    variants = raw.variants.split(/[,、\n]/).map((v) => v.trim());
+  }
+  variants = variants.filter(Boolean).slice(0, 30);
+  if (variants.some((v) => v.length > 40)) return "各バリエーションは40文字以内で入力してください";
+
   return {
     id,
     name,
@@ -49,6 +62,7 @@ function buildGoods(raw: Record<string, unknown>, id: string): Goods | string {
     description,
     ...(image ? { image } : {}),
     stock,
+    ...(variants.length > 0 ? { variantLabel: variantLabel || "種類", variants } : {}),
     ...(externalUrl ? { externalUrl } : {}),
     active,
   };
