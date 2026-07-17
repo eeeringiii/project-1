@@ -73,6 +73,20 @@ export type Goods = {
   active: boolean; // false の間はサイトに出さない
 };
 
+// ---- ストア設定（送料など） ----
+export type ShopConfig = {
+  shippingFee: number; // 全国一律送料（円）。0 なら送料無料
+  freeShippingOver: number; // この金額（税込）以上で送料無料。0 なら無し
+  shippingNote: string; // 送料に関する補足
+};
+
+// 送料を計算する（サーバー/クライアント共通のロジック）
+export function calcShipping(config: ShopConfig, subtotal: number): number {
+  if (config.shippingFee <= 0) return 0;
+  if (config.freeShippingOver > 0 && subtotal >= config.freeShippingOver) return 0;
+  return config.shippingFee;
+}
+
 // ---- 注文・顧客 ----
 export const ORDER_STATUSES = ["受付", "入金確認", "発送済み", "キャンセル"] as const;
 export type OrderStatus = (typeof ORDER_STATUSES)[number];
@@ -83,6 +97,11 @@ export type OrderItem = {
   price: number;
   qty: number;
   variant?: string; // 選択したサイズ・カラー等
+};
+
+export type OrderAmount = {
+  subtotal: number; // 商品小計
+  shipping: number; // 送料
 };
 
 export type OrderCustomer = {
@@ -100,7 +119,9 @@ export type Order = {
   status: OrderStatus;
   customer: OrderCustomer;
   items: OrderItem[];
-  total: number; // 税込合計（円）
+  subtotal?: number; // 商品小計（税込）
+  shipping?: number; // 送料
+  total: number; // お支払い合計（税込・送料込み）
   note?: string; // お客様からの備考
 };
 

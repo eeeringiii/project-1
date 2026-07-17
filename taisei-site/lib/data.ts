@@ -6,6 +6,7 @@ import type {
   Movie,
   Profile,
   Release,
+  ShopConfig,
   SiteSettings,
 } from "@/lib/content";
 
@@ -47,4 +48,18 @@ export function getGoods(): Goods[] {
 // 公開ページ用：掲載中（active）のグッズのみ
 export function getActiveGoods(): Goods[] {
   return getGoods().filter((g) => g.active);
+}
+
+// ストア設定（送料など）。ファイルが無い場合は安全な既定値を返す。
+export function getShopConfig(): ShopConfig {
+  try {
+    const raw = readJson<Partial<ShopConfig>>("shop.json");
+    return {
+      shippingFee: Number(raw.shippingFee) || 0,
+      freeShippingOver: Number(raw.freeShippingOver) || 0,
+      shippingNote: typeof raw.shippingNote === "string" ? raw.shippingNote : "",
+    };
+  } catch {
+    return { shippingFee: 0, freeShippingOver: 0, shippingNote: "" };
+  }
 }

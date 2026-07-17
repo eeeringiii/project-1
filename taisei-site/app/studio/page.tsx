@@ -7,6 +7,7 @@ import {
   getProfile,
   getReleases,
   getSettings,
+  getShopConfig,
 } from "@/lib/data";
 import { getAllNews } from "@/lib/news";
 
@@ -34,6 +35,7 @@ export default function StudioPage() {
         settings={getSettings()}
         profile={getProfile()}
         goods={getGoods()}
+        shop={getShopConfig()}
       />
     </main>
   );

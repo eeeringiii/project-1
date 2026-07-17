@@ -17,12 +17,20 @@ export default function StoreLayout({ children }: { children: ReactNode }) {
       </main>
       <footer className="border-t border-line">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-6 py-10 md:flex-row md:justify-between md:px-9">
-          <a
-            href={siteHref("/")}
-            className="text-[0.66rem] tracking-[0.2em] text-sub transition-colors hover:text-gold"
-          >
-            オフィシャルサイトへ戻る
-          </a>
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+            <a
+              href={siteHref("/")}
+              className="text-[0.66rem] tracking-[0.2em] text-sub transition-colors hover:text-gold"
+            >
+              オフィシャルサイトへ戻る
+            </a>
+            <a
+              href={siteHref("/contact")}
+              className="text-[0.66rem] tracking-[0.2em] text-sub transition-colors hover:text-gold"
+            >
+              お問い合わせ
+            </a>
+          </div>
           <small className="text-[0.62rem] tracking-[0.2em] text-muted">
             © {siteMeta.artistNameEn}
           </small>

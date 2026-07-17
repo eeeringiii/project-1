@@ -7,6 +7,7 @@ import {
   type CustomerSummary,
   type Goods,
   type GoodsCategory,
+  type ShopConfig,
   type LiveEvent,
   type Movie,
   type NewsItem,
@@ -854,7 +855,70 @@ const GOODS_CATEGORIES: GoodsCategory[] = [
   "OTHER",
 ];
 
-function GoodsTab({ password, initial }: { password: string; initial: Goods[] }) {
+function ShippingConfig({ password, initial }: { password: string; initial: ShopConfig }) {
+  const [fee, setFee] = useState(String(initial.shippingFee));
+  const [freeOver, setFreeOver] = useState(String(initial.freeShippingOver));
+  const [note, setNote] = useState(initial.shippingNote);
+  const [sending, setSending] = useState(false);
+  const [done, setDone] = useState(false);
+  const [error, setError] = useState("");
+
+  async function save() {
+    setError("");
+    setDone(false);
+    const feeNum = Number(fee);
+    const freeNum = Number(freeOver);
+    if (!Number.isInteger(feeNum) || feeNum < 0) return setError("送料は0以上の整数で入力してください");
+    if (!Number.isInteger(freeNum) || freeNum < 0)
+      return setError("送料無料ラインは0以上の整数で入力してください");
+    setSending(true);
+    const res = await post("/api/studio/goods", {
+      password,
+      action: "config",
+      config: { shippingFee: feeNum, freeShippingOver: freeNum, shippingNote: note },
+    });
+    setSending(false);
+    if (!res.ok) return setError(res.error ?? "エラーが発生しました");
+    setDone(true);
+  }
+
+  return (
+    <div className="border border-line p-4">
+      <h3 className="mb-1 text-[0.8rem] tracking-[0.2em] text-gold">ストア設定（送料）</h3>
+      <p className={hintCls}>
+        お客様のカートに「送料」と「お支払い合計」を表示します。送料を 0 にすると全国送料無料になります。
+      </p>
+      <div className="mt-4 grid gap-4 md:grid-cols-2">
+        <div>
+          <label className={labelCls}>全国一律送料（円）</label>
+          <input type="number" inputMode="numeric" min={0} className={field} value={fee} onChange={(e) => setFee(e.target.value)} placeholder="500" />
+        </div>
+        <div>
+          <label className={labelCls}>送料無料になる金額（円・0で無し）</label>
+          <input type="number" inputMode="numeric" min={0} className={field} value={freeOver} onChange={(e) => setFreeOver(e.target.value)} placeholder="10000" />
+        </div>
+      </div>
+      <div className="mt-4">
+        <label className={labelCls}>送料に関する補足（任意）</label>
+        <input type="text" className={field} maxLength={200} value={note} onChange={(e) => setNote(e.target.value)} placeholder="全国一律。ご入金確認後、順次発送いたします。" />
+      </div>
+      <Notice error={error} done={done} doneText="送料設定を更新しました" />
+      <button type="button" className={`${primaryBtn} mt-4`} disabled={sending} onClick={save}>
+        {sending ? "送信中…" : "送料設定を保存する"}
+      </button>
+    </div>
+  );
+}
+
+function GoodsTab({
+  password,
+  initial,
+  shop,
+}: {
+  password: string;
+  initial: Goods[];
+  shop: ShopConfig;
+}) {
   const [items, setItems] = useState<Goods[]>(initial);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [name, setName] = useState("");
@@ -993,6 +1057,7 @@ function GoodsTab({ password, initial }: { password: string; initial: Goods[] })
 
   return (
     <div className="space-y-6">
+      <ShippingConfig password={password} initial={shop} />
       <div>
         <span className={labelCls}>現在の商品</span>
         {items.length === 0 ? (
@@ -1355,6 +1420,20 @@ function OrdersTab({ password }: { password: string }) {
                       <span className="tabular-nums text-sub">{yen(it.price * it.qty)}</span>
                     </li>
                   ))}
+                  {typeof o.shipping === "number" && (
+                    <>
+                      <li className="mt-1 flex justify-between border-t border-line-soft pt-1.5 text-sub">
+                        <span>小計</span>
+                        <span className="tabular-nums">{yen(o.subtotal ?? o.total)}</span>
+                      </li>
+                      <li className="flex justify-between text-sub">
+                        <span>送料</span>
+                        <span className="tabular-nums">
+                          {o.shipping === 0 ? "無料" : yen(o.shipping)}
+                        </span>
+                      </li>
+                    </>
+                  )}
                   <li className="mt-1 flex justify-between border-t border-line-soft pt-1.5 font-medium">
                     <span>合計</span>
                     <span className="tabular-nums">{yen(o.total)}</span>
@@ -1445,6 +1524,7 @@ export default function StudioTabs({
   settings,
   profile,
   goods,
+  shop,
 }: {
   news: NewsItem[];
   releases: Release[];
@@ -1453,6 +1533,7 @@ export default function StudioTabs({
   settings: SiteSettings;
   profile: Profile;
   goods: Goods[];
+  shop: ShopConfig;
 }) {
   const [tab, setTab] = useState<TabKey>("news");
   const [password, setPassword] = useState("");
@@ -1504,7 +1585,7 @@ export default function StudioTabs({
         {tab === "releases" && <ReleaseTab password={password} initial={releases} />}
         {tab === "live" && <LiveTab password={password} initial={live} />}
         {tab === "movies" && <MovieTab password={password} initial={movies} />}
-        {tab === "goods" && <GoodsTab password={password} initial={goods} />}
+        {tab === "goods" && <GoodsTab password={password} initial={goods} shop={shop} />}
         {tab === "orders" && <OrdersTab password={password} />}
         {tab === "photos" && <PhotoTab password={password} settings={settings} />}
         {tab === "settings" && (

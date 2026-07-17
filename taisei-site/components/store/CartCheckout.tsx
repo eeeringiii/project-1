@@ -2,15 +2,21 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { formatYen } from "@/lib/content";
+import { calcShipping, formatYen, type ShopConfig } from "@/lib/content";
 import { useCart } from "@/components/store/CartContext";
 
 const fieldCls =
   "w-full border border-line bg-paper px-4 py-3 text-[0.95rem] focus:border-gold focus:outline-none";
 const labelCls = "mb-1.5 block text-[0.8rem] tracking-[0.08em] text-ink";
 
-export default function CartCheckout() {
-  const { items, total, count, setQty, remove, clear, ready } = useCart();
+export default function CartCheckout({ shop }: { shop: ShopConfig }) {
+  const { items, total: subtotal, count, setQty, remove, clear, ready } = useCart();
+  const shipping = calcShipping(shop, subtotal);
+  const grandTotal = subtotal + shipping;
+  const remainingForFree =
+    shop.shippingFee > 0 && shop.freeShippingOver > 0 && subtotal < shop.freeShippingOver
+      ? shop.freeShippingOver - subtotal
+      : 0;
   const [customer, setCustomer] = useState({
     name: "",
     kana: "",
@@ -179,9 +185,30 @@ export default function CartCheckout() {
             </li>
           ))}
         </ul>
-        <div className="flex items-baseline justify-between border-t border-line px-4 py-4">
-          <span className="text-[0.75rem] tracking-[0.2em] text-sub">商品合計（税込）</span>
-          <span className="font-display text-xl tracking-wide">{formatYen(total)}</span>
+        <div className="space-y-2 border-t border-line px-4 py-4 text-sm">
+          <div className="flex items-baseline justify-between text-sub">
+            <span>商品小計（税込）</span>
+            <span className="tabular-nums">{formatYen(subtotal)}</span>
+          </div>
+          <div className="flex items-baseline justify-between text-sub">
+            <span>送料</span>
+            <span className="tabular-nums">
+              {shop.shippingFee <= 0
+                ? "無料"
+                : shipping === 0
+                  ? "無料"
+                  : formatYen(shipping)}
+            </span>
+          </div>
+          {remainingForFree > 0 && (
+            <p className="border border-gold-soft bg-paper-soft px-3 py-2 text-[0.78rem] text-gold">
+              あと {formatYen(remainingForFree)} のお買い上げで送料無料です
+            </p>
+          )}
+          <div className="flex items-baseline justify-between border-t border-line-soft pt-3">
+            <span className="text-[0.75rem] tracking-[0.2em] text-sub">お支払い合計</span>
+            <span className="font-display text-xl tracking-wide">{formatYen(grandTotal)}</span>
+          </div>
         </div>
       </div>
 
@@ -247,7 +274,7 @@ export default function CartCheckout() {
           disabled={sending}
           className="mt-6 w-full border border-ink bg-ink px-6 py-4 text-[0.85rem] tracking-[0.3em] text-paper transition-opacity hover:opacity-80 disabled:opacity-40"
         >
-          {sending ? "送信中…" : `この内容で注文する（${formatYen(total)}）`}
+          {sending ? "送信中…" : `この内容で注文する（${formatYen(grandTotal)}）`}
         </button>
         <p className="mt-2 text-[0.72rem] leading-relaxed text-muted">
           送信の時点では決済は発生しません。折り返しお支払い方法をご案内します。

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import CartCheckout from "@/components/store/CartCheckout";
+import { getShopConfig } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "CART",
@@ -7,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function CartPage() {
-  return <CartCheckout />;
+  return <CartCheckout shop={getShopConfig()} />;
 }

@@ -6,6 +6,7 @@ import { getRepoFile, putRepoFile, toBase64 } from "@/lib/github";
 // content/goods.json（配列）を GitHub 経由で書き換える。
 
 const GOODS_PATH = "taisei-site/content/goods.json";
+const SHOP_PATH = "taisei-site/content/shop.json";
 const CATEGORIES: GoodsCategory[] = [
   "APPAREL",
   "MUSIC",
@@ -81,6 +82,41 @@ export async function POST(req: Request) {
   if (payload.password !== studioPassword) return bad("パスワードが違います", 401);
 
   const action = payload.action as string;
+
+  // ストア設定（送料）の保存。content/shop.json を丸ごと更新する。
+  if (action === "config") {
+    if (!process.env.GITHUB_CONTENT_TOKEN)
+      return bad("サーバー設定が未完了です（GITHUB_CONTENT_TOKEN）", 500);
+    const cfg = (payload.config as Record<string, unknown>) ?? {};
+    const shippingFee = Number(cfg.shippingFee);
+    const freeShippingOver = Number(cfg.freeShippingOver);
+    if (!Number.isInteger(shippingFee) || shippingFee < 0 || shippingFee > 100000)
+      return bad("送料は0〜100,000の整数で入力してください");
+    if (!Number.isInteger(freeShippingOver) || freeShippingOver < 0 || freeShippingOver > 1_000_000)
+      return bad("送料無料ラインは0以上の整数で入力してください");
+    const shippingNote =
+      typeof cfg.shippingNote === "string" ? cfg.shippingNote.trim().slice(0, 200) : "";
+    const data = { shippingFee, freeShippingOver, shippingNote };
+    try {
+      let sha: string | undefined;
+      try {
+        sha = (await getRepoFile(SHOP_PATH)).sha;
+      } catch {
+        /* 初回は新規作成 */
+      }
+      await putRepoFile(
+        SHOP_PATH,
+        toBase64(JSON.stringify(data, null, 2) + "\n"),
+        "入稿(ストア設定): 送料を更新",
+        sha,
+      );
+      return NextResponse.json({ ok: true });
+    } catch (e) {
+      console.error("studio shop config error:", e);
+      return bad("保存に失敗しました。時間をおいて再度お試しください", 502);
+    }
+  }
+
   if (!["append", "update", "remove"].includes(action))
     return bad("操作が不正です");
 

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import type { Goods, Order, OrderItem } from "@/lib/content";
+import { calcShipping, type Goods, type Order, type OrderItem } from "@/lib/content";
+import { getShopConfig } from "@/lib/data";
 import { getRepoFile, putRepoFile, toBase64 } from "@/lib/github";
 
 // グッズ販売の注文受付（公開エンドポイント・パスワード不要）。
@@ -114,7 +115,10 @@ export async function POST(req: Request) {
       });
     }
 
-    const total = items.reduce((sum, it) => sum + it.price * it.qty, 0);
+    // 送料はサーバー側の設定から計算（クライアントの金額は信用しない）
+    const subtotal = items.reduce((sum, it) => sum + it.price * it.qty, 0);
+    const shipping = calcShipping(getShopConfig(), subtotal);
+    const total = subtotal + shipping;
     const orderId = makeOrderId();
     const order: Order = {
       id: orderId,
@@ -129,6 +133,8 @@ export async function POST(req: Request) {
         address: (c.address as string).trim(),
       },
       items,
+      subtotal,
+      shipping,
       total,
       ...(note ? { note } : {}),
     };

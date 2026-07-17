@@ -5,7 +5,8 @@ import {
   GOODS_CATEGORY_LABEL,
   type Goods,
 } from "@/lib/content";
-import { getActiveGoods } from "@/lib/data";
+import { getActiveGoods, getShopConfig } from "@/lib/data";
+import { siteHref } from "@/lib/shop";
 
 export const metadata: Metadata = {
   title: "GOODS STORE",
@@ -71,6 +72,13 @@ const STEPS = [
 
 export default function GoodsStorePage() {
   const goods = getActiveGoods();
+  const shop = getShopConfig();
+  const shippingText =
+    shop.shippingFee <= 0
+      ? "全国送料無料"
+      : shop.freeShippingOver > 0
+        ? `全国一律 ${formatYen(shop.shippingFee)}（${formatYen(shop.freeShippingOver)}以上で無料）`
+        : `全国一律 ${formatYen(shop.shippingFee)}`;
   return (
     <div className="space-y-14">
       {/* ヒーロー */}
@@ -122,13 +130,23 @@ export default function GoodsStorePage() {
           </p>
           <p className="border border-line-soft bg-paper-soft px-4 py-3">
             <span className="mb-1 block text-[0.68rem] tracking-[0.14em] text-gold">送料</span>
-            全国一律。金額はご注文後のご案内メールに記載
+            {shippingText}
           </p>
           <p className="border border-line-soft bg-paper-soft px-4 py-3">
             <span className="mb-1 block text-[0.68rem] tracking-[0.14em] text-gold">お届け</span>
             ご入金確認後、順次発送いたします
           </p>
         </div>
+        <p className="mt-5 text-[0.8rem] text-sub">
+          ご不明な点は{" "}
+          <a
+            href={siteHref("/contact")}
+            className="text-gold underline underline-offset-2 hover:opacity-80"
+          >
+            お問い合わせ
+          </a>{" "}
+          からお気軽にご連絡ください。商品の交換・不良については到着後1週間以内にご連絡をお願いします。
+        </p>
       </section>
     </div>
   );
