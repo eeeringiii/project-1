@@ -12,12 +12,15 @@ import { PLATFORMS, PLATFORM_LABELS } from "@/constants";
 import { contentSourceSchema } from "@/schemas";
 import type { Platform } from "@/types/domain";
 import { can } from "@/services/permissions";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
+import { uploadMedia } from "@/repositories/supabase/storage";
 
 interface UploadPreview {
   name: string;
   kind: "image" | "video";
   url: string;
   size: number;
+  file: File;
 }
 
 export function ContentCreateForm() {
@@ -65,12 +68,13 @@ export function ContentCreateForm() {
         kind,
         url: URL.createObjectURL(f),
         size: f.size,
+        file: f,
       });
     });
     setUploads((s) => [...s, ...next]);
   }
 
-  function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     const parsed = contentSourceSchema.safeParse({
       title,
@@ -103,14 +107,32 @@ export function ContentCreateForm() {
 
     const source = createContentSource(parsed.data);
 
-    // アップロード素材を素材ライブラリへ登録（MVP: セッション内プレビュー）
-    uploads.forEach((u) => {
+    // アップロード素材を素材ライブラリへ登録
+    // Supabase設定時は Storage へアップロードして公開URLを保存、未設定時はローカルプレビュー。
+    for (const u of uploads) {
+      let fileUrl = u.url;
+      let note: string | null =
+        "MVP: ローカルプレビュー（Supabase未設定）";
+      if (isSupabaseConfigured) {
+        try {
+          const res = await uploadMedia(u.file, source.artistId);
+          fileUrl = res.url;
+          note = null;
+        } catch (err) {
+          toast.show(
+            `素材アップロードに失敗しました: ${
+              err instanceof Error ? err.message : "不明なエラー"
+            }`,
+            "error",
+          );
+        }
+      }
       addMediaAsset({
         artistId: source.artistId,
         campaignId: source.campaignId,
         category: u.kind === "image" ? "announcement_image" : "video",
         fileName: u.name,
-        fileUrl: u.url,
+        fileUrl,
         fileType: u.kind,
         mimeType: u.kind === "image" ? "image/*" : "video/*",
         fileSize: u.size,
@@ -123,10 +145,10 @@ export function ContentCreateForm() {
         rightsNote: null,
         creditText: null,
         tags: ["入稿時アップロード"],
-        notes: "MVPではローカルプレビューのみ（Phase 2でStorage連携）",
+        notes: note,
         createdBy: currentUser.id,
       });
-    });
+    }
 
     toast.show("コンテンツを登録しました。AI生成に進みます。", "success");
     router.push(`/content/${source.id}/generate`);
@@ -323,8 +345,9 @@ export function ContentCreateForm() {
                 </div>
               )}
               <p className="text-xs text-[var(--muted)]">
-                ※ MVPではローカルプレビューのみ。Phase 2 で Supabase Storage
-                にアップロードします。
+                {isSupabaseConfigured
+                  ? "※ 登録時に Supabase Storage へアップロードします。"
+                  : "※ Supabase未設定のためローカルプレビューのみ。.env.local 設定で Storage 連携に切り替わります。"}
               </p>
             </div>
           </Card>

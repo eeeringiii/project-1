@@ -79,8 +79,8 @@ export function Header({
       </button>
 
       <button
-        onClick={() => {
-          signOut();
+        onClick={async () => {
+          await signOut();
           toast.show("ログアウトしました", "info");
           router.push("/login");
         }}

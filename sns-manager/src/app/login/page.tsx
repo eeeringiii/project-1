@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Disc3, Mail, Lock } from "lucide-react";
 import { Button, Field, Input } from "@/components/ui/primitives";
-import { getSession, signIn } from "@/lib/auth";
+import { hasSession, signIn } from "@/lib/auth";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { APP_NAME } from "@/constants";
 import { useToast } from "@/components/ui/Toast";
 
@@ -14,23 +15,24 @@ export default function LoginPage() {
   const [email, setEmail] = useState("manager@example.com");
   const [password, setPassword] = useState("password");
   const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (getSession()) router.replace("/dashboard");
+    hasSession().then((ok) => {
+      if (ok) router.replace("/dashboard");
+    });
   }, [router]);
 
-  function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    if (!email.includes("@")) {
-      setError("メールアドレスの形式が正しくありません。");
+    setSubmitting(true);
+    const result = await signIn(email, password);
+    setSubmitting(false);
+    if (!result.ok) {
+      setError(result.error);
       return;
     }
-    if (password.length < 4) {
-      setError("パスワードは4文字以上で入力してください。");
-      return;
-    }
-    signIn(email);
     toast.show("ログインしました", "success");
     router.push("/dashboard");
   }
@@ -90,14 +92,25 @@ export default function LoginPage() {
             </p>
           )}
 
-          <Button type="submit" variant="primary" className="w-full">
-            ログイン
+          <Button
+            type="submit"
+            variant="primary"
+            className="w-full"
+            disabled={submitting}
+          >
+            {submitting ? "ログイン中…" : "ログイン"}
           </Button>
 
           <p className="text-center text-[11px] leading-relaxed text-[var(--muted)]">
-            ※ 現在はモック認証です。任意のメール／パスワード（4文字以上）でログインできます。
-            <br />
-            Phase 2 で Supabase Auth に差し替えます。
+            {isSupabaseConfigured ? (
+              <>Supabase Auth でログインします。登録済みのメール／パスワードを入力してください。</>
+            ) : (
+              <>
+                ※ 現在はモック認証です。任意のメール／パスワード（4文字以上）でログインできます。
+                <br />
+                `.env.local` に Supabase を設定すると Supabase Auth に切り替わります。
+              </>
+            )}
           </p>
         </form>
       </div>

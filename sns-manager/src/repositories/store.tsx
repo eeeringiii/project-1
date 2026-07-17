@@ -1,13 +1,13 @@
 "use client";
 
 /**
- * データストア（Phase 1: クライアント内メモリ + localStorage 永続化）
+ * データストア（UIの単一情報源）
  *
- * 要件「モックデータでも一通り操作でき、リロード後もある程度保持」を満たすため、
- * React Context で全エンティティと更新操作を提供する。
+ * - Supabase 未設定時: クライアント内メモリ + localStorage 永続（Phase 1 と同じモック動作）
+ * - Supabase 設定時: 起動時に Supabase から全データをロードし、各更新を書き込みスルーで永続化
  *
- * Phase 2 でこの Provider の内部実装を Supabase 呼び出しに差し替えても、
- * `useStore()` の公開インターフェースを維持できるよう、UI は本フックのみ参照する。
+ * UI（features）は本フック `useStore()` のみを参照するため、実装差し替えの影響を受けない。
+ * 書き込みは楽観的更新（ローカル即時反映）＋非同期永続化（失敗時は console にエラー）。
  */
 import {
   createContext,
@@ -36,6 +36,8 @@ import type { GeneratedDraft } from "@/services/ai-generation";
 import { transition, makeVersion } from "@/services/status-flow";
 import * as seed from "@/mock/seed";
 import type { ContentSourceInput } from "@/schemas";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
+import * as repo from "@/repositories/supabase/repo";
 
 const STORAGE_KEY = "sns-manager-store-v1";
 
@@ -71,26 +73,38 @@ function buildSeedState(): StoreState {
   };
 }
 
+/** ID採番: Supabase設定時はUUID（DBのuuid列に適合）、未設定時は可読ID */
 function genId(prefix: string): string {
+  if (isSupabaseConfigured && typeof crypto !== "undefined" && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
   return `${prefix}_${Date.now().toString(36)}_${Math.random()
     .toString(36)
     .slice(2, 7)}`;
 }
 
+/** 永続化を best-effort で実行（Supabase設定時のみ） */
+function persist(op: () => Promise<void>): void {
+  if (!isSupabaseConfigured) return;
+  op().catch((e) => {
+    console.error("[store] Supabase 永続化に失敗しました:", e);
+  });
+}
+
 interface StoreApi {
   state: StoreState;
   currentUser: User;
+  loading: boolean;
+  loadError: string | null;
   setCurrentUserId: (id: string) => void;
   reset: () => void;
 
-  // content
   createContentSource: (input: ContentSourceInput) => ContentSource;
   createPostsFromDrafts: (
     sourceId: string,
     drafts: GeneratedDraft[],
   ) => SocialPost[];
 
-  // posts
   updatePost: (
     id: string,
     patch: Partial<SocialPost>,
@@ -100,16 +114,13 @@ interface StoreApi {
   deletePost: (id: string) => void;
   createEmptyPost: (platform: SocialPost["platform"]) => SocialPost;
 
-  // media
   addMediaAsset: (asset: Omit<MediaAsset, "id" | "createdAt" | "updatedAt">) => void;
   updateMediaAsset: (id: string, patch: Partial<MediaAsset>) => void;
   deleteMediaAsset: (id: string) => void;
 
-  // brand rules
   upsertBrandRule: (rule: BrandRule) => void;
   deleteBrandRule: (id: string) => void;
 
-  // campaigns
   createCampaign: (
     campaign: Omit<Campaign, "id" | "artistId" | "createdAt" | "updatedAt">,
   ) => void;
@@ -120,23 +131,51 @@ const StoreContext = createContext<StoreApi | null>(null);
 export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<StoreState>(buildSeedState);
   const [hydrated, setHydrated] = useState(false);
+  const [loading, setLoading] = useState(isSupabaseConfigured);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
-  // localStorage から復元
+  // 起動時のデータロード
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      // localStorage（外部ストア）からの復元。Phase 2でSupabase取得に差替。
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      if (raw) setState(JSON.parse(raw) as StoreState);
-    } catch {
-      // 破損時はシードのまま
+    let active = true;
+    if (isSupabaseConfigured) {
+      repo
+        .loadAll()
+        .then((snap) => {
+          if (!active) return;
+          setState((s) => ({
+            ...s,
+            ...snap,
+            // 現在ユーザーは Supabase の users から先頭を暫定選択（本来は auth.uid と紐付け）
+            currentUserId: snap.users[0]?.id ?? s.currentUserId,
+          }));
+          setLoading(false);
+        })
+        .catch((e) => {
+          if (!active) return;
+          setLoadError(e instanceof Error ? e.message : "読み込みに失敗しました");
+          setLoading(false);
+        })
+        .finally(() => {
+          if (active) setHydrated(true);
+        });
+    } else {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        if (raw) setState(JSON.parse(raw) as StoreState);
+      } catch {
+        // 破損時はシードのまま
+      }
+      setHydrated(true);
     }
-    setHydrated(true);
+    return () => {
+      active = false;
+    };
   }, []);
 
-  // 変更を保存
+  // localStorage への保存（モック時のみ）
   useEffect(() => {
-    if (!hydrated) return;
+    if (!hydrated || isSupabaseConfigured) return;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch {
@@ -150,6 +189,8 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     [state.users, state.currentUserId],
   );
 
+  const artistId = state.artists[0]?.id ?? seed.ARTIST_ID;
+
   const setCurrentUserId = useCallback((id: string) => {
     setState((s) => ({ ...s, currentUserId: id }));
   }, []);
@@ -157,10 +198,12 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const reset = useCallback(() => {
     const fresh = buildSeedState();
     setState(fresh);
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(fresh));
-    } catch {
-      // ignore
+    if (!isSupabaseConfigured) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(fresh));
+      } catch {
+        // ignore
+      }
     }
   }, []);
 
@@ -169,7 +212,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       const nowIso = new Date().toISOString();
       const source: ContentSource = {
         id: genId("src"),
-        artistId: seed.ARTIST_ID,
+        artistId,
         campaignId: input.campaignId,
         title: input.title,
         sourceText: input.sourceText,
@@ -188,13 +231,11 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         createdAt: nowIso,
         updatedAt: nowIso,
       };
-      setState((s) => ({
-        ...s,
-        contentSources: [source, ...s.contentSources],
-      }));
+      setState((s) => ({ ...s, contentSources: [source, ...s.contentSources] }));
+      persist(() => repo.upsertContentSource(source));
       return source;
     },
-    [state.currentUserId],
+    [artistId, state.currentUserId],
   );
 
   const createPostsFromDrafts = useCallback(
@@ -203,7 +244,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       const source = state.contentSources.find((c) => c.id === sourceId);
       const newPosts: SocialPost[] = drafts.map((d) => ({
         id: genId("post"),
-        artistId: seed.ARTIST_ID,
+        artistId,
         campaignId: source?.campaignId ?? null,
         contentSourceId: sourceId,
         platform: d.platform,
@@ -229,9 +270,12 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         updatedAt: nowIso,
       }));
       setState((s) => ({ ...s, posts: [...newPosts, ...s.posts] }));
+      persist(async () => {
+        for (const p of newPosts) await repo.upsertPost(p);
+      });
       return newPosts;
     },
-    [state.contentSources, state.currentUserId],
+    [artistId, state.contentSources, state.currentUserId],
   );
 
   const createEmptyPost = useCallback(
@@ -239,7 +283,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       const nowIso = new Date().toISOString();
       const post: SocialPost = {
         id: genId("post"),
-        artistId: seed.ARTIST_ID,
+        artistId,
         campaignId: null,
         contentSourceId: null,
         platform,
@@ -265,9 +309,10 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         updatedAt: nowIso,
       };
       setState((s) => ({ ...s, posts: [post, ...s.posts] }));
+      persist(() => repo.upsertPost(post));
       return post;
     },
-    [state.currentUserId],
+    [artistId, state.currentUserId],
   );
 
   const updatePost = useCallback(
@@ -276,72 +321,72 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       patch: Partial<SocialPost>,
       opts?: { changeSummary?: string },
     ) => {
-      setState((s) => {
-        const post = s.posts.find((p) => p.id === id);
-        if (!post) return s;
-        const contentChanged =
-          (patch.title !== undefined && patch.title !== post.title) ||
-          (patch.body !== undefined && patch.body !== post.body) ||
-          (patch.hashtags !== undefined &&
-            JSON.stringify(patch.hashtags) !== JSON.stringify(post.hashtags));
+      const post = state.posts.find((p) => p.id === id);
+      if (!post) return;
+      const contentChanged =
+        (patch.title !== undefined && patch.title !== post.title) ||
+        (patch.body !== undefined && patch.body !== post.body) ||
+        (patch.hashtags !== undefined &&
+          JSON.stringify(patch.hashtags) !== JSON.stringify(post.hashtags));
 
-        const updated: SocialPost = {
-          ...post,
-          ...patch,
-          updatedAt: new Date().toISOString(),
-        };
+      const updated: SocialPost = {
+        ...post,
+        ...patch,
+        updatedAt: new Date().toISOString(),
+      };
 
-        let versions = s.postVersions;
-        if (contentChanged && opts?.changeSummary) {
-          const versionNumber =
-            s.postVersions.filter((v) => v.socialPostId === id).length + 1;
-          versions = [
-            makeVersion({
-              post: updated,
-              versionNumber,
-              userId: s.currentUserId,
-              changeSummary: opts.changeSummary,
-            }),
-            ...s.postVersions,
-          ];
-        }
+      let newVersion: PostVersion | null = null;
+      if (contentChanged && opts?.changeSummary) {
+        const versionNumber =
+          state.postVersions.filter((v) => v.socialPostId === id).length + 1;
+        newVersion = makeVersion({
+          post: updated,
+          versionNumber,
+          userId: state.currentUserId,
+          changeSummary: opts.changeSummary,
+        });
+      }
 
-        return {
-          ...s,
-          posts: s.posts.map((p) => (p.id === id ? updated : p)),
-          postVersions: versions,
-        };
+      const version = newVersion;
+      setState((s) => ({
+        ...s,
+        posts: s.posts.map((p) => (p.id === id ? updated : p)),
+        postVersions: version ? [version, ...s.postVersions] : s.postVersions,
+      }));
+      persist(async () => {
+        await repo.upsertPost(updated);
+        if (version) await repo.insertPostVersion(version);
       });
     },
-    [],
+    [state.posts, state.postVersions, state.currentUserId],
   );
 
   const changeStatus = useCallback(
     (id: string, next: PostStatus, comment?: string) => {
-      setState((s) => {
-        const post = s.posts.find((p) => p.id === id);
-        if (!post) return s;
-        const { post: updated, history } = transition({
-          post,
-          next,
-          userId: s.currentUserId,
-          comment,
-        });
-        return {
-          ...s,
-          posts: s.posts.map((p) => (p.id === id ? updated : p)),
-          statusHistories: [history, ...s.statusHistories],
-        };
+      const post = state.posts.find((p) => p.id === id);
+      if (!post) return;
+      const { post: updated, history } = transition({
+        post,
+        next,
+        userId: state.currentUserId,
+        comment,
+      });
+      setState((s) => ({
+        ...s,
+        posts: s.posts.map((p) => (p.id === id ? updated : p)),
+        statusHistories: [history, ...s.statusHistories],
+      }));
+      persist(async () => {
+        await repo.upsertPost(updated);
+        await repo.insertStatusHistory(history);
       });
     },
-    [],
+    [state.posts, state.currentUserId],
   );
 
   const deletePost = useCallback((id: string) => {
-    setState((s) => ({
-      ...s,
-      posts: s.posts.filter((p) => p.id !== id),
-    }));
+    setState((s) => ({ ...s, posts: s.posts.filter((p) => p.id !== id) }));
+    persist(() => repo.deletePost(id));
   }, []);
 
   const addMediaAsset = useCallback(
@@ -354,22 +399,27 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         updatedAt: nowIso,
       };
       setState((s) => ({ ...s, mediaAssets: [full, ...s.mediaAssets] }));
+      persist(() => repo.upsertMediaAsset(full));
     },
     [],
   );
 
   const updateMediaAsset = useCallback(
     (id: string, patch: Partial<MediaAsset>) => {
+      const asset = state.mediaAssets.find((a) => a.id === id);
+      if (!asset) return;
+      const updated: MediaAsset = {
+        ...asset,
+        ...patch,
+        updatedAt: new Date().toISOString(),
+      };
       setState((s) => ({
         ...s,
-        mediaAssets: s.mediaAssets.map((a) =>
-          a.id === id
-            ? { ...a, ...patch, updatedAt: new Date().toISOString() }
-            : a,
-        ),
+        mediaAssets: s.mediaAssets.map((a) => (a.id === id ? updated : a)),
       }));
+      persist(() => repo.upsertMediaAsset(updated));
     },
-    [],
+    [state.mediaAssets],
   );
 
   const deleteMediaAsset = useCallback((id: string) => {
@@ -377,6 +427,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       ...s,
       mediaAssets: s.mediaAssets.filter((a) => a.id !== id),
     }));
+    persist(() => repo.deleteMediaAsset(id));
   }, []);
 
   const upsertBrandRule = useCallback((rule: BrandRule) => {
@@ -389,6 +440,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
           : [rule, ...s.brandRules],
       };
     });
+    persist(() => repo.upsertBrandRule(rule));
   }, []);
 
   const deleteBrandRule = useCallback((id: string) => {
@@ -396,6 +448,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       ...s,
       brandRules: s.brandRules.filter((r) => r.id !== id),
     }));
+    persist(() => repo.deleteBrandRule(id));
   }, []);
 
   const createCampaign = useCallback(
@@ -406,18 +459,21 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       const full: Campaign = {
         ...campaign,
         id: genId("camp"),
-        artistId: seed.ARTIST_ID,
+        artistId,
         createdAt: nowIso,
         updatedAt: nowIso,
       };
       setState((s) => ({ ...s, campaigns: [full, ...s.campaigns] }));
+      persist(() => repo.upsertCampaign(full));
     },
-    [],
+    [artistId],
   );
 
   const api: StoreApi = {
     state,
     currentUser,
+    loading,
+    loadError,
     setCurrentUserId,
     reset,
     createContentSource,
@@ -442,8 +498,6 @@ export function useStore(): StoreApi {
   if (!ctx) throw new Error("useStore は StoreProvider の内側で使用してください");
   return ctx;
 }
-
-// ---- 便利セレクタ ----
 
 export function useCurrentRole(): UserRole {
   return useStore().currentUser.role;

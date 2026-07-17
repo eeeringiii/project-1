@@ -5,7 +5,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { X } from "lucide-react";
 import { Sidebar } from "./Sidebar";
 import { Header } from "./Header";
-import { getSession } from "@/lib/auth";
+import { hasSession } from "@/lib/auth";
+import { useStore } from "@/repositories/store";
 import { APP_NAME } from "@/constants";
 
 const CRUMB_LABELS: Record<string, string> = {
@@ -36,13 +37,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [authChecked, setAuthChecked] = useState(false);
 
   useEffect(() => {
-    // モック認証ゲート（外部状態=localStorageの購読）。Phase 2でSupabase Authに差替。
-    if (!getSession()) {
-      router.replace("/login");
-    } else {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setAuthChecked(true);
-    }
+    // 認証ゲート。Supabase設定時はセッション確認、未設定時はモック（localStorage）。
+    let active = true;
+    hasSession().then((ok) => {
+      if (!active) return;
+      if (!ok) router.replace("/login");
+      else setAuthChecked(true);
+    });
+    return () => {
+      active = false;
+    };
   }, [router]);
 
   if (!authChecked) {
@@ -88,8 +92,36 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       <div className="flex min-w-0 flex-1 flex-col">
         <Header breadcrumb={breadcrumb} onOpenMenu={() => setDrawer(true)} />
-        <main className="flex-1 px-4 py-5 sm:px-6 sm:py-6">{children}</main>
+        <main className="flex-1 px-4 py-5 sm:px-6 sm:py-6">
+          <DataGate>{children}</DataGate>
+        </main>
       </div>
     </div>
+  );
+}
+
+/** Supabase設定時、初回データロード中はスピナー、失敗時はエラーバナーを表示 */
+function DataGate({ children }: { children: React.ReactNode }) {
+  const { loading, loadError } = useStore();
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center gap-2 py-16 text-sm text-[var(--muted)]">
+        <span className="h-4 w-4 animate-spin rounded-full border-2 border-[var(--border)] border-t-[var(--accent)]" />
+        データを読み込んでいます…
+      </div>
+    );
+  }
+  return (
+    <>
+      {loadError && (
+        <div className="mb-4 rounded-xl border border-[var(--danger)]/30 bg-[var(--danger-bg)] px-4 py-3 text-sm text-[var(--danger)]">
+          データの読み込みに失敗しました：{loadError}
+          <br />
+          Supabase の設定（URL / anon key / マイグレーション適用 / RLS）をご確認ください。
+        </div>
+      )}
+      {children}
+    </>
   );
 }

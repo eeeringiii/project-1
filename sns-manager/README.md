@@ -4,7 +4,18 @@
 
 > このリポジトリの `sns-manager/` は、既存の `taisei-site/`（アーティストHP）や `app/`（別アプリ）とは独立した Next.js アプリです。他プロジェクトには影響しません。
 
-## 現在の到達点：Phase 1（モックMVP）
+## 動作モード（重要）
+
+このアプリは環境変数の有無で自動的に切り替わります。**どちらのモードでもUI・操作は同一**です。
+
+| モード | 条件 | データの保存先 | 認証 |
+| --- | --- | --- | --- |
+| **モック**（既定） | Supabase未設定 | ブラウザの localStorage | モック認証 |
+| **Supabase** | `NEXT_PUBLIC_SUPABASE_URL` / `ANON_KEY` 設定時 | Supabase PostgreSQL / Storage | Supabase Auth |
+
+Supabase接続の手順は [`docs/phase2-supabase.md`](./docs/phase2-supabase.md) を参照してください（マイグレーション適用・ユーザー登録・バケット作成込み）。
+
+## Phase 1（モックMVP）で実装済みの機能
 
 外部SNS API・Supabase・Anthropic API に未接続でも、**モックデータで一通り操作できる**状態です。
 
@@ -78,17 +89,17 @@ sns-manager/
 
 UI / ドメインロジック / データアクセス / バリデーション / 型 / 定数 / モックを分離しています。
 
-## データの持続について（Phase 1）
+## データの持続について
 
-Phase 1 はブラウザの `localStorage` にモックデータを保存します（リロード後も保持）。
-アップロードした画像/動画は**セッション内のローカルプレビューのみ**で、永続化はされません（Phase 2 で Supabase Storage に接続）。
+- **モックモード**：ブラウザの `localStorage` に保存（リロード後も保持）。アップロード画像/動画はセッション内のローカルプレビューのみ。
+- **Supabaseモード**：全データを PostgreSQL に永続化（RLS適用）。素材は Storage バケット `media` にアップロードし公開URLで参照。認証は Supabase Auth。
 
 ## 実装フェーズ
 
 | フェーズ | 内容 | 状態 |
 | --- | --- | --- |
 | Phase 1 | 画面とモックデータ | ✅ 完了 |
-| Phase 2 | Supabase 連携（Auth/DB/Storage/RLS/CRUD） | 予定 |
+| Phase 2 | Supabase 連携（Auth/DB/Storage/RLS/CRUD） | ✅ 接続レディ（`.env.local` 設定で有効化） |
 | Phase 3 | Anthropic API 連携（媒体別プロンプト/Zod検証/再生成/履歴） | 予定 |
 | Phase 4 | 予約投稿ジョブ基盤（モック実行・リトライ・結果保存） | 予定 |
 | Phase 5 | 外部SNS API 連携（**設計のみ**、`docs/phase5-external-apis.md`） | 設計 |

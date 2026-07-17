@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.105.0",
+    "@supabase/ssr": "^0.5.2",
+    "@supabase/supabase-js": "^2.110.7",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "lucide-react": "^0.469.0",

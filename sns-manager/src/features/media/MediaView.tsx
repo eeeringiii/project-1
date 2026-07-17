@@ -11,6 +11,8 @@ import { Modal, ConfirmDialog } from "@/components/ui/Modal";
 import { useStore } from "@/repositories/store";
 import { useToast } from "@/components/ui/Toast";
 import { can } from "@/services/permissions";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
+import { uploadMedia } from "@/repositories/supabase/storage";
 import {
   MEDIA_CATEGORY_LABELS,
   PLATFORMS,
@@ -225,11 +227,14 @@ function AddAssetModal({
   const [tags, setTags] = useState("");
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [fileSize, setFileSize] = useState(0);
+  const [file, setFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
 
   function reset() {
     setFileName("");
     setPreviewUrl(null);
     setFileSize(0);
+    setFile(null);
     setTags("");
     setCredit("");
     setRights("");
@@ -262,14 +267,35 @@ function AddAssetModal({
           </Button>
           <Button
             variant="primary"
-            disabled={!fileName}
-            onClick={() => {
+            disabled={!fileName || uploading}
+            onClick={async () => {
+              let fileUrl =
+                previewUrl ?? "https://placehold.co/800x600?text=Asset";
+              const notes: string | null = isSupabaseConfigured
+                ? null
+                : "Supabase未設定のためローカルプレビュー";
+              if (isSupabaseConfigured && file) {
+                setUploading(true);
+                try {
+                  const res = await uploadMedia(file, artistId);
+                  fileUrl = res.url;
+                } catch (err) {
+                  setUploading(false);
+                  alert(
+                    `アップロードに失敗しました: ${
+                      err instanceof Error ? err.message : "不明なエラー"
+                    }`,
+                  );
+                  return;
+                }
+                setUploading(false);
+              }
               onAdd({
                 artistId,
                 campaignId: null,
                 category,
                 fileName,
-                fileUrl: previewUrl ?? "https://placehold.co/800x600?text=Asset",
+                fileUrl,
                 fileType,
                 mimeType: fileType === "image" ? "image/*" : "video/*",
                 fileSize,
@@ -285,12 +311,12 @@ function AddAssetModal({
                   .split(",")
                   .map((t) => t.trim())
                   .filter(Boolean),
-                notes: null,
+                notes,
               });
               reset();
             }}
           >
-            追加する
+            {uploading ? "アップロード中…" : "追加する"}
           </Button>
         </>
       }
@@ -310,6 +336,7 @@ function AddAssetModal({
               setFileSize(f.size);
               setFileType(f.type.startsWith("video") ? "video" : "image");
               setPreviewUrl(URL.createObjectURL(f));
+              setFile(f);
             }}
           />
         </label>
@@ -377,8 +404,9 @@ function AddAssetModal({
           </div>
         </Field>
         <p className="text-xs text-[var(--muted)]">
-          ※ MVPではファイルはローカルプレビューのみ。Phase 2 で Supabase Storage
-          に保存します。
+          {isSupabaseConfigured
+            ? "※ 追加時に Supabase Storage（bucket: media）へアップロードします。"
+            : "※ Supabase未設定のためローカルプレビューのみ。.env.local 設定で Storage 保存に切り替わります。"}
         </p>
       </div>
     </Modal>
