@@ -1338,7 +1338,7 @@ function OrdersTab({ password }: { password: string }) {
                   </select>
                   <a
                     href={`mailto:${o.customer.email}?subject=${encodeURIComponent(
-                      `【福本大晴 OFFICIAL】ご注文 ${o.id} について`,
+                      `【ARTIST OFFICIAL】ご注文 ${o.id} について`,
                     )}`}
                     className="border border-line px-3 py-1.5 text-[0.7rem] tracking-[0.1em] text-sub transition-colors hover:border-gold hover:text-gold"
                   >

@@ -141,11 +141,12 @@ export function snsListFrom(sns: SnsUrls): SnsLink[] {
 }
 
 export const siteMeta = {
-  artistName: "福本大晴",
-  artistNameEn: "TAISEI FUKUMOTO",
-  siteName: "福本大晴 OFFICIAL SITE",
+  // アーティスト名は仮名（プレースホルダー）。実名に差し替える際はここを変更する。
+  artistName: "アーティスト",
+  artistNameEn: "ARTIST",
+  siteName: "ARTIST OFFICIAL SITE",
   description:
-    "福本大晴オフィシャルサイト。最新のニュース、リリース、ライブ・イベント情報をお届けします。",
+    "アーティストのオフィシャルサイト。最新のニュース、リリース、ライブ・イベント情報をお届けします。",
 };
 
 // サイト共通ナビゲーション（ヘッダー・フッターで共用）

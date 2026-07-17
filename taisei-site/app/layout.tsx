@@ -45,7 +45,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const settings = getSettings();
-  // 検索エンジンに「福本大晴の公式サイト」であることを正しく伝える構造化データ
+  // 検索エンジンに「アーティストの公式サイト」であることを正しく伝える構造化データ
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",

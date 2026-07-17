@@ -9,7 +9,7 @@ import { shopEnabled } from "@/lib/shop";
 export const metadata: Metadata = {
   title: "GOODS",
   description:
-    "福本大晴オフィシャルグッズ。アパレル・音源・アクセサリーなどのオンライン販売。",
+    "アーティストオフィシャルグッズ。アパレル・音源・アクセサリーなどのオンライン販売。",
 };
 
 export default async function GoodsPage() {
