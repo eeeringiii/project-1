@@ -2,10 +2,10 @@ import Link from "next/link";
 import SnsLinks from "@/components/SnsLinks";
 import { navItems, siteMeta, snsListFrom } from "@/lib/content";
 import { getSettings } from "@/lib/data";
-import { shopEnabled, shopHref } from "@/lib/shop";
+import { shopHref } from "@/lib/shop";
 
-// GOODS はサブドメイン運用時のみ shop.ドメインへ
-const hrefFor = (href: string) => (href === "/goods" && shopEnabled ? shopHref() : href);
+// STORE は本体から切り離した独立ページ。通常は /goods、サブドメイン運用時は shop.ドメイン。
+const storeHref = shopHref();
 
 export default function Footer() {
   const snsLinks = snsListFrom(getSettings().sns);
@@ -17,7 +17,7 @@ export default function Footer() {
             {navItems.map((item) => (
               <li key={item.href}>
                 <Link
-                  href={hrefFor(item.href)}
+                  href={item.href}
                   className={`nav-link text-[0.66rem] tracking-[0.2em] ${
                     item.href === "/business" ? "text-gold" : "text-sub"
                   }`}
@@ -26,6 +26,14 @@ export default function Footer() {
                 </Link>
               </li>
             ))}
+            <li>
+              <Link
+                href={storeHref}
+                className="nav-link text-[0.66rem] tracking-[0.2em] text-gold"
+              >
+                STORE
+              </Link>
+            </li>
           </ul>
         </nav>
         <div className="flex flex-col items-center gap-6 md:flex-row md:justify-between">

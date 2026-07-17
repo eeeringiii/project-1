@@ -156,7 +156,6 @@ export const navItems = [
   { href: "/discography", label: "DISCOGRAPHY", jp: "ディスコグラフィ" },
   { href: "/movie", label: "MOVIE", jp: "ムービー" },
   { href: "/live", label: "LIVE", jp: "ライブ・イベント" },
-  { href: "/goods", label: "GOODS", jp: "グッズ" },
   { href: "/contact", label: "CONTACT", jp: "ファンの皆さまへ" },
   { href: "/business", label: "BUSINESS", jp: "お仕事のご依頼" },
 ];

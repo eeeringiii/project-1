@@ -4,11 +4,11 @@ import Link from "next/link";
 import { useState } from "react";
 import SnsLinks from "@/components/SnsLinks";
 import { navItems, siteMeta, type SnsLink } from "@/lib/content";
-import { shopEnabled, shopHref } from "@/lib/shop";
+import { shopHref } from "@/lib/shop";
 
-// GOODS はサブドメイン運用時のみ shop.ドメインへ（外部リンク扱い）。
-const isExternalGoods = (href: string) => href === "/goods" && shopEnabled;
-const hrefFor = (href: string) => (isExternalGoods(href) ? shopHref() : href);
+// STORE は本体サイトから切り離した独立ページ。控えめな導線だけ残す。
+// shopHref() は通常は /goods、サブドメイン運用時は shop.ドメインを返す。
+const storeHref = shopHref();
 
 export default function Header({ snsLinks }: { snsLinks: SnsLink[] }) {
   const [open, setOpen] = useState(false);
@@ -30,7 +30,7 @@ export default function Header({ snsLinks }: { snsLinks: SnsLink[] }) {
               {navItems.map((item) => (
                 <li key={item.href}>
                   <Link
-                    href={hrefFor(item.href)}
+                    href={item.href}
                     className={`nav-link text-[0.7rem] tracking-[0.22em] ${
                       item.href === "/business" ? "text-gold" : ""
                     }`}
@@ -41,7 +41,13 @@ export default function Header({ snsLinks }: { snsLinks: SnsLink[] }) {
               ))}
             </ul>
           </nav>
-          <div className="border-l border-line pl-6">
+          <div className="flex items-center gap-6 border-l border-line pl-6">
+            <Link
+              href={storeHref}
+              className="border border-line px-3 py-1.5 text-[0.66rem] tracking-[0.22em] text-sub transition-colors hover:border-gold hover:text-gold"
+            >
+              STORE
+            </Link>
             <SnsLinks links={snsLinks} size={15} gap="gap-4" location="header" />
           </div>
         </div>
@@ -72,7 +78,7 @@ export default function Header({ snsLinks }: { snsLinks: SnsLink[] }) {
             {navItems.map((item) => (
               <li key={item.href} className="border-b border-line-soft">
                 <Link
-                  href={hrefFor(item.href)}
+                  href={item.href}
                   className="flex items-baseline gap-4 px-8 py-4"
                   onClick={() => setOpen(false)}
                 >
@@ -89,6 +95,18 @@ export default function Header({ snsLinks }: { snsLinks: SnsLink[] }) {
                 </Link>
               </li>
             ))}
+            <li className="border-b border-line-soft bg-paper-soft">
+              <Link
+                href={storeHref}
+                className="flex items-baseline gap-4 px-8 py-4"
+                onClick={() => setOpen(false)}
+              >
+                <span className="text-xs tracking-[0.28em] text-gold">STORE</span>
+                <span className="text-[0.65rem] tracking-[0.1em] text-muted">
+                  オフィシャルグッズ
+                </span>
+              </Link>
+            </li>
           </ul>
           <div className="px-8 py-5">
             <SnsLinks links={snsLinks} size={19} gap="gap-7" location="mobile-menu" />
