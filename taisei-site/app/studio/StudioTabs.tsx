@@ -1,14 +1,23 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type {
-  LiveEvent,
-  Movie,
-  NewsItem,
-  Profile,
-  Release,
-  SiteSettings,
+import {
+  GOODS_CATEGORY_LABEL,
+  ORDER_STATUSES,
+  type CustomerSummary,
+  type Goods,
+  type GoodsCategory,
+  type LiveEvent,
+  type Movie,
+  type NewsItem,
+  type Order,
+  type OrderStatus,
+  type Profile,
+  type Release,
+  type SiteSettings,
 } from "@/lib/content";
+
+const yen = (n: number) => `¥${new Intl.NumberFormat("ja-JP").format(n)}`;
 
 // ---- 共通スタイル・部品 -------------------------------------------------
 
@@ -835,6 +844,542 @@ function CurrentList({
   );
 }
 
+// ---- グッズ -------------------------------------------------------------
+
+const GOODS_CATEGORIES: GoodsCategory[] = [
+  "APPAREL",
+  "MUSIC",
+  "ACCESSORY",
+  "GOODS",
+  "OTHER",
+];
+
+function GoodsTab({ password, initial }: { password: string; initial: Goods[] }) {
+  const [items, setItems] = useState<Goods[]>(initial);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [name, setName] = useState("");
+  const [category, setCategory] = useState<GoodsCategory>("GOODS");
+  const [price, setPrice] = useState("");
+  const [stock, setStock] = useState("");
+  const [description, setDescription] = useState("");
+  const [externalUrl, setExternalUrl] = useState("");
+  const [active, setActive] = useState(true);
+  const [keepImage, setKeepImage] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [sending, setSending] = useState(false);
+  const [done, setDone] = useState(false);
+  const [doneText, setDoneText] = useState("");
+  const [error, setError] = useState("");
+  const [listError, setListError] = useState("");
+
+  function resetForm() {
+    setEditingId(null);
+    setName("");
+    setCategory("GOODS");
+    setPrice("");
+    setStock("");
+    setDescription("");
+    setExternalUrl("");
+    setActive(true);
+    setKeepImage("");
+    setImageFile(null);
+    setError("");
+  }
+
+  function startEdit(g: Goods) {
+    setDone(false);
+    setError("");
+    setEditingId(g.id);
+    setName(g.name);
+    setCategory(g.category);
+    setPrice(String(g.price));
+    setStock(String(g.stock));
+    setDescription(g.description);
+    setExternalUrl(g.externalUrl ?? "");
+    setActive(g.active);
+    setKeepImage(g.image ?? "");
+    setImageFile(null);
+    document.getElementById("goods-form")?.scrollIntoView({ behavior: "smooth" });
+  }
+
+  async function removeItem(g: Goods) {
+    setListError("");
+    if (!window.confirm(`「${g.name}」を削除します。よろしいですか？`)) return;
+    const res = await post("/api/studio/goods", { password, action: "remove", id: g.id });
+    if (!res.ok) return setListError(res.error ?? "削除に失敗しました");
+    setItems((prev) => prev.filter((x) => x.id !== g.id));
+    if (editingId === g.id) resetForm();
+  }
+
+  async function submit() {
+    setError("");
+    setDone(false);
+    if (!name.trim()) return setError("商品名を入力してください");
+    if (!description.trim()) return setError("商品説明を入力してください");
+    const priceNum = Number(price);
+    if (!Number.isInteger(priceNum) || priceNum < 0)
+      return setError("価格は0以上の整数で入力してください");
+    const stockNum = Number(stock);
+    if (!Number.isInteger(stockNum) || stockNum < 0)
+      return setError("在庫数は0以上の整数で入力してください");
+    setSending(true);
+    let image = editingId ? keepImage : "";
+    if (imageFile) {
+      try {
+        const dataUrl = await resizeImage(imageFile, 1400);
+        const up = await post("/api/studio/image", { password, role: "goods", dataUrl });
+        if (!up.ok) {
+          setSending(false);
+          return setError(up.error ?? "画像のアップロードに失敗しました");
+        }
+        image = up.path ?? "";
+      } catch {
+        setSending(false);
+        return setError("画像の読み込みに失敗しました。別の画像でお試しください");
+      }
+    }
+    const item = {
+      name,
+      category,
+      price: priceNum,
+      stock: stockNum,
+      description,
+      externalUrl,
+      image,
+      active,
+    };
+    const res = await post("/api/studio/goods", {
+      password,
+      action: editingId ? "update" : "append",
+      ...(editingId ? { id: editingId } : {}),
+      item,
+    });
+    setSending(false);
+    if (!res.ok) return setError(res.error ?? "エラーが発生しました");
+    // 一覧を即時反映（サイト公開反映は約2分）
+    const saved: Goods = {
+      id: editingId ?? `goods-tmp-${Date.now().toString(36)}`,
+      name,
+      category,
+      price: priceNum,
+      description,
+      stock: stockNum,
+      active,
+      ...(image ? { image } : {}),
+      ...(externalUrl ? { externalUrl } : {}),
+    };
+    setItems((prev) =>
+      editingId ? prev.map((x) => (x.id === editingId ? saved : x)) : [...prev, saved],
+    );
+    setDoneText(editingId ? "商品を更新しました" : "商品を追加しました");
+    setDone(true);
+    resetForm();
+  }
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <span className={labelCls}>現在の商品</span>
+        {items.length === 0 ? (
+          <p className="border border-line bg-paper-soft px-4 py-3 text-sm text-muted">
+            登録中の商品はありません
+          </p>
+        ) : (
+          <ul className="divide-y divide-line-soft border border-line">
+            {items.map((g) => (
+              <li key={g.id} className="flex items-center justify-between gap-3 px-4 py-3">
+                <div className="min-w-0">
+                  <p className="truncate text-sm">
+                    {!g.active && <span className="text-muted">［非公開］</span>}
+                    {g.name}
+                  </p>
+                  <p className="text-[0.72rem] text-muted">
+                    {GOODS_CATEGORY_LABEL[g.category]}・{yen(g.price)}・在庫{g.stock}
+                    {g.externalUrl ? "・外部販売" : ""}
+                    {g.stock <= 0 ? "・SOLD OUT" : ""}
+                  </p>
+                </div>
+                <div className="flex shrink-0 gap-2">
+                  <button
+                    type="button"
+                    className="border border-line px-3 py-1.5 text-[0.66rem] tracking-[0.1em] text-sub transition-colors hover:border-gold hover:text-gold"
+                    onClick={() => startEdit(g)}
+                  >
+                    編集
+                  </button>
+                  <button type="button" className={dangerBtn} onClick={() => removeItem(g)}>
+                    削除
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+        {listError && <p className="mt-2 text-sm text-red-700">{listError}</p>}
+      </div>
+
+      <div id="goods-form" className="space-y-6 border-t border-line pt-6">
+        <div className="flex items-center justify-between">
+          <h3 className="text-[0.8rem] tracking-[0.2em] text-gold">
+            {editingId ? "商品を編集" : "新しい商品を追加"}
+          </h3>
+          {editingId && (
+            <button
+              type="button"
+              className="text-[0.72rem] text-muted underline"
+              onClick={resetForm}
+            >
+              新規追加に戻る
+            </button>
+          )}
+        </div>
+        <div>
+          <label className={labelCls}>商品名</label>
+          <input
+            type="text"
+            className={field}
+            maxLength={120}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="例：ロゴTシャツ（ブラック）"
+          />
+        </div>
+        <div className="grid gap-6 md:grid-cols-3">
+          <div>
+            <label className={labelCls}>カテゴリ</label>
+            <select
+              className={field}
+              value={category}
+              onChange={(e) => setCategory(e.target.value as GoodsCategory)}
+            >
+              {GOODS_CATEGORIES.map((c) => (
+                <option key={c} value={c}>
+                  {GOODS_CATEGORY_LABEL[c]}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className={labelCls}>価格（税込・円）</label>
+            <input
+              type="number"
+              inputMode="numeric"
+              min={0}
+              className={field}
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              placeholder="4200"
+            />
+          </div>
+          <div>
+            <label className={labelCls}>在庫数</label>
+            <input
+              type="number"
+              inputMode="numeric"
+              min={0}
+              className={field}
+              value={stock}
+              onChange={(e) => setStock(e.target.value)}
+              placeholder="30"
+            />
+          </div>
+        </div>
+        <div>
+          <label className={labelCls}>商品説明</label>
+          <textarea
+            className={`${field} min-h-28`}
+            maxLength={2000}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </div>
+        <div>
+          <label className={labelCls}>商品写真（あれば）</label>
+          <input
+            type="file"
+            accept="image/*"
+            className={field}
+            onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
+          />
+          {editingId && keepImage && !imageFile && (
+            <span className={hintCls}>
+              現在の写真を使用中。変更する場合のみ選び直してください
+            </span>
+          )}
+          <span className={hintCls}>自動で軽量化されます。スマホの写真そのままで大丈夫です</span>
+        </div>
+        <div>
+          <label className={labelCls}>外部ショップのURL（BASE / STORES 等・任意）</label>
+          <input
+            type="url"
+            className={field}
+            value={externalUrl}
+            onChange={(e) => setExternalUrl(e.target.value)}
+            placeholder="https://...（入力するとサイト内注文ではなく外部リンクになります）"
+          />
+        </div>
+        <label className="flex items-center gap-3 text-sm text-sub">
+          <input
+            type="checkbox"
+            className="accent-gold"
+            checked={active}
+            onChange={(e) => setActive(e.target.checked)}
+          />
+          サイトに掲載する（外すと下書きとして非公開）
+        </label>
+        <Notice error={error} done={done} doneText={doneText} />
+        <button type="button" className={primaryBtn} disabled={sending} onClick={submit}>
+          {sending ? "送信中…" : editingId ? "この内容で更新する" : "この内容で追加する"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ---- 注文・顧客 ---------------------------------------------------------
+
+function fmtDateTime(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  const p = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}/${p(d.getMonth() + 1)}/${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
+const STATUS_STYLE: Record<OrderStatus, string> = {
+  受付: "border-gold-soft text-gold",
+  入金確認: "border-sky-300 text-sky-700",
+  発送済み: "border-emerald-300 text-emerald-700",
+  キャンセル: "border-line text-muted",
+};
+
+function OrdersTab({ password }: { password: string }) {
+  const [loaded, setLoaded] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [customers, setCustomers] = useState<CustomerSummary[]>([]);
+  const [stats, setStats] = useState<{
+    totalSales: number;
+    paidOrShipped: number;
+    pending: number;
+    count: number;
+  } | null>(null);
+  const [view, setView] = useState<"orders" | "customers">("orders");
+  const [busyId, setBusyId] = useState<string | null>(null);
+
+  async function load() {
+    if (!password) return;
+    setLoading(true);
+    setError("");
+    const res = await fetch("/api/studio/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password, action: "list" }),
+    });
+    setLoading(false);
+    let json: {
+      ok?: boolean;
+      error?: string;
+      orders?: Order[];
+      customers?: CustomerSummary[];
+      stats?: typeof stats;
+    };
+    try {
+      json = await res.json();
+    } catch {
+      return setError("読み込みに失敗しました");
+    }
+    if (!res.ok || !json.ok) return setError(json.error ?? "読み込みに失敗しました");
+    setOrders(json.orders ?? []);
+    setCustomers(json.customers ?? []);
+    setStats(json.stats ?? null);
+    setLoaded(true);
+  }
+
+  async function changeStatus(id: string, status: OrderStatus) {
+    setBusyId(id);
+    const res = await post("/api/studio/orders", { password, action: "status", id, status });
+    setBusyId(null);
+    if (!res.ok) return setError(res.error ?? "更新に失敗しました");
+    setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status } : o)));
+  }
+
+  async function removeOrder(id: string) {
+    if (!window.confirm(`注文 ${id} を削除します。よろしいですか？`)) return;
+    setBusyId(id);
+    const res = await post("/api/studio/orders", { password, action: "delete", id });
+    setBusyId(null);
+    if (!res.ok) return setError(res.error ?? "削除に失敗しました");
+    setOrders((prev) => prev.filter((o) => o.id !== id));
+  }
+
+  if (!loaded) {
+    return (
+      <div className="space-y-4">
+        <p className="text-sm leading-relaxed text-sub">
+          注文情報には個人情報が含まれるため、ボタンを押したときだけ読み込みます。
+        </p>
+        <button type="button" className={primaryBtn} disabled={loading} onClick={load}>
+          {loading ? "読み込み中…" : "注文・顧客データを読み込む"}
+        </button>
+        {error && <p className="text-sm text-red-700">{error}</p>}
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {stats && (
+        <div className="grid grid-cols-3 gap-3">
+          <div className="border border-line px-3 py-4 text-center">
+            <p className="font-display text-lg tracking-wide">{yen(stats.totalSales)}</p>
+            <p className="mt-1 text-[0.66rem] tracking-[0.1em] text-muted">売上（キャンセル除く）</p>
+          </div>
+          <div className="border border-line px-3 py-4 text-center">
+            <p className="font-display text-lg tracking-wide">{stats.count}</p>
+            <p className="mt-1 text-[0.66rem] tracking-[0.1em] text-muted">注文件数</p>
+          </div>
+          <div className="border border-line px-3 py-4 text-center">
+            <p className="font-display text-lg tracking-wide text-gold">{stats.pending}</p>
+            <p className="mt-1 text-[0.66rem] tracking-[0.1em] text-muted">未対応（受付）</p>
+          </div>
+        </div>
+      )}
+
+      <div className="flex items-center justify-between">
+        <div className="flex gap-2">
+          {(["orders", "customers"] as const).map((v) => (
+            <button
+              key={v}
+              type="button"
+              onClick={() => setView(v)}
+              className={`border px-3 py-1.5 text-[0.7rem] tracking-[0.12em] transition-colors ${
+                view === v ? "border-ink bg-ink text-paper" : "border-line text-sub"
+              }`}
+            >
+              {v === "orders" ? "注文一覧" : "顧客一覧"}
+            </button>
+          ))}
+        </div>
+        <button
+          type="button"
+          className="text-[0.72rem] text-muted underline"
+          disabled={loading}
+          onClick={load}
+        >
+          {loading ? "更新中…" : "再読み込み"}
+        </button>
+      </div>
+
+      {error && <p className="text-sm text-red-700">{error}</p>}
+
+      {view === "orders" ? (
+        orders.length === 0 ? (
+          <p className="border border-line bg-paper-soft px-4 py-3 text-sm text-muted">
+            まだ注文はありません
+          </p>
+        ) : (
+          <ul className="space-y-4">
+            {orders.map((o) => (
+              <li key={o.id} className="border border-line p-4">
+                <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <span className="font-display tracking-widest">{o.id}</span>
+                    <span className="ml-3 text-[0.72rem] text-muted">
+                      {fmtDateTime(o.createdAt)}
+                    </span>
+                  </div>
+                  <span
+                    className={`border px-2 py-0.5 text-[0.66rem] tracking-[0.1em] ${STATUS_STYLE[o.status]}`}
+                  >
+                    {o.status}
+                  </span>
+                </div>
+                <div className="mb-3 grid gap-1 text-[0.82rem] leading-relaxed text-sub">
+                  <p>
+                    <span className="text-ink">{o.customer.name}</span>（{o.customer.kana}）
+                  </p>
+                  <p>{o.customer.email}／{o.customer.phone}</p>
+                  <p>
+                    〒{o.customer.postal}　{o.customer.address}
+                  </p>
+                </div>
+                <ul className="mb-3 border-y border-line-soft py-2 text-[0.82rem]">
+                  {o.items.map((it) => (
+                    <li key={it.id} className="flex justify-between py-0.5">
+                      <span>
+                        {it.name} × {it.qty}
+                      </span>
+                      <span className="tabular-nums text-sub">{yen(it.price * it.qty)}</span>
+                    </li>
+                  ))}
+                  <li className="mt-1 flex justify-between border-t border-line-soft pt-1.5 font-medium">
+                    <span>合計</span>
+                    <span className="tabular-nums">{yen(o.total)}</span>
+                  </li>
+                </ul>
+                {o.note && (
+                  <p className="mb-3 whitespace-pre-line border border-line-soft bg-paper-soft px-3 py-2 text-[0.8rem] text-sub">
+                    備考：{o.note}
+                  </p>
+                )}
+                <div className="flex flex-wrap items-center gap-2">
+                  <select
+                    className="border border-line bg-paper px-3 py-1.5 text-[0.75rem] focus:border-gold focus:outline-none"
+                    value={o.status}
+                    disabled={busyId === o.id}
+                    onChange={(e) => changeStatus(o.id, e.target.value as OrderStatus)}
+                  >
+                    {ORDER_STATUSES.map((s) => (
+                      <option key={s} value={s}>
+                        {s}
+                      </option>
+                    ))}
+                  </select>
+                  <a
+                    href={`mailto:${o.customer.email}?subject=${encodeURIComponent(
+                      `【福本大晴 OFFICIAL】ご注文 ${o.id} について`,
+                    )}`}
+                    className="border border-line px-3 py-1.5 text-[0.7rem] tracking-[0.1em] text-sub transition-colors hover:border-gold hover:text-gold"
+                  >
+                    メール作成
+                  </a>
+                  <button
+                    type="button"
+                    className={dangerBtn}
+                    disabled={busyId === o.id}
+                    onClick={() => removeOrder(o.id)}
+                  >
+                    削除
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )
+      ) : customers.length === 0 ? (
+        <p className="border border-line bg-paper-soft px-4 py-3 text-sm text-muted">
+          まだ顧客はいません
+        </p>
+      ) : (
+        <ul className="divide-y divide-line-soft border border-line">
+          {customers.map((c) => (
+            <li key={c.email} className="px-4 py-3">
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-sm text-ink">{c.name}</span>
+                <span className="text-[0.8rem] tabular-nums text-sub">{yen(c.totalSpent)}</span>
+              </div>
+              <p className="mt-0.5 text-[0.72rem] text-muted">
+                {c.email}・{c.orderCount}回・最終 {fmtDateTime(c.lastOrderAt)}
+              </p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
 // ---- 全体 ---------------------------------------------------------------
 
 const TABS = [
@@ -842,6 +1387,8 @@ const TABS = [
   { key: "releases", label: "リリース" },
   { key: "live", label: "LIVE" },
   { key: "movies", label: "MOVIE" },
+  { key: "goods", label: "グッズ" },
+  { key: "orders", label: "注文・顧客" },
   { key: "photos", label: "写真" },
   { key: "settings", label: "設定" },
 ] as const;
@@ -855,6 +1402,7 @@ export default function StudioTabs({
   movies,
   settings,
   profile,
+  goods,
 }: {
   news: NewsItem[];
   releases: Release[];
@@ -862,6 +1410,7 @@ export default function StudioTabs({
   movies: Movie[];
   settings: SiteSettings;
   profile: Profile;
+  goods: Goods[];
 }) {
   const [tab, setTab] = useState<TabKey>("news");
   const [password, setPassword] = useState("");
@@ -913,6 +1462,8 @@ export default function StudioTabs({
         {tab === "releases" && <ReleaseTab password={password} initial={releases} />}
         {tab === "live" && <LiveTab password={password} initial={live} />}
         {tab === "movies" && <MovieTab password={password} initial={movies} />}
+        {tab === "goods" && <GoodsTab password={password} initial={goods} />}
+        {tab === "orders" && <OrdersTab password={password} />}
         {tab === "photos" && <PhotoTab password={password} settings={settings} />}
         {tab === "settings" && (
           <SettingsTab password={password} settings={settings} profile={profile} />

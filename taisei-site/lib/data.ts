@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import type {
+  Goods,
   LiveEvent,
   Movie,
   Profile,
@@ -36,4 +37,14 @@ export function getMovies(): Movie[] {
 export function getLiveEvents(): LiveEvent[] {
   const events = readJson<LiveEvent[]>("live.json");
   return events.sort((a, b) => (a.date > b.date ? 1 : -1));
+}
+
+// グッズ一覧。入稿ページはこの配列を編集する。
+export function getGoods(): Goods[] {
+  return readJson<Goods[]>("goods.json");
+}
+
+// 公開ページ用：掲載中（active）のグッズのみ
+export function getActiveGoods(): Goods[] {
+  return getGoods().filter((g) => g.active);
 }

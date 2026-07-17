@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
 import StudioTabs from "./StudioTabs";
-import { getLiveEvents, getMovies, getProfile, getReleases, getSettings } from "@/lib/data";
+import {
+  getGoods,
+  getLiveEvents,
+  getMovies,
+  getProfile,
+  getReleases,
+  getSettings,
+} from "@/lib/data";
 import { getAllNews } from "@/lib/news";
 
 export const metadata: Metadata = {
@@ -26,6 +33,7 @@ export default function StudioPage() {
         movies={getMovies()}
         settings={getSettings()}
         profile={getProfile()}
+        goods={getGoods()}
       />
     </main>
   );
