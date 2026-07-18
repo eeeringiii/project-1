@@ -16,6 +16,7 @@ const CRUMB_LABELS: Record<string, string> = {
   generate: "AI生成",
   posts: "投稿一覧",
   calendar: "カレンダー",
+  publishing: "配信ジョブ",
   media: "素材管理",
   brand: "ブランドルール",
 };

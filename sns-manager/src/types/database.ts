@@ -197,3 +197,12 @@ export interface PublishingJobRow {
   created_at: string;
   updated_at: string;
 }
+
+export interface PublishingResultRow {
+  id: string;
+  publishing_job_id: string;
+  external_post_id: string | null;
+  published_url: string | null;
+  response_data: Record<string, unknown> | null;
+  created_at: string;
+}

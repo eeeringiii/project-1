@@ -17,6 +17,8 @@ import type {
   ContentSource,
   MediaAsset,
   PostVersion,
+  PublishingJob,
+  PublishingResult,
   SocialPost,
   StatusHistory,
   User,
@@ -35,6 +37,10 @@ import {
   mediaAssetToRow,
   postVersionFromRow,
   postVersionToRow,
+  publishingJobFromRow,
+  publishingJobToRow,
+  publishingResultFromRow,
+  publishingResultToRow,
   socialPostFromRow,
   socialPostToRow,
   statusHistoryFromRow,
@@ -53,6 +59,8 @@ export interface RepoSnapshot {
   postVersions: PostVersion[];
   statusHistories: StatusHistory[];
   aiLogs: AiGenerationLog[];
+  publishingJobs: PublishingJob[];
+  publishingResults: PublishingResult[];
 }
 
 /** 画面表示に必要な全データをまとめて取得（RLSで許可された範囲のみ返る） */
@@ -70,6 +78,8 @@ export async function loadAll(): Promise<RepoSnapshot> {
     histories,
     rules,
     aiLogs,
+    jobs,
+    results,
   ] = await Promise.all([
     sb.from("users").select("*"),
     sb.from("artists").select("*"),
@@ -82,6 +92,8 @@ export async function loadAll(): Promise<RepoSnapshot> {
     sb.from("status_histories").select("*"),
     sb.from("brand_rules").select("*"),
     sb.from("ai_generation_logs").select("*"),
+    sb.from("publishing_jobs").select("*"),
+    sb.from("publishing_results").select("*"),
   ]);
 
   const err =
@@ -95,7 +107,9 @@ export async function loadAll(): Promise<RepoSnapshot> {
     versions.error ||
     histories.error ||
     rules.error ||
-    aiLogs.error;
+    aiLogs.error ||
+    jobs.error ||
+    results.error;
   if (err) throw new Error(err.message);
 
   // post_media から mediaAssetIds を投稿へ結合
@@ -126,6 +140,8 @@ export async function loadAll(): Promise<RepoSnapshot> {
     postVersions: (versions.data ?? []).map(postVersionFromRow),
     statusHistories: (histories.data ?? []).map(statusHistoryFromRow),
     aiLogs: (aiLogs.data ?? []).map(aiLogFromRow),
+    publishingJobs: (jobs.data ?? []).map(publishingJobFromRow),
+    publishingResults: (results.data ?? []).map(publishingResultFromRow),
   };
 }
 
@@ -218,5 +234,21 @@ export async function insertAiLog(l: AiGenerationLog): Promise<void> {
   const { error } = await getBrowserClient()
     .from("ai_generation_logs")
     .insert(aiLogToRow(l));
+  if (error) throw new Error(error.message);
+}
+
+export async function upsertPublishingJob(j: PublishingJob): Promise<void> {
+  const { error } = await getBrowserClient()
+    .from("publishing_jobs")
+    .upsert(publishingJobToRow(j));
+  if (error) throw new Error(error.message);
+}
+
+export async function insertPublishingResult(
+  r: PublishingResult,
+): Promise<void> {
+  const { error } = await getBrowserClient()
+    .from("publishing_results")
+    .insert(publishingResultToRow(r));
   if (error) throw new Error(error.message);
 }

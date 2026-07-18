@@ -10,6 +10,7 @@ import type {
   MediaCategory,
   Platform,
   PostStatus,
+  PublishingJobStatus,
   UserRole,
 } from "@/types/domain";
 
@@ -239,4 +240,25 @@ export const APPROVAL_TYPE_LABELS: Record<ApprovalType, string> = {
   staff: "担当者確認",
   artist: "本人確認",
   final: "最終承認",
+};
+
+// ---- 配信ジョブ ----
+
+export const PUBLISHING_JOB_STATUS_LABELS: Record<PublishingJobStatus, string> = {
+  queued: "待機中",
+  running: "実行中",
+  succeeded: "成功",
+  failed: "失敗",
+  cancelled: "取消",
+};
+
+export const PUBLISHING_JOB_TONE: Record<
+  PublishingJobStatus,
+  "neutral" | "info" | "warning" | "success" | "danger"
+> = {
+  queued: "info",
+  running: "info",
+  succeeded: "success",
+  failed: "danger",
+  cancelled: "neutral",
 };
