@@ -2,15 +2,15 @@ import { NextResponse } from "next/server";
 import { calcShipping, type Goods, type Order, type OrderItem } from "@/lib/content";
 import { getShopConfig } from "@/lib/data";
 import { getRepoFile, putRepoFile, toBase64 } from "@/lib/github";
+import { appendOrder, sheetsEnabled } from "@/lib/sheets";
 
 // グッズ販売の注文受付（公開エンドポイント・パスワード不要）。
 // 1) content/goods.json から正規の価格・在庫を読む（クライアントの金額は信用しない）
-// 2) content/orders/<注文番号>.json に注文を保存（個人情報を含む・公開ページからは読まない）
-// 3) goods.json の在庫を減らす
-// いずれも GitHub へのコミット。mainへの反映でVercelが再ビルドする。
+// 2) 注文（個人情報を含む）は Google スプレッドシートに保存する
+//    （公開リポジトリには個人情報を一切書かない）
+// 3) goods.json の在庫を減らす（在庫は個人情報ではないのでリポジトリで管理）
 
 const GOODS_PATH = "taisei-site/content/goods.json";
-const ORDERS_DIR = "taisei-site/content/orders";
 
 function bad(message: string, status = 400) {
   return NextResponse.json({ error: message }, { status });
@@ -79,6 +79,13 @@ export async function POST(req: Request) {
   const totalQtyById = new Map<string, number>();
   for (const l of lines) totalQtyById.set(l.id, (totalQtyById.get(l.id) ?? 0) + l.qty);
 
+  // 注文の保存先（スプレッドシート）が未設定なら、個人情報を扱わないため受付を停止する
+  if (!sheetsEnabled)
+    return bad(
+      "ただいまご注文を受け付けられません。お手数ですが時間をおいて再度お試しください",
+      503,
+    );
+
   if (!process.env.GITHUB_CONTENT_TOKEN)
     return bad("サーバー設定が未完了です。お手数ですが管理者にご連絡ください", 500);
 
@@ -139,12 +146,8 @@ export async function POST(req: Request) {
       ...(note ? { note } : {}),
     };
 
-    // 1) 先に注文を保存（お客様の注文を確実に記録する）
-    await putRepoFile(
-      `${ORDERS_DIR}/${orderId}.json`,
-      toBase64(JSON.stringify(order, null, 2) + "\n"),
-      `注文受付: ${orderId}`,
-    );
+    // 1) 先に注文を Google スプレッドシートへ保存（お客様の注文を確実に記録する）
+    await appendOrder(order);
 
     // 2) 在庫を減らす（失敗しても注文は成立済みなので成功として返す）
     try {

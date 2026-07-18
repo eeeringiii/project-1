@@ -1,13 +1,17 @@
 import { NextResponse } from "next/server";
-import { ORDER_STATUSES, type Order, type OrderStatus } from "@/lib/content";
-import { deleteRepoFile, getRepoFile, putRepoFile, toBase64 } from "@/lib/github";
-import { getAllOrders, orderStats, summarizeCustomers } from "@/lib/orders";
+import { ORDER_STATUSES, type OrderStatus } from "@/lib/content";
+import { orderStats, summarizeCustomers } from "@/lib/orders";
+import {
+  deleteOrder,
+  readOrders,
+  sheetsEnabled,
+  updateOrderStatus,
+} from "@/lib/sheets";
 
 // /studio「注文・顧客」タブの注文一覧取得・ステータス更新・削除。
-// 注文は個人情報を含むため、この一覧はパスワード認証を通ったときだけ返す
-//（studioページ自体はサーバー認証がないため、サーバーHTMLには埋め込まない）。
+// 注文（個人情報）は Google スプレッドシートに保存されており、
+// この一覧はパスワード認証を通ったときだけ返す。
 
-const ORDERS_DIR = "taisei-site/content/orders";
 const ID_RE = /^[0-9]{8}-[A-Z0-9]{4}$/;
 
 function bad(message: string, status = 400) {
@@ -31,50 +35,44 @@ export async function POST(req: Request) {
   if (!studioPassword) return bad("サーバー設定が未完了です（STUDIO_PASSWORD）", 500);
   if (payload.password !== studioPassword) return bad("パスワードが違います", 401);
 
-  // 一覧取得（認証済みのみ）。ビルド時にディスクへ書かれた注文ファイルを読む。
-  if (payload.action === "list") {
-    const orders = getAllOrders();
-    return NextResponse.json({
-      ok: true,
-      orders,
-      customers: summarizeCustomers(orders),
-      stats: orderStats(orders),
-    });
-  }
-
-  const id = (payload.id ?? "").trim();
-  if (!ID_RE.test(id)) return bad("注文の指定が不正です");
-
-  if (!process.env.GITHUB_CONTENT_TOKEN)
-    return bad("サーバー設定が未完了です（GITHUB_CONTENT_TOKEN）", 500);
-
-  const repoPath = `${ORDERS_DIR}/${id}.json`;
+  if (!sheetsEnabled)
+    return bad(
+      "注文の保存先（スプレッドシート）が未設定です。管理者にご連絡ください",
+      503,
+    );
 
   try {
+    // 一覧取得（認証済みのみ）
+    if (payload.action === "list") {
+      const orders = await readOrders();
+      return NextResponse.json({
+        ok: true,
+        orders,
+        customers: summarizeCustomers(orders),
+        stats: orderStats(orders),
+      });
+    }
+
+    const id = (payload.id ?? "").trim();
+    if (!ID_RE.test(id)) return bad("注文の指定が不正です");
+
     if (payload.action === "delete") {
-      const { sha } = await getRepoFile(repoPath);
-      await deleteRepoFile(repoPath, `注文削除: ${id}`, sha);
+      const done = await deleteOrder(id);
+      if (!done) return bad("対象の注文が見つかりませんでした", 404);
       return NextResponse.json({ ok: true });
     }
 
     if (payload.action === "status") {
       const status = payload.status as OrderStatus;
       if (!ORDER_STATUSES.includes(status)) return bad("ステータスが不正です");
-      const { text, sha } = await getRepoFile(repoPath);
-      const order = JSON.parse(text) as Order;
-      order.status = status;
-      await putRepoFile(
-        repoPath,
-        toBase64(JSON.stringify(order, null, 2) + "\n"),
-        `注文更新: ${id} → ${status}`,
-        sha,
-      );
+      const done = await updateOrderStatus(id, status);
+      if (!done) return bad("対象の注文が見つかりませんでした", 404);
       return NextResponse.json({ ok: true });
     }
 
     return bad("操作が不正です");
   } catch (e) {
     console.error("studio orders error:", e);
-    return bad("処理に失敗しました。注文が見つからないか、通信に失敗しました", 502);
+    return bad("処理に失敗しました。時間をおいて再度お試しください", 502);
   }
 }
