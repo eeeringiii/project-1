@@ -58,7 +58,10 @@ function ProductCard({ g }: { g: Goods }) {
       <h2 className="mb-1 text-[0.95rem] leading-snug transition-colors group-hover:text-gold">
         {g.name}
       </h2>
-      <p className="font-display text-base tracking-wide">{formatYen(g.price)}</p>
+      <p className="flex items-baseline gap-1">
+        <span className="text-[1.05rem] font-semibold tabular-nums">{formatYen(g.price)}</span>
+        <span className="text-[0.62rem] text-muted">税込</span>
+      </p>
     </Link>
   );
 }

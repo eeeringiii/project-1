@@ -206,8 +206,8 @@ export default function CartCheckout({ shop }: { shop: ShopConfig }) {
             </p>
           )}
           <div className="flex items-baseline justify-between border-t border-line-soft pt-3">
-            <span className="text-[0.75rem] tracking-[0.2em] text-sub">お支払い合計</span>
-            <span className="font-display text-xl tracking-wide">{formatYen(grandTotal)}</span>
+            <span className="text-[0.8rem] tracking-[0.16em] text-ink">お支払い合計（税込）</span>
+            <span className="text-2xl font-semibold tabular-nums">{formatYen(grandTotal)}</span>
           </div>
         </div>
       </div>

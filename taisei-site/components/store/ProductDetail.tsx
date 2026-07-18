@@ -77,8 +77,10 @@ export default function ProductDetail({ goods }: { goods: Goods }) {
           {GOODS_CATEGORY_LABEL[goods.category]}
         </p>
         <h1 className="text-xl leading-snug md:text-2xl">{goods.name}</h1>
-        <p className="mt-4 font-display text-2xl tracking-wide">{formatYen(goods.price)}</p>
-        <p className="mt-1 text-[0.7rem] text-muted">税込</p>
+        <p className="mt-4 flex items-baseline gap-2">
+          <span className="text-3xl font-semibold tabular-nums">{formatYen(goods.price)}</span>
+          <span className="text-sm text-muted">（税込）</span>
+        </p>
 
         <div className="mt-6 whitespace-pre-line border-y border-line-soft py-6 text-[0.9rem] leading-loose text-sub">
           {goods.description}

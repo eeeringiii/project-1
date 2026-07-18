@@ -68,7 +68,12 @@ export default async function GoodsDetailPage({
                 <p className="text-[0.82rem] leading-snug transition-colors group-hover:text-gold">
                   {g.name}
                 </p>
-                <p className="font-display text-sm">{formatYen(g.price)}</p>
+                <p>
+                  <span className="text-[0.95rem] font-semibold tabular-nums">
+                    {formatYen(g.price)}
+                  </span>
+                  <span className="ml-1 text-[0.6rem] text-muted">税込</span>
+                </p>
               </Link>
             ))}
           </div>
