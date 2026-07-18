@@ -1,0 +1,256 @@
+@import "tailwindcss";
+
+/*
+  OSHICOA 16 デザインシステム
+  コンセプト: ゲームのステータス画面 × ファッションブランドの特設サイト。
+  ベース=黒/チャコール/ダークネイビー、アクセント=紫/ブルー/マゼンタ/ピンクを光・境界・数値・CTAに限定。
+*/
+
+:root {
+  --bg: #07070b;
+  --bg-1: #0b0c12;
+  --bg-2: #12131c;
+  --panel: rgba(20, 22, 32, 0.72);
+  --panel-solid: #14161f;
+  --line: rgba(148, 130, 200, 0.16);
+  --line-strong: rgba(160, 140, 220, 0.32);
+
+  --text: #eef0f6;
+  --text-sub: #b7bad0; /* 本文補助。AAコントラストを維持 */
+  --text-muted: #9296b4; /* 補足・キャプション。背景#07070bに対しAA(4.5:1)以上 */
+
+  --violet: #8b5cf6;
+  --blue: #4f8cff;
+  --magenta: #d946ef;
+  --pink: #ff5da2;
+  --accent: var(--violet);
+
+  --glow-violet: rgba(139, 92, 246, 0.45);
+  --glow-magenta: rgba(217, 70, 239, 0.35);
+
+  --radius: 14px;
+  --radius-sm: 10px;
+  --maxw: 1120px;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-1: var(--bg-1);
+  --color-bg-2: var(--bg-2);
+  --color-panel: var(--panel-solid);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-text: var(--text);
+  --color-text-sub: var(--text-sub);
+  --color-text-muted: var(--text-muted);
+  --color-violet: var(--violet);
+  --color-blue: var(--blue);
+  --color-magenta: var(--magenta);
+  --color-pink: var(--pink);
+  --font-sans: var(--font-noto-sans-jp), system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), var(--font-noto-sans-jp), sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.75;
+  letter-spacing: 0.01em;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  /* 秘密の研究所らしい、ごく淡い解析グリッドとネオンの気配 */
+  background-image:
+    radial-gradient(60rem 60rem at 12% -10%, rgba(139, 92, 246, 0.12), transparent 60%),
+    radial-gradient(50rem 50rem at 100% 0%, rgba(217, 70, 239, 0.1), transparent 55%),
+    radial-gradient(70rem 40rem at 50% 120%, rgba(79, 140, 255, 0.08), transparent 60%);
+  background-attachment: fixed;
+}
+
+/* ===== タイポグラフィ ===== */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
+}
+.type-code {
+  font-family: var(--font-display);
+  letter-spacing: 0.18em;
+  font-weight: 700;
+}
+
+/* ===== レイアウト ===== */
+.container-x {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: clamp(1.1rem, 4vw, 2.5rem);
+}
+
+/* ===== パネル/カード ===== */
+.panel {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0)) ,
+    var(--panel-solid);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.panel-hair {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.015);
+}
+
+/* 微光の境界線 */
+.edge-glow {
+  position: relative;
+}
+.edge-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--violet), transparent 40%, var(--magenta));
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ===== ボタン ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.85rem 1.6rem;
+  transition: transform 0.18s ease, box-shadow 0.24s ease, background 0.24s ease, border-color 0.2s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+  line-height: 1.2;
+}
+.btn-primary {
+  color: #fff;
+  background: linear-gradient(120deg, var(--violet), var(--magenta));
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06) inset, 0 10px 30px -12px var(--glow-violet);
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12) inset, 0 16px 44px -14px var(--glow-magenta);
+}
+.btn-ghost {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--line-strong);
+}
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--violet);
+}
+
+/* ===== フォーム ===== */
+.field {
+  width: 100%;
+  background: rgba(9, 10, 16, 0.7);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.field::placeholder {
+  color: var(--text-muted);
+}
+.field:focus {
+  outline: none;
+  border-color: var(--violet);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.22);
+}
+
+/* ===== アクセシビリティ ===== */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.skip-link {
+  position: absolute;
+  left: 0.5rem;
+  top: -3rem;
+  z-index: 100;
+  background: var(--panel-solid);
+  border: 1px solid var(--line-strong);
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  transition: top 0.2s ease;
+}
+.skip-link:focus {
+  top: 0.5rem;
+}
+
+/* ===== 装飾 ===== */
+.grid-noise {
+  background-image:
+    linear-gradient(to right, var(--line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+  background-size: 44px 44px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 40%, transparent 78%);
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 40%, transparent 78%);
+}
+.text-gradient {
+  background: linear-gradient(120deg, #fff, var(--violet) 55%, var(--magenta));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ===== アニメーション（reduced-motion配慮） ===== */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slide-in {
+  from { opacity: 0; transform: translateX(16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+.animate-fade-up { animation: fade-up 0.5s ease both; }
+.animate-slide-in { animation: slide-in 0.28s ease both; }
+.animate-pulse-soft { animation: pulse-soft 1.6s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
