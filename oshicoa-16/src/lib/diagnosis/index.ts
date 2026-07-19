@@ -3,5 +3,9 @@ export { determineType } from "@/lib/diagnosis/determineType";
 export { calculateTags } from "@/lib/diagnosis/calculateTags";
 export { determinePhase } from "@/lib/diagnosis/determinePhase";
 export { calculateChart } from "@/lib/diagnosis/calculateChart";
-export { normalizeAxisScores, POLE_TOTAL_WEIGHT } from "@/lib/diagnosis/normalizeScores";
+export {
+  normalizeAxisScores,
+  computePoleTotals,
+  STANDARD_POLE_TOTALS,
+} from "@/lib/diagnosis/normalizeScores";
 export { createResult, IncompleteDiagnosisError } from "@/lib/diagnosis/createResult";

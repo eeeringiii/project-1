@@ -9,7 +9,8 @@ import { calculateTags } from "@/lib/diagnosis/calculateTags";
 import { determinePhase } from "@/lib/diagnosis/determinePhase";
 import { calculateChart } from "@/lib/diagnosis/calculateChart";
 import { createResult, IncompleteDiagnosisError } from "@/lib/diagnosis/createResult";
-import { POLE_TOTAL_WEIGHT } from "@/lib/diagnosis/normalizeScores";
+import { STANDARD_POLE_TOTALS, computePoleTotals } from "@/lib/diagnosis/normalizeScores";
+import { preciseQuestions } from "@/data/questionsPrecise";
 
 function answersFrom(value: AnswerValue): DiagnosisAnswer[] {
   return questions.map((q) => ({ questionId: q.id, value }));
@@ -34,15 +35,22 @@ function seededAnswers(seed: number): DiagnosisAnswer[] {
 }
 
 describe("データ整合性", () => {
-  it("全ての極が正の重みを1つ以上持つ（ゼロ割り・到達不能を防ぐ）", () => {
-    for (const pole of ["R", "C", "E", "P", "G", "M", "T", "S"] as const) {
-      expect(POLE_TOTAL_WEIGHT[pole]).toBeGreaterThan(0);
+  it("標準・精密の両セットで全ての極が正の重みを1つ以上持つ（ゼロ割り・到達不能を防ぐ）", () => {
+    const poles = ["R", "C", "E", "P", "G", "M", "T", "S"] as const;
+    const preciseTotals = computePoleTotals(preciseQuestions);
+    for (const pole of poles) {
+      expect(STANDARD_POLE_TOTALS[pole]).toBeGreaterThan(0);
+      expect(preciseTotals[pole]).toBeGreaterThan(0);
     }
   });
 
-  it("質問のtagWeightsは全て既知のタグIDを参照する", () => {
+  it("精密版は48問である", () => {
+    expect(preciseQuestions.length).toBe(48);
+  });
+
+  it("質問のtagWeightsは全て既知のタグIDを参照する（精密版=全設問）", () => {
     const tagIds = new Set(tags.map((t) => t.id));
-    for (const q of questions) {
+    for (const q of preciseQuestions) {
       for (const id of Object.keys(q.tagWeights ?? {})) {
         expect(tagIds.has(id)).toBe(true);
       }
@@ -163,5 +171,43 @@ describe("createResult（統合）", () => {
     expect(a.typeCode).toBe(b.typeCode);
     expect(a.tags).toEqual(b.tags);
     expect(a.chartScores).toEqual(b.chartScores);
+  });
+});
+
+describe("精密48問版", () => {
+  function precise(seed: number): DiagnosisAnswer[] {
+    const options: AnswerValue[] = [3, 1, -1, -3];
+    const rand = mulberry32(seed);
+    return preciseQuestions.map((q) => ({
+      questionId: q.id,
+      value: options[Math.floor(rand() * 4)],
+    }));
+  }
+
+  it("48問回答で結果が生成され、有効なタイプになる", () => {
+    const result = createResult(precise(3), undefined, "precise");
+    expect(ALL_TYPE_CODES).toContain(result.typeCode);
+    expect(result.answers.length).toBe(48);
+  });
+
+  it("48問未満（標準セット分だけ）を精密指定で渡すとエラー", () => {
+    const partial = precise(3).slice(0, 24);
+    expect(() => createResult(partial, undefined, "precise")).toThrow(IncompleteDiagnosisError);
+  });
+
+  it("精密版でも同じ回答は同じ結果（決定的）", () => {
+    const answers = precise(21);
+    const a = createResult(answers, undefined, "precise");
+    const b = createResult(answers, undefined, "precise");
+    expect(a.typeCode).toBe(b.typeCode);
+    expect(a.chartScores).toEqual(b.chartScores);
+  });
+
+  it("精密版でも多様なタイプへ到達できる", () => {
+    const found = new Set<TypeCode>();
+    for (let seed = 0; seed < 400; seed++) {
+      found.add(createResult(precise(seed), undefined, "precise").typeCode);
+    }
+    expect(found.size).toBeGreaterThanOrEqual(14);
   });
 });

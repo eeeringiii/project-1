@@ -22,7 +22,7 @@ export default function DiagnosisStartPage() {
           <OshiProfileForm />
         </div>
         <p className="mt-6 text-center text-xs text-text-muted">
-          全24問・約3〜4分 / 登録不要 / 結果画像を保存可能
+          標準24問（約3〜4分）／精密48問（約6〜8分） / 登録不要 / 結果画像を保存可能
         </p>
       </div>
     </div>

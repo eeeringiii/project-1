@@ -1,5 +1,5 @@
 import type { ChartMetricId, DiagnosisAnswer, TypeCode } from "@/types";
-import { questionMap } from "@/data/questions";
+import { questionMap } from "@/data/questionSets";
 import { chartMetricIds } from "@/data/chartMetrics";
 import { typeMap } from "@/data/types";
 

@@ -1,5 +1,5 @@
 import type { AxisKey, AxisScores, DiagnosisAnswer } from "@/types";
-import { questionMap } from "@/data/questions";
+import { questionMap } from "@/data/questionSets";
 
 const ALL_POLES: AxisKey[] = ["R", "C", "E", "P", "G", "M", "T", "S"];
 

@@ -1,4 +1,5 @@
 import type { DiagnosisResult, OshiProfile, DiagnosisAnswer } from "@/types";
+import type { QuestionSetId } from "@/data/questionSets";
 
 /**
  * localStorage 永続化ユーティリティ。
@@ -11,6 +12,7 @@ const STORAGE_KEY = "oshicoa16:v1";
 export type PersistedState = {
   version: number;
   state: {
+    mode?: QuestionSetId;
     oshiProfile?: OshiProfile;
     answers?: DiagnosisAnswer[];
     result?: DiagnosisResult;

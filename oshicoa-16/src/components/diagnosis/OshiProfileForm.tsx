@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDiagnosisStore } from "@/stores/diagnosisStore";
 import { GENRE_OPTIONS, DURATION_OPTIONS, FREQUENCY_OPTIONS } from "@/constants/oshiOptions";
+import { QUESTION_SET_META, type QuestionSetId } from "@/data/questionSets";
 import { trackEvent } from "@/lib/analytics";
 
 /**
@@ -13,16 +14,17 @@ import { trackEvent } from "@/lib/analytics";
 export default function OshiProfileForm() {
   const router = useRouter();
   const setOshiProfile = useDiagnosisStore((s) => s.setOshiProfile);
-  const restartSameOshi = useDiagnosisStore((s) => s.restartSameOshi);
+  const setMode = useDiagnosisStore((s) => s.setMode);
 
+  const [mode, setLocalMode] = useState<QuestionSetId>("standard");
   const [oshiName, setOshiName] = useState("");
   const [genre, setGenre] = useState("");
   const [duration, setDuration] = useState("");
   const [frequency, setFrequency] = useState("");
 
   const start = () => {
-    // 途中まで回答が残っている可能性があるためリセットしてから開始。
-    restartSameOshi();
+    // セットを確定（内部で回答をリセットして開始位置を戻す）。
+    setMode(mode);
     const profile = {
       oshiName: oshiName.trim() || undefined,
       genre: genre || undefined,
@@ -32,13 +34,44 @@ export default function OshiProfileForm() {
     setOshiProfile(profile);
     const filled = Object.values(profile).some(Boolean);
     if (filled) trackEvent("oshi_profile_completed");
-    trackEvent("diagnosis_start");
+    trackEvent("diagnosis_start", { mode });
     router.push("/diagnosis/questions");
   };
 
   return (
     <div className="panel edge-glow p-6 sm:p-8">
       <div className="space-y-6">
+        <fieldset>
+          <legend className="mb-2 block text-sm font-medium text-text">診断のボリューム</legend>
+          <div className="grid grid-cols-2 gap-3">
+            {(Object.values(QUESTION_SET_META)).map((meta) => {
+              const active = mode === meta.id;
+              return (
+                <button
+                  key={meta.id}
+                  type="button"
+                  aria-pressed={active}
+                  onClick={() => setLocalMode(meta.id)}
+                  className={`rounded-xl border p-4 text-left transition-colors ${
+                    active
+                      ? "border-violet bg-[rgba(139,92,246,0.14)]"
+                      : "border-line-strong hover:border-violet"
+                  }`}
+                >
+                  <span className="flex items-baseline gap-2">
+                    <span className="font-display text-base font-bold text-text">{meta.label}</span>
+                    <span className="type-code text-xs text-violet">{meta.count}問</span>
+                  </span>
+                  <span className="mt-1 block text-xs text-text-muted">{meta.minutes}</span>
+                  <span className="mt-1 block text-xs text-text-sub leading-relaxed">
+                    {meta.description}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </fieldset>
+
         <div>
           <label htmlFor="oshiName" className="mb-2 block text-sm font-medium text-text">
             推しの名前 <span className="text-text-muted">（任意）</span>

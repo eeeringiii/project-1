@@ -5,25 +5,27 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { AnswerValue } from "@/types";
 import { ANSWER_OPTIONS } from "@/types";
-import { questions } from "@/data/questions";
+import { getQuestionSet } from "@/data/questionSets";
 import { useDiagnosisStore } from "@/stores/diagnosisStore";
 import { trackEvent } from "@/lib/analytics";
 import DiagnosisProgress from "@/components/diagnosis/DiagnosisProgress";
 import QuestionCard from "@/components/diagnosis/QuestionCard";
 import AnalysisLoading from "@/components/diagnosis/AnalysisLoading";
 
-const total = questions.length;
-
 export default function QuestionsFlow() {
   const router = useRouter();
   const hydrate = useDiagnosisStore((s) => s.hydrate);
   const hasHydrated = useDiagnosisStore((s) => s.hasHydrated);
+  const mode = useDiagnosisStore((s) => s.mode);
   const answers = useDiagnosisStore((s) => s.answers);
   const currentIndex = useDiagnosisStore((s) => s.currentIndex);
   const answerCurrent = useDiagnosisStore((s) => s.answerCurrent);
   const goToPrevious = useDiagnosisStore((s) => s.goToPrevious);
   const goToIndex = useDiagnosisStore((s) => s.goToIndex);
   const finalize = useDiagnosisStore((s) => s.finalize);
+
+  const questions = getQuestionSet(mode);
+  const total = questions.length;
 
   useEffect(() => {
     hydrate();
@@ -64,7 +66,7 @@ export default function QuestionsFlow() {
       const answeredCount = questions.filter((q) => answers[q.id] !== undefined).length;
       goToIndex(Math.min(answeredCount, total - 1));
     }
-  }, [finalize, router, answers, goToIndex]);
+  }, [finalize, router, answers, goToIndex, questions, total]);
 
   if (!hasHydrated) {
     return <div className="py-20 text-center text-text-muted">読み込み中…</div>;

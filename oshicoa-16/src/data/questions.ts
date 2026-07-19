@@ -13,7 +13,7 @@ import type { DiagnosisQuestion } from "@/types";
  * 極ごとの合計重みには偏りがあるが、determineType では極ごとに正規化して比較するため
  * 質問数の偏りが結果を偏らせない設計になっている（lib/diagnosis/normalizeScores.ts 参照）。
  */
-export const questions: DiagnosisQuestion[] = [
+export const standardQuestions: DiagnosisQuestion[] = [
   {
     id: "q1",
     text: "推しの作品そのものより、推し本人から反応をもらえた瞬間のほうが強く記憶に残る。",
@@ -195,8 +195,7 @@ export const questions: DiagnosisQuestion[] = [
   },
 ];
 
-export const questionMap: Record<string, DiagnosisQuestion> = Object.fromEntries(
-  questions.map((q) => [q.id, q]),
-);
+/** 後方互換のためのエイリアス（標準24問）。新規コードは questionSets を参照すること。 */
+export const questions = standardQuestions;
 
-export const QUESTION_COUNT = questions.length;
+export const QUESTION_COUNT = standardQuestions.length;

@@ -1,5 +1,5 @@
 import type { DiagnosisAnswer, DiagnosisResult, OshiProfile } from "@/types";
-import { questions } from "@/data/questions";
+import { questionSets, type QuestionSetId } from "@/data/questionSets";
 import { calculateAxes } from "@/lib/diagnosis/calculateAxes";
 import { determineType } from "@/lib/diagnosis/determineType";
 import { calculateTags } from "@/lib/diagnosis/calculateTags";
@@ -13,18 +13,19 @@ export class IncompleteDiagnosisError extends Error {
   }
 }
 
-const requiredIds = new Set(questions.map((q) => q.id));
-
 /**
  * 全回答から診断結果を生成する。
- * 全質問が回答されていない場合は IncompleteDiagnosisError を投げる。
+ * 指定した問題セット（標準/精密）の全質問が回答されていない場合は IncompleteDiagnosisError を投げる。
  * 同じ回答からは常に同じ結果を返す（決定的）。
  */
 export function createResult(
   answers: DiagnosisAnswer[],
   oshiProfile?: OshiProfile,
+  setId: QuestionSetId = "standard",
 ): DiagnosisResult {
-  // 回答の妥当性チェック（重複を除いた有効回答が全質問を満たすか）。
+  const setQuestions = questionSets[setId];
+  const requiredIds = new Set(setQuestions.map((q) => q.id));
+
   const answered = new Map<string, DiagnosisAnswer>();
   for (const a of answers) {
     if (requiredIds.has(a.questionId)) answered.set(a.questionId, a);
@@ -36,7 +37,7 @@ export function createResult(
   }
 
   // 質問定義の順序に揃えた正規化済み回答。
-  const orderedAnswers: DiagnosisAnswer[] = questions.map((q) => answered.get(q.id)!);
+  const orderedAnswers: DiagnosisAnswer[] = setQuestions.map((q) => answered.get(q.id)!);
 
   const axisScores = calculateAxes(orderedAnswers);
   const typeCode = determineType(axisScores, orderedAnswers);

@@ -1,14 +1,19 @@
-import type { AxisKey, AxisScores } from "@/types";
-import { questions } from "@/data/questions";
+import type { AxisKey, AxisScores, DiagnosisQuestion } from "@/types";
+import { standardQuestions } from "@/data/questions";
 
 const ALL_POLES: AxisKey[] = ["R", "C", "E", "P", "G", "M", "T", "S"];
 
+function emptyTotals(): AxisScores {
+  return Object.fromEntries(ALL_POLES.map((p) => [p, 0])) as AxisScores;
+}
+
 /**
- * 各極が「全質問中どれだけの重みを割り当てられているか」の合計（正の重みのみ）。
- * 質問データから静的に算出されるため、質問を編集すれば自動的に追従する。
+ * 与えられた設問集合における、各極への割り当て重みの合計（正の重みのみ）。
+ * 標準24問でも精密48問でも、実際に回答された設問集合から都度算出するため、
+ * どちらのセットでも正規化が正しく機能する。
  */
-export const POLE_TOTAL_WEIGHT: AxisScores = (() => {
-  const totals = Object.fromEntries(ALL_POLES.map((p) => [p, 0])) as AxisScores;
+export function computePoleTotals(questions: DiagnosisQuestion[]): AxisScores {
+  const totals = emptyTotals();
   for (const q of questions) {
     for (const pole of ALL_POLES) {
       const w = q.weights[pole];
@@ -16,20 +21,20 @@ export const POLE_TOTAL_WEIGHT: AxisScores = (() => {
     }
   }
   return totals;
-})();
+}
+
+/** 標準24問の極合計（データ整合性テスト等の参照用）。 */
+export const STANDARD_POLE_TOTALS: AxisScores = computePoleTotals(standardQuestions);
 
 /**
  * 生の極スコアを -1〜1 の「その極への同意度」に正規化する。
- *
- * 極ごとに割り当て重みが異なっても（質問数の偏りがあっても）比較が公平になるよう、
- * 各極スコアを「最大回答強度(3) × その極の総重み」で割る。
- * これにより、少数の質問しか割り当てられていない極（例: T）でも、
- * 多数の質問を持つ極（例: S）と同じ土俵で比較できる。
+ * 各極スコアを「最大回答強度(3) × その極の総重み」で割ることで、
+ * 極ごとの質問数の偏りに依らず比較できるようにする。
  */
-export function normalizeAxisScores(raw: AxisScores): AxisScores {
+export function normalizeAxisScores(raw: AxisScores, totals: AxisScores): AxisScores {
   const normalized = {} as AxisScores;
   for (const pole of ALL_POLES) {
-    const denom = 3 * (POLE_TOTAL_WEIGHT[pole] || 1);
+    const denom = 3 * (totals[pole] || 1);
     normalized[pole] = raw[pole] / denom;
   }
   return normalized;

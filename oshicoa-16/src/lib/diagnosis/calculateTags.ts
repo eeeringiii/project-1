@@ -1,5 +1,5 @@
 import type { DiagnosisAnswer, OtakuTag, TagId } from "@/types";
-import { questionMap } from "@/data/questions";
+import { questionMap } from "@/data/questionSets";
 import { tags, tagMap } from "@/data/tags";
 
 type TagScore = { id: TagId; score: number; strong: number };

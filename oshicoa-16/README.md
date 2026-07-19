@@ -156,7 +156,8 @@ UIから完全に分離し、単体テスト可能です（`src/lib/diagnosis/`�
 
 すべて `src/data/` にID付きで分離しており、表示コンポーネントに文言を直書きしていません（将来のCMS移行を想定）。
 
-- **質問データ**: `data/questions.ts`。`weights`（軸）・`chartWeights`・`tagWeights`・`phaseWeights` を編集。極を増減しても `normalizeScores` が総重みを再集計するため追従します。各質問がどの判定へ効くかは同ファイル内コメントとweights定義から追えます。
+- **質問データ**: 標準24問は `data/questions.ts`（`standardQuestions`）、精密版の追加24問は `data/questionsPrecise.ts`（`additionalQuestions`、精密版は `preciseQuestions` = 標準+追加の48問）。`weights`（軸）・`chartWeights`・`tagWeights`・`phaseWeights` を編集。問題セットは `data/questionSets.ts` に集約され、正規化は「回答された設問集合」から都度算出するため、設問を増減しても軸の偏りは自動補正されます。
+- **問題セット（標準/精密）**: `data/questionSets.ts` の `questionSets` / `QUESTION_SET_META` に定義。`/diagnosis` の入力画面で標準24問・精密48問を選択でき、選択は端末内に保存されます。新しいセット（例: ジャンル別）を追加する場合もここに定義を足すだけで、診断ロジック（`createResult(answers, oshiProfile, setId)`）はそのまま利用できます。
 - **タイプデータ**: `data/types.ts`。`OshicoaType` 型に沿って16件を定義。`premiumUrl` はタイプ別のnote等の販売導線（**仮URL**）。
 - **業タグの追加**: `data/tags.ts` に要素を追加し、`questions.ts` の `tagWeights` で加点。最大30種以上へ拡張可能。
 - **関係フェーズの追加**: `data/phases.ts` に追加し、`lib/diagnosis/determinePhase.ts` の推し歴マッピングや `questions.ts` の `phaseWeights` を調整。
@@ -209,6 +210,7 @@ UIから完全に分離し、単体テスト可能です（`src/lib/diagnosis/`�
 ## 将来拡張する場合の注意点
 
 - 診断データを増やす際も**表示コンポーネントに文言を直書きしない**こと（`data/`に集約）。
-- 精密48問版・同担相性診断・多言語・ジャンル別版などは、`questions.ts` / `types.ts` の構造を維持したまま追加できます。
+- **実装済みの拡張**: 精密48問版（問題セット選択）／同担相性診断（`/compatibility`）。
+- 多言語・ジャンル別版などは、`questionSets.ts` / `types.ts` の構造を維持したまま追加できます。
 - 相性診断（`/compatibility`）はデータ構造（7項目スコア・順序非依存参照）を用意済み。UIを実装すれば公開できます。
 - 会員登録・Stripe決済・管理画面などサーバー側機能を追加する場合も、**推しの名前などの個人情報を端末外へ出さない**方針を維持してください。

@@ -1,5 +1,5 @@
 import type { DiagnosisAnswer, OshiProfile, PhaseId, RelationshipPhase } from "@/types";
-import { questionMap } from "@/data/questions";
+import { questionMap } from "@/data/questionSets";
 import { phases, phaseMap } from "@/data/phases";
 
 /** 推し歴（任意入力）が示す基準フェーズと、その重み。 */
