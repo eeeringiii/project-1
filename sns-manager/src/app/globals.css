@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+/*
+ * デザインシステム
+ * アーティスト事務所の管理画面として、シンプルで高級感のある配色。
+ * 落ち着いたインクブルー＋ウォームグレー＋ゴールドのアクセント。
+ */
+
+:root {
+  --bg: #f7f6f3;
+  --surface: #ffffff;
+  --surface-2: #faf9f7;
+  --border: #e7e4de;
+  --ink: #1c1b19;
+  --ink-2: #57534e;
+  --muted: #8b867d;
+  --accent: #1e293b;
+  --accent-fg: #ffffff;
+  --gold: #b08d57;
+  --info: #2563eb;
+  --info-bg: #eff4ff;
+  --success: #17795e;
+  --success-bg: #e9f6f0;
+  --warning: #b45309;
+  --warning-bg: #fdf3e7;
+  --danger: #b42318;
+  --danger-bg: #fdeceb;
+  --neutral: #57534e;
+  --neutral-bg: #f0efec;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-gold: var(--gold);
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+* {
+  border-color: var(--border);
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* スクロールバー（控えめ） */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #d6d3cc;
+  border-radius: 8px;
+  border: 2px solid var(--bg);
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-toast-in {
+  animation: toast-in 0.18s ease-out;
+}
+.animate-fade-in {
+  animation: fade-in 0.15s ease-out;
+}

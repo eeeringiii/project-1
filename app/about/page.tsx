@@ -1,0 +1,1 @@
+export default function About(){return <main className="shell form"><p className="eyebrow">ABOUT OSHICOA 16</p><h1>愛の量ではなく、<br/>愛がどこへ向かうか。</h1><p className="lead">OSHICOA 16は、課金額や現場数で推し活を採点しません。現場、積み、布教、同担、供給、ファンサ、解釈に現れる「自分らしい熱量の置き場所」を、16の生態として言葉にする体験です。</p></main>}
