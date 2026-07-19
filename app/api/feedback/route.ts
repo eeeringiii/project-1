@@ -3,6 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 const client = new Anthropic();
 
+// 短い栄養アドバイスの生成は軽量タスクで、Haiku で十分。
+// 上位モデルが必要な場合のみ ANTHROPIC_MODEL で上書きする。
+const MODEL = process.env.ANTHROPIC_MODEL ?? "claude-haiku-4-5";
+
 export async function POST(req: NextRequest) {
   try {
     const { meals } = await req.json();
@@ -18,7 +22,7 @@ export async function POST(req: NextRequest) {
       .join("\n");
 
     const response = await client.messages.create({
-      model: "claude-opus-4-8",
+      model: MODEL,
       max_tokens: 512,
       messages: [
         {

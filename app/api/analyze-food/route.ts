@@ -3,6 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 const client = new Anthropic();
 
+// 食べ物写真の解析は構造化された抽出タスクで、Haiku で十分。
+// 上位モデルが必要な場合のみ ANTHROPIC_MODEL で上書きする。
+const MODEL = process.env.ANTHROPIC_MODEL ?? "claude-haiku-4-5";
+
 export async function POST(req: NextRequest) {
   try {
     const { imageBase64, mediaType } = await req.json();
@@ -12,7 +16,7 @@ export async function POST(req: NextRequest) {
     }
 
     const response = await client.messages.create({
-      model: "claude-opus-4-8",
+      model: MODEL,
       max_tokens: 1024,
       messages: [
         {
