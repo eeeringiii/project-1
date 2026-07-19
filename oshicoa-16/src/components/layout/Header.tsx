@@ -9,7 +9,7 @@ const navLinks = [
 
 export default function Header() {
   return (
-    <header className="sticky top-0 z-50 border-b border-line backdrop-blur-md bg-[rgba(7,7,11,0.66)]">
+    <header className="sticky top-0 z-50 border-b border-line backdrop-blur-md bg-[rgba(255,255,255,0.72)]">
       <div className="container-x flex items-center justify-between h-16">
         <Link href="/" className="flex items-baseline gap-2" aria-label={`${siteMeta.siteName} トップへ`}>
           <span className="type-code text-lg text-gradient font-display">OSHICOA</span>

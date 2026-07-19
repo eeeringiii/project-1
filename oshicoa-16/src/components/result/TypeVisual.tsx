@@ -96,7 +96,7 @@ export default function TypeVisual({ code, size = 320, className = "", animate =
           textAnchor="middle"
           className="type-code"
           fontSize={size * 0.2}
-          fill={`hsla(${hue}, 60%, 88%, 0.12)`}
+          fill={`hsla(${hue}, 70%, 62%, 0.16)`}
         >
           {code}
         </text>
@@ -104,8 +104,8 @@ export default function TypeVisual({ code, size = 320, className = "", animate =
         {/* ノード（4文字） */}
         {nodes.map((n, i) => (
           <g key={i}>
-            <circle cx={n.x} cy={n.y} r={size * 0.055} fill="rgba(10,10,16,0.85)" stroke={`hsl(${hue + i * 30}, 85%, 66%)`} strokeWidth={1.2} />
-            <text x={n.x} y={n.y} dy="0.34em" textAnchor="middle" className="type-code" fontSize={size * 0.05} fill="#eef0f6">
+            <circle cx={n.x} cy={n.y} r={size * 0.058} fill="#ffffff" stroke={`hsl(${hue + i * 30}, 78%, 70%)`} strokeWidth={1.6} />
+            <text x={n.x} y={n.y} dy="0.34em" textAnchor="middle" className="type-code" fontSize={size * 0.05} fill="#6a5c95">
               {n.ch}
             </text>
           </g>

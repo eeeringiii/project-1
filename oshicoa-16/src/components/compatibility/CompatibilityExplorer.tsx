@@ -49,7 +49,7 @@ function ScoreBar({ label, value }: { label: string; value: number }) {
         <span className="text-text-sub">{label}</span>
         <span className="type-code text-text">{value}</span>
       </div>
-      <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-[rgba(255,255,255,0.06)]">
+      <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-[rgba(150,120,210,0.18)]">
         <div
           className="h-full rounded-full bg-gradient-to-r from-violet to-magenta transition-[width] duration-500 ease-out"
           style={{ width: `${value}%` }}

@@ -9,7 +9,7 @@ export default function DiagnosisProgress({ current, total }: { current: number;
         <span>{pct}%</span>
       </div>
       <div
-        className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-[rgba(255,255,255,0.06)]"
+        className="mt-2 h-2 w-full overflow-hidden rounded-full bg-[rgba(150,120,210,0.18)]"
         role="progressbar"
         aria-valuenow={current}
         aria-valuemin={0}

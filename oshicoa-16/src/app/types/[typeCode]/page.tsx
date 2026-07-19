@@ -5,7 +5,7 @@ import { ALL_TYPE_CODES, isTypeCode } from "@/types";
 import { typeMap } from "@/data/types";
 import { getBestMatch } from "@/data/compatibility";
 import { absoluteUrl } from "@/lib/site";
-import TypeVisual from "@/components/result/TypeVisual";
+import TypeCharacter from "@/components/result/TypeCharacter";
 import RadarChart from "@/components/charts/RadarChart";
 import ResultSummary from "@/components/result/ResultSummary";
 import CompatibilityCard from "@/components/result/CompatibilityCard";
@@ -82,7 +82,7 @@ export default async function TypeDetailPage({ params }: Params) {
           <div className="grid-noise pointer-events-none absolute inset-0 opacity-40" aria-hidden="true" />
           <div className="relative">
             <div className="mx-auto max-w-[240px]">
-              <TypeVisual code={type.code} size={240} />
+              <TypeCharacter code={type.code} name={type.name} size={240} />
             </div>
             <p className="type-code mt-6 text-base text-magenta">{type.code}</p>
             <h1 className="mt-1 font-display text-4xl font-bold text-gradient sm:text-5xl">

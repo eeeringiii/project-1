@@ -37,7 +37,7 @@ function drawMiniRadar(
   const angle = (i: number) => (Math.PI * 2 * i) / count - Math.PI / 2;
 
   // グリッド
-  ctx.strokeStyle = "rgba(160,140,220,0.22)";
+  ctx.strokeStyle = "rgba(150,120,210,0.3)";
   ctx.lineWidth = 1.5;
   for (const ring of [0.5, 1]) {
     ctx.beginPath();
@@ -64,13 +64,31 @@ function drawMiniRadar(
   });
   ctx.closePath();
   const grad = ctx.createLinearGradient(cx - radius, cy - radius, cx + radius, cy + radius);
-  grad.addColorStop(0, "rgba(217,70,239,0.55)");
-  grad.addColorStop(1, "rgba(139,92,246,0.5)");
+  grad.addColorStop(0, "rgba(255,143,192,0.6)");
+  grad.addColorStop(1, "rgba(157,127,224,0.45)");
   ctx.fillStyle = grad;
   ctx.fill();
-  ctx.strokeStyle = "#ff5da2";
+  ctx.strokeStyle = "#ff8fc0";
   ctx.lineWidth = 3;
   ctx.stroke();
+}
+
+/** 角丸矩形パスを引く（塗り/線は呼び出し側で行う）。 */
+function roundRect(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  radius: number,
+): void {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.arcTo(x + width, y, x + width, y + height, radius);
+  ctx.arcTo(x + width, y + height, x, y + height, radius);
+  ctx.arcTo(x, y + height, x, y, radius);
+  ctx.arcTo(x, y, x + width, y, radius);
+  ctx.closePath();
 }
 
 /**
@@ -90,42 +108,43 @@ export async function generateResultImage(params: Params): Promise<Blob> {
   const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("Canvas 2D コンテキストを取得できませんでした。");
 
-  // 背景
+  // 背景（パステル）
   const bg = ctx.createLinearGradient(0, 0, w, h);
-  bg.addColorStop(0, "#0a0a12");
-  bg.addColorStop(1, "#12101c");
+  bg.addColorStop(0, "#f3ecfc");
+  bg.addColorStop(1, "#fbeef6");
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, w, h);
 
   // 淡いグロー
-  const glow = ctx.createRadialGradient(w * 0.5, h * 0.32, 0, w * 0.5, h * 0.32, w * 0.7);
-  glow.addColorStop(0, "rgba(139,92,246,0.22)");
+  const glow = ctx.createRadialGradient(w * 0.5, h * 0.3, 0, w * 0.5, h * 0.3, w * 0.7);
+  glow.addColorStop(0, "rgba(255,182,220,0.4)");
   glow.addColorStop(1, "transparent");
   ctx.fillStyle = glow;
   ctx.fillRect(0, 0, w, h);
 
-  // 枠
-  ctx.strokeStyle = "rgba(160,140,220,0.28)";
-  ctx.lineWidth = 2;
-  ctx.strokeRect(40, 40, w - 80, h - 80);
+  // 丸い枠
+  ctx.strokeStyle = "rgba(157,127,224,0.4)";
+  ctx.lineWidth = 3;
+  roundRect(ctx, 36, 36, w - 72, h - 72, 40);
+  ctx.stroke();
 
   const pad = 90;
   ctx.textAlign = "left";
 
   // ロゴ
-  ctx.fillStyle = "#c9b8ff";
+  ctx.fillStyle = "#8b6fd6";
   ctx.font = `700 40px ${JP_FONT}`;
-  ctx.fillText("OSHICOA 16", pad, 130);
-  ctx.fillStyle = "#9296b4";
+  ctx.fillText("OSHICOA 16", pad, 132);
+  ctx.fillStyle = "#9a8dc0";
   ctx.font = `500 26px ${JP_FONT}`;
   ctx.textAlign = "right";
-  ctx.fillText("ヲタク生態診断", w - pad, 128);
+  ctx.fillText("ヲタク生態診断", w - pad, 130);
   ctx.textAlign = "left";
 
   // 推し名（あれば）
   let y = 250;
   if (oshiName) {
-    ctx.fillStyle = "#b7bad0";
+    ctx.fillStyle = "#7466a0";
     ctx.font = `500 34px ${JP_FONT}`;
     const line = fitText(ctx, `${oshiName}を推しているときのあなた`, w - pad * 2);
     ctx.fillText(line, pad, y);
@@ -133,23 +152,23 @@ export async function generateResultImage(params: Params): Promise<Blob> {
   }
 
   // タイプコード
-  ctx.fillStyle = "#d946ef";
+  ctx.fillStyle = "#ff8fc0";
   ctx.font = `700 64px ${JP_FONT}`;
   ctx.fillText(type.code.split("").join(" "), pad, y + 90);
 
   // タイプ名
-  ctx.fillStyle = "#ffffff";
+  ctx.fillStyle = "#4b3f77";
   ctx.font = `700 84px ${JP_FONT}`;
   ctx.fillText(fitText(ctx, type.name, w - pad * 2), pad, y + 190);
 
   // キャッチコピー
-  ctx.fillStyle = "#b7bad0";
+  ctx.fillStyle = "#6a5c95";
   ctx.font = `500 34px ${JP_FONT}`;
   ctx.fillText(fitText(ctx, `「${type.catchphrase}」`, w - pad * 2), pad, y + 250);
 
   // 業タグ
   if (tags.length) {
-    ctx.fillStyle = "#ff5da2";
+    ctx.fillStyle = "#e57fb8";
     ctx.font = `700 32px ${JP_FONT}`;
     const tagLine = tags.map((t) => `#${t.name}`).join("  ");
     ctx.fillText(fitText(ctx, tagLine, w - pad * 2), pad, y + 320);
@@ -160,10 +179,10 @@ export async function generateResultImage(params: Params): Promise<Blob> {
   drawMiniRadar(ctx, w - pad - 150, radarCy, 130, chartScores);
 
   // フッター
-  ctx.fillStyle = "#9296b4";
+  ctx.fillStyle = "#9a8dc0";
   ctx.font = `500 28px ${JP_FONT}`;
   ctx.fillText("#OSHICOA16  #ヲタク生態診断", pad, h - 110);
-  ctx.fillStyle = "#6f6f88";
+  ctx.fillStyle = "#a99fc4";
   ctx.font = `500 24px ${JP_FONT}`;
   ctx.fillText("oshicoa16 — あなたの推し方の本性は？", pad, h - 70);
 

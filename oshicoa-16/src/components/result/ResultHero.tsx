@@ -1,5 +1,5 @@
 import type { OshicoaType, OtakuTag } from "@/types";
-import TypeVisual from "@/components/result/TypeVisual";
+import TypeCharacter from "@/components/result/TypeCharacter";
 
 type Props = {
   type: OshicoaType;
@@ -14,7 +14,7 @@ export default function ResultHero({ type, tags, oshiName, undiagnosed }: Props)
       <div className="grid-noise pointer-events-none absolute inset-0 opacity-40" aria-hidden="true" />
       <div className="relative">
         <div className="mx-auto max-w-[260px]">
-          <TypeVisual code={type.code} size={260} />
+          <TypeCharacter code={type.code} name={type.name} size={260} />
         </div>
 
         {oshiName ? (

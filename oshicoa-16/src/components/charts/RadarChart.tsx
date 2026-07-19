@@ -49,8 +49,8 @@ export default function RadarChart({ values, size = 320, className = "" }: Props
       >
         <defs>
           <radialGradient id="radarFill" cx="50%" cy="50%" r="60%">
-            <stop offset="0%" stopColor="rgba(217,70,239,0.42)" />
-            <stop offset="100%" stopColor="rgba(139,92,246,0.28)" />
+            <stop offset="0%" stopColor="rgba(255,143,192,0.5)" />
+            <stop offset="100%" stopColor="rgba(157,127,224,0.34)" />
           </radialGradient>
         </defs>
 
@@ -65,7 +65,7 @@ export default function RadarChart({ values, size = 320, className = "" }: Props
               })
               .join(" ")}
             fill="none"
-            stroke="rgba(160,140,220,0.16)"
+            stroke="rgba(150,120,210,0.28)"
             strokeWidth={1}
           />
         ))}
@@ -80,16 +80,16 @@ export default function RadarChart({ values, size = 320, className = "" }: Props
               y1={cy}
               x2={p.x}
               y2={p.y}
-              stroke="rgba(160,140,220,0.14)"
+              stroke="rgba(150,120,210,0.22)"
               strokeWidth={1}
             />
           );
         })}
 
         {/* データ多角形 */}
-        <polygon points={polygon} fill="url(#radarFill)" stroke="#d946ef" strokeWidth={1.8} />
+        <polygon points={polygon} fill="url(#radarFill)" stroke="#ff8fc0" strokeWidth={2.2} />
         {dataPoints.map((p, i) => (
-          <circle key={i} cx={p.x} cy={p.y} r={2.6} fill="#ff5da2" />
+          <circle key={i} cx={p.x} cy={p.y} r={3} fill="#ff8fc0" stroke="#fff" strokeWidth={1} />
         ))}
 
         {/* ラベル */}
@@ -105,7 +105,7 @@ export default function RadarChart({ values, size = 320, className = "" }: Props
               dy="0.32em"
               textAnchor={anchor}
               fontSize={size * 0.037}
-              fill="#b7bad0"
+              fill="#6a5c95"
               className="font-sans"
             >
               {m.shortName}

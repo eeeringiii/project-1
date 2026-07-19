@@ -48,7 +48,7 @@ export async function GET(request: Request) {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "72px",
-          background: "linear-gradient(135deg, #0a0a12 0%, #14101e 100%)",
+          background: "linear-gradient(135deg, #f1eafc 0%, #fbeef6 100%)",
           position: "relative",
           fontFamily: "NotoSansJP",
         }}
@@ -62,7 +62,7 @@ export async function GET(request: Request) {
             width: "520px",
             height: "520px",
             borderRadius: "9999px",
-            background: `radial-gradient(circle, hsla(${hue},90%,60%,0.35), transparent 65%)`,
+            background: `radial-gradient(circle, hsla(${hue},80%,80%,0.6), transparent 65%)`,
             display: "flex",
           }}
         />
@@ -74,32 +74,32 @@ export async function GET(request: Request) {
             width: "360px",
             height: "360px",
             borderRadius: "9999px",
-            border: `2px solid hsla(${hue},85%,68%,0.35)`,
+            border: `3px solid hsla(${hue},75%,78%,0.55)`,
             display: "flex",
           }}
         />
 
         <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-          <span style={{ color: "#c9b8ff", fontSize: "34px", fontWeight: 700, letterSpacing: "0.12em" }}>
+          <span style={{ color: "#8b6fd6", fontSize: "36px", fontWeight: 700, letterSpacing: "0.06em" }}>
             OSHICOA 16
           </span>
-          <span style={{ color: "#9296b4", fontSize: "24px" }}>｜ヲタク生態診断</span>
+          <span style={{ color: "#9a8dc0", fontSize: "24px" }}>｜ヲタク生態診断</span>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <span
             style={{
-              color: `hsl(${hue},90%,72%)`,
-              fontSize: "40px",
+              color: "#ff8fc0",
+              fontSize: "42px",
               fontWeight: 700,
-              letterSpacing: "0.3em",
+              letterSpacing: "0.24em",
             }}
           >
             {code.split("").join(" ")}
           </span>
           <span
             style={{
-              color: "#ffffff",
+              color: "#4b3f77",
               fontSize: type ? "96px" : "60px",
               fontWeight: 700,
               marginTop: "8px",
@@ -108,13 +108,13 @@ export async function GET(request: Request) {
           >
             {name}
           </span>
-          <span style={{ color: "#b7bad0", fontSize: "34px", marginTop: "18px" }}>
+          <span style={{ color: "#6a5c95", fontSize: "34px", marginTop: "18px" }}>
             {type ? `「${catchphrase}」` : catchphrase}
           </span>
         </div>
 
         <div style={{ display: "flex" }}>
-          <span style={{ color: "#6f6f88", fontSize: "26px" }}>
+          <span style={{ color: "#9a8dc0", fontSize: "26px" }}>
             あなたの推し方の本性は？ #OSHICOA16
           </span>
         </div>

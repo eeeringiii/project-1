@@ -4,7 +4,7 @@ import SectionHeading from "@/components/common/SectionHeading";
 import AxisCard from "@/components/common/AxisCard";
 import TypeCard from "@/components/types/TypeCard";
 import FaqAccordion from "@/components/common/FaqAccordion";
-import TypeVisual from "@/components/result/TypeVisual";
+import TypeCharacter from "@/components/result/TypeCharacter";
 import { axisInfos } from "@/constants/axes";
 import { types, typeMap } from "@/data/types";
 import { faqItems } from "@/data/faq";
@@ -151,7 +151,7 @@ export default function HomePage() {
         <div className="mx-auto mt-10 max-w-2xl">
           <div className="panel edge-glow overflow-hidden p-8 text-center">
             <div className="mx-auto max-w-[240px]">
-              <TypeVisual code={preview.code} size={240} />
+              <TypeCharacter code={preview.code} name={preview.name} size={240} />
             </div>
             <p className="type-code mt-6 text-sm text-magenta">{preview.code}</p>
             <h3 className="mt-2 font-display text-3xl font-bold text-gradient">{preview.name}</h3>

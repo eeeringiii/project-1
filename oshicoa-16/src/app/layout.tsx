@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
-import { Noto_Sans_JP, Space_Grotesk } from "next/font/google";
+import { Zen_Maru_Gothic, Fredoka } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import AnalyticsScripts from "@/components/common/AnalyticsScripts";
 import { siteMeta, BASE_URL } from "@/lib/site";
 
-const notoSansJp = Noto_Sans_JP({
-  variable: "--font-noto-sans-jp",
+const zenMaru = Zen_Maru_Gothic({
+  variable: "--font-zen-maru",
   subsets: ["latin"],
   weight: ["400", "500", "700"],
   display: "swap",
 });
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
+const fredoka = Fredoka({
+  variable: "--font-fredoka",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -59,7 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   };
 
   return (
-    <html lang="ja" className={`${notoSansJp.variable} ${spaceGrotesk.variable}`}>
+    <html lang="ja" className={`${zenMaru.variable} ${fredoka.variable}`}>
       <body>
         <script
           type="application/ld+json"

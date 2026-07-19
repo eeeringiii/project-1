@@ -27,8 +27,8 @@ export default function AnswerButton({ value, label, shortcut, selected, onSelec
       type="button"
       onClick={() => onSelect(value)}
       aria-pressed={selected}
-      className={`flex w-full items-center gap-3 rounded-xl border bg-[rgba(255,255,255,0.02)] px-4 py-4 text-left transition-all duration-150 hover:bg-[rgba(139,92,246,0.08)] active:scale-[0.99] ${
-        selected ? "border-violet bg-[rgba(139,92,246,0.14)] shadow-[0_0_0_3px_rgba(139,92,246,0.18)]" : accent[intensity]
+      className={`flex w-full items-center gap-3 rounded-2xl border bg-panel-soft px-4 py-4 text-left transition-all duration-150 hover:bg-[rgba(157,127,224,0.12)] active:scale-[0.99] ${
+        selected ? "border-violet bg-[rgba(157,127,224,0.18)] shadow-[0_0_0_3px_rgba(157,127,224,0.22)]" : accent[intensity]
       }`}
     >
       <span
