@@ -15,7 +15,8 @@
 
 | ファイル | 役割 |
 | --- | --- |
-| `Code.gs` | Apps Script 本体（Webアプリ）。友だち情報を受け取りシートに追記 |
+| `Code.gs` | **本命**。エルメの外部送信から叩かれ、友だち情報を受け取りシートに追記 |
+| `Code_LINE_webhook.gs` | **フォールバック**。LINE Messaging APIのfollow Webhookを直接受ける版（`Code.gs`とはどちらか一方を使う） |
 | `appsscript.json` | Apps Script のマニフェスト（Webアプリ設定・タイムゾーン） |
 
 ---
@@ -69,12 +70,17 @@ https://script.google.com/macros/s/XXXX/exec?token=秘密の文字列&name=<表�
 
 ## もしエルメに「外部URLを叩くアクション」が無い場合（フォールバック）
 
-プランによってはエルメから外部送信ができないことがあります。その場合は **LINE公式アカウントの Messaging API Webhook** を直接使う方法に切り替えられます（こちらは確実に友だち追加＝`follow`イベントを取れます）。
+プランによってはエルメから外部送信ができないことがあります。その場合は **LINE公式アカウントの Messaging API Webhook** を直接使う方法に切り替えられます（こちらは確実に友だち追加＝`follow`イベントを取れます）。**この用途の完成コードが `Code_LINE_webhook.gs` として同梱済み**です。
 
-1. LINE Developers でチャネルの **Webhook URL** に STEP1 のWebアプリURL（`?token=秘密の文字列` 付き）を設定し、Webhook利用をON
-2. `Code.gs` を LINE の `follow` イベント形式（`events[].type === 'follow'`、`events[].source.userId`）を読む版に拡張し、表示名は LINE の `getProfile` API で取得
+1. `Code.gs` の代わりに **`Code_LINE_webhook.gs`** をGASプロジェクトに貼り付け（両方入れると `doPost` が衝突するのでどちらか一方）
+2. 設定セクションを埋める。特に **`CHANNEL_ACCESS_TOKEN`**（LINE Developers → Messaging API設定 → チャネルアクセストークン(長期)）と `SECRET_TOKEN`
+3. ウェブアプリとしてデプロイ（実行=自分／アクセス=全員）
+4. LINE Developers → 対象チャネル → Messaging API設定:
+   - **Webhook URL** = 発行URL + `?token=秘密の文字列`
+   - 「Webhookの利用」を **ON** →「検証」ボタンで疎通確認
+5. これで友だち追加時に `follow` を受信 → `getProfile` で表示名を取得 → シートに追記されます
 
-> 注意: LINE公式アカウントのWebhook URLは**1つだけ**です。既にエルメがそのWebhookを使っている場合、直接方式に切り替えるとエルメ側の自動応答が止まります。**エルメを主で使うなら STEP3 の外部送信方式が第一候補**です。この切り替えが必要になったら、`Code.gs` の `follow` 対応版を用意しますので声をかけてください。
+> 注意: LINE公式アカウントのWebhook URLは**1つだけ**です。既にエルメがそのWebhookを使っている場合、直接方式に切り替えるとエルメ側の自動応答が止まります。**エルメを主で使うなら STEP3 の外部送信方式が第一候補**、これはあくまで外部送信が使えない時の代替です。
 
 ---
 
