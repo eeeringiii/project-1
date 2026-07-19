@@ -1,101 +1,40 @@
-import crypto from "node:crypto";
 import type { Order, OrderItem, OrderStatus } from "@/lib/content";
 
 // 注文（個人情報）を Google スプレッドシートに保存・取得する。
-// 公開リポジトリに個人情報を残さないための保存先。
-// サービスアカウント認証（外部ライブラリ不要・Node標準の crypto で JWT を署名）。
+// スプレッドシートに付属の「Google Apps Script」を Web App として公開し、
+// そこへ HTTPS で読み書きする方式（サービスアカウント不要・設定が簡単）。
 //
 // 必要な環境変数（Vercel に設定）:
-//   GOOGLE_SERVICE_ACCOUNT_EMAIL … サービスアカウントのメール
-//   GOOGLE_PRIVATE_KEY           … サービスアカウントの秘密鍵（\n を含む）
-//   ORDERS_SHEET_ID              … 対象スプレッドシートのID（URLの /d/ と /edit の間）
+//   ORDERS_WEBHOOK_URL    … Apps Script を「デプロイ」して得られる /exec のURL
+//   ORDERS_WEBHOOK_SECRET … Apps Script 側の SECRET と一致させる合言葉
 //
-// スプレッドシートはサービスアカウントのメールに「編集者」で共有しておくこと。
+// 公開リポジトリには個人情報を一切書かない。
 
-const EMAIL = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL ?? "";
-const RAW_KEY = process.env.GOOGLE_PRIVATE_KEY ?? "";
-const SHEET_ID = process.env.ORDERS_SHEET_ID ?? "";
+const WEBHOOK_URL = process.env.ORDERS_WEBHOOK_URL ?? "";
+const WEBHOOK_SECRET = process.env.ORDERS_WEBHOOK_SECRET ?? "";
 
-export const sheetsEnabled = Boolean(EMAIL && RAW_KEY && SHEET_ID);
+export const sheetsEnabled = Boolean(WEBHOOK_URL && WEBHOOK_SECRET);
 
-// 列の並び（1行目のヘッダー）。items_json は明細の完全復元用。
-const HEADER = [
-  "注文番号",
-  "日時",
-  "ステータス",
-  "氏名",
-  "フリガナ",
-  "メール",
-  "電話",
-  "郵便番号",
-  "住所",
-  "商品",
-  "商品小計",
-  "送料",
-  "合計",
-  "備考",
-  "items_json",
-];
-const LAST_COL = "O"; // 15列目
-const API = "https://sheets.googleapis.com/v4/spreadsheets";
+// スプレッドシートの列順（Apps Script 側と一致させること）
+// 注文番号, 日時, ステータス, 氏名, フリガナ, メール, 電話, 郵便番号, 住所,
+// 商品, 商品小計, 送料, 合計, 備考, items_json
 
-function base64url(input: Buffer | string): string {
-  return Buffer.from(input)
-    .toString("base64")
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=+$/, "");
-}
-
-let cachedToken: { token: string; exp: number } | null = null;
-
-async function getAccessToken(): Promise<string> {
-  if (cachedToken && cachedToken.exp > Date.now() + 60_000) return cachedToken.token;
-
-  const now = Math.floor(Date.now() / 1000);
-  const header = base64url(JSON.stringify({ alg: "RS256", typ: "JWT" }));
-  const claim = base64url(
-    JSON.stringify({
-      iss: EMAIL,
-      scope: "https://www.googleapis.com/auth/spreadsheets",
-      aud: "https://oauth2.googleapis.com/token",
-      iat: now,
-      exp: now + 3600,
-    }),
-  );
-  const signingInput = `${header}.${claim}`;
-  const privateKey = RAW_KEY.replace(/\\n/g, "\n");
-  const signature = base64url(
-    crypto.sign("RSA-SHA256", Buffer.from(signingInput), privateKey),
-  );
-  const assertion = `${signingInput}.${signature}`;
-
-  const res = await fetch("https://oauth2.googleapis.com/token", {
+async function call(
+  action: string,
+  extra: Record<string, unknown> = {},
+): Promise<Record<string, unknown>> {
+  const res = await fetch(WEBHOOK_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({
-      grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
-      assertion,
-    }),
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ secret: WEBHOOK_SECRET, action, ...extra }),
+    redirect: "follow",
   });
   if (!res.ok) {
-    throw new Error(`Google認証に失敗: ${res.status} ${(await res.text()).slice(0, 200)}`);
+    throw new Error(`注文ストア呼び出しに失敗: ${res.status} ${(await res.text()).slice(0, 200)}`);
   }
-  const json = (await res.json()) as { access_token: string; expires_in: number };
-  cachedToken = { token: json.access_token, exp: Date.now() + json.expires_in * 1000 };
-  return json.access_token;
-}
-
-async function api(path: string, init?: RequestInit): Promise<Response> {
-  const token = await getAccessToken();
-  return fetch(`${API}/${SHEET_ID}${path}`, {
-    ...init,
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-      ...(init?.headers ?? {}),
-    },
-  });
+  const json = (await res.json()) as Record<string, unknown>;
+  if (!json.ok) throw new Error(`注文ストアがエラーを返しました: ${json.error ?? "unknown"}`);
+  return json;
 }
 
 // items を人が読める文字列にする（例: ロゴTシャツ（L）×2 ／ CD×1）
@@ -105,21 +44,7 @@ function itemsText(items: OrderItem[]): string {
     .join(" ／ ");
 }
 
-// 1行目にヘッダーが無ければ作成する
-async function ensureHeader(): Promise<void> {
-  const res = await api(`/values/A1:${LAST_COL}1`);
-  if (!res.ok) throw new Error(`シート読み取りに失敗: ${res.status}`);
-  const json = (await res.json()) as { values?: string[][] };
-  if (!json.values || json.values.length === 0) {
-    await api(`/values/A1:${LAST_COL}1?valueInputOption=RAW`, {
-      method: "PUT",
-      body: JSON.stringify({ values: [HEADER] }),
-    });
-  }
-}
-
 export async function appendOrder(order: Order): Promise<void> {
-  await ensureHeader();
   const row = [
     order.id,
     order.createdAt,
@@ -137,11 +62,7 @@ export async function appendOrder(order: Order): Promise<void> {
     order.note ?? "",
     JSON.stringify(order.items),
   ];
-  const res = await api(
-    `/values/A:${LAST_COL}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
-    { method: "POST", body: JSON.stringify({ values: [row] }) },
-  );
-  if (!res.ok) throw new Error(`注文の記録に失敗: ${res.status} ${(await res.text()).slice(0, 200)}`);
+  await call("append", { row });
 }
 
 function rowToOrder(r: string[]): Order {
@@ -152,75 +73,50 @@ function rowToOrder(r: string[]): Order {
     items = [];
   }
   return {
-    id: r[0] ?? "",
-    createdAt: r[1] ?? "",
+    id: String(r[0] ?? ""),
+    createdAt: String(r[1] ?? ""),
     status: (r[2] as OrderStatus) || "受付",
     customer: {
-      name: r[3] ?? "",
-      kana: r[4] ?? "",
-      email: r[5] ?? "",
-      phone: r[6] ?? "",
-      postal: r[7] ?? "",
-      address: r[8] ?? "",
+      name: String(r[3] ?? ""),
+      kana: String(r[4] ?? ""),
+      email: String(r[5] ?? ""),
+      phone: String(r[6] ?? ""),
+      postal: String(r[7] ?? ""),
+      address: String(r[8] ?? ""),
     },
     items,
-    subtotal: r[10] ? Number(r[10]) : undefined,
-    shipping: r[11] ? Number(r[11]) : undefined,
+    subtotal: r[10] !== "" && r[10] != null ? Number(r[10]) : undefined,
+    shipping: r[11] !== "" && r[11] != null ? Number(r[11]) : undefined,
     total: Number(r[12] ?? 0),
-    ...(r[13] ? { note: r[13] } : {}),
+    ...(r[13] ? { note: String(r[13]) } : {}),
   };
 }
 
 export async function readOrders(): Promise<Order[]> {
-  const res = await api(`/values/A2:${LAST_COL}`);
-  if (!res.ok) throw new Error(`注文の取得に失敗: ${res.status}`);
-  const json = (await res.json()) as { values?: string[][] };
-  const rows = json.values ?? [];
+  const json = await call("list");
+  const rows = (json.rows as string[][]) ?? [];
   return rows
     .filter((r) => r[0])
     .map(rowToOrder)
     .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
 }
 
-// 注文番号から、その行番号（スプレッドシート上の1始まり行）を探す
-async function findRow(id: string): Promise<number | null> {
-  const res = await api(`/values/A:A`);
-  if (!res.ok) throw new Error(`行の検索に失敗: ${res.status}`);
-  const json = (await res.json()) as { values?: string[][] };
-  const rows = json.values ?? [];
-  for (let i = 0; i < rows.length; i++) {
-    if (rows[i][0] === id) return i + 1; // 1始まり
-  }
-  return null;
-}
-
 export async function updateOrderStatus(id: string, status: OrderStatus): Promise<boolean> {
-  const row = await findRow(id);
-  if (!row) return false;
-  const res = await api(`/values/C${row}?valueInputOption=RAW`, {
-    method: "PUT",
-    body: JSON.stringify({ values: [[status]] }),
-  });
-  if (!res.ok) throw new Error(`ステータス更新に失敗: ${res.status}`);
-  return true;
+  try {
+    await call("status", { id, status });
+    return true;
+  } catch (e) {
+    if (String(e).includes("notfound")) return false;
+    throw e;
+  }
 }
 
 export async function deleteOrder(id: string): Promise<boolean> {
-  const row = await findRow(id);
-  if (!row) return false;
-  // 先頭シート（gridId=0）の該当行を削除（0始まりの行インデックス）
-  const res = await api(`:batchUpdate`, {
-    method: "POST",
-    body: JSON.stringify({
-      requests: [
-        {
-          deleteDimension: {
-            range: { sheetId: 0, dimension: "ROWS", startIndex: row - 1, endIndex: row },
-          },
-        },
-      ],
-    }),
-  });
-  if (!res.ok) throw new Error(`行の削除に失敗: ${res.status}`);
-  return true;
+  try {
+    await call("delete", { id });
+    return true;
+  } catch (e) {
+    if (String(e).includes("notfound")) return false;
+    throw e;
+  }
 }
