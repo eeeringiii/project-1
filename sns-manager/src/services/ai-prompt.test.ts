@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { buildSystemPrompt, buildUserPrompt } from "./ai-prompt";
+import {
+  buildSystemPrompt,
+  buildSharedContextPrompt,
+  buildPlatformPrompt,
+} from "./ai-prompt";
 import type { BrandRule, ContentSource } from "@/types/domain";
 
 const source: ContentSource = {
@@ -67,25 +71,33 @@ describe("ai-prompt", () => {
     expect(sys).toContain("解禁");
   });
 
-  it("userプロンプトに告知情報・解禁日時・NGワードが含まれる", () => {
-    const p = buildUserPrompt(source, rules, "x");
-    expect(p).toContain("アオイロ配信");
-    expect(p).toContain("解禁日時");
-    expect(p).toContain("限定,絶対");
-    expect(p).toContain('"platform": "x"');
+  it("共通文脈に告知情報・解禁日時・共通NGワードが含まれる", () => {
+    const shared = buildSharedContextPrompt(source, rules);
+    expect(shared).toContain("アオイロ配信");
+    expect(shared).toContain("解禁日時");
+    expect(shared).toContain("限定,絶対"); // platform=null の共通ルール
   });
 
-  it("媒体別ルールは対象媒体のみ適用され、無効ルールは除外される", () => {
-    const igPrompt = buildUserPrompt(source, rules, "instagram");
+  it("媒体プロンプトに対象媒体と出力形式が含まれる", () => {
+    const p = buildPlatformPrompt(rules, "x");
+    expect(p).toContain('"platform": "x"');
+    expect(p).toContain("対象媒体");
+  });
+
+  it("媒体固有ルールは対象媒体のみ適用され、無効ルールは除外される", () => {
+    const igPrompt = buildPlatformPrompt(rules, "instagram");
     expect(igPrompt).toContain("丁寧"); // instagram向けの有効ルール
     expect(igPrompt).not.toContain("IG限定ルール"); // 無効ルール
 
-    const xPrompt = buildUserPrompt(source, rules, "x");
+    const xPrompt = buildPlatformPrompt(rules, "x");
     expect(xPrompt).not.toContain("丁寧"); // instagram専用ルールはXに出ない
+
+    // 共通ルール（platform=null）は媒体固有プロンプトには出さない（system側に集約）
+    expect(igPrompt).not.toContain("限定,絶対");
   });
 
   it("postTypes 指定で一部再生成のプロンプトになる", () => {
-    const p = buildUserPrompt(source, rules, "x", ["reminder"]);
+    const p = buildPlatformPrompt(rules, "x", ["reminder"]);
     expect(p).toContain("リマインド投稿");
     expect(p).not.toContain("公式告知文");
   });

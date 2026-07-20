@@ -17,7 +17,12 @@ import {
   generateRequestSchema,
   type AiPost,
 } from "@/schemas";
-import { buildSystemPrompt, buildUserPrompt, summarizePrompt } from "@/services/ai-prompt";
+import {
+  buildSystemPrompt,
+  buildSharedContextPrompt,
+  buildPlatformPrompt,
+  summarizePrompt,
+} from "@/services/ai-prompt";
 import { generateMockDrafts } from "@/services/ai-generation";
 import { PLATFORM_POST_TYPES } from "@/constants";
 import type { ContentSource, Platform } from "@/types/domain";
@@ -101,12 +106,22 @@ export async function POST(request: Request) {
 
   // ---- Anthropic 呼び出し（媒体ごと） ----
   const client = new Anthropic({ apiKey });
-  const system = buildSystemPrompt();
+  // system（静的指示）＋共通文脈（告知情報・共通ルール）は媒体ループ内で不変。
+  // 末尾ブロックに cache_control を付け、2媒体目以降はキャッシュから読ませて
+  // 入力トークンのコストを削減する（プロンプトキャッシュ）。
+  const system: Anthropic.TextBlockParam[] = [
+    { type: "text", text: buildSystemPrompt() },
+    {
+      type: "text",
+      text: buildSharedContextPrompt(source, rules),
+      cache_control: { type: "ephemeral" },
+    },
+  ];
   const posts: AiPost[] = [];
 
   try {
     for (const t of targets) {
-      const userPrompt = buildUserPrompt(source, rules, t.platform, t.postTypes);
+      const userPrompt = buildPlatformPrompt(rules, t.platform, t.postTypes);
       const message = await client.messages.create({
         model: MODEL,
         max_tokens: 2500,
@@ -119,12 +134,14 @@ export async function POST(request: Request) {
         .join("");
       const parsed = aiResponseSchema.parse(JSON.parse(extractJson(text)));
       posts.push(...parsed.posts);
-      // ログ（機密なし）: 入力要約と出力件数のみ
+      // ログ（機密なし）: 入力要約・出力件数・キャッシュ読取トークン数のみ
       console.info(
         `[ai.generate] model=${MODEL} / ${summarizePrompt(
           t.platform,
           t.postTypes,
-        )} / posts=${parsed.posts.length}`,
+        )} / posts=${parsed.posts.length} / cacheRead=${
+          message.usage.cache_read_input_tokens ?? 0
+        }`,
       );
     }
   } catch (e) {

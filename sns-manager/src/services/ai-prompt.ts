@@ -54,14 +54,23 @@ export function buildSystemPrompt(): string {
   ].join("\n");
 }
 
-function ruleLines(rules: BrandRule[], platform: Platform): string {
-  const active = rules.filter(
-    (r) => r.isActive && (r.platform === null || r.platform === platform),
-  );
-  if (active.length === 0) return "（登録なし）";
-  return active
+function formatRules(rules: BrandRule[]): string {
+  if (rules.length === 0) return "（登録なし）";
+  return rules
     .map((r) => `- ${RULE_LABELS[r.ruleType] ?? r.ruleType}: ${r.ruleValue}`)
     .join("\n");
+}
+
+/** 全媒体共通（platform 未指定）の有効ルール */
+function globalRuleLines(rules: BrandRule[]): string {
+  return formatRules(rules.filter((r) => r.isActive && r.platform === null));
+}
+
+/** 指定媒体だけに適用される有効ルール */
+function platformRuleLines(rules: BrandRule[], platform: Platform): string {
+  return formatRules(
+    rules.filter((r) => r.isActive && r.platform === platform),
+  );
 }
 
 function sourceFacts(source: ContentSource): string {
@@ -82,11 +91,29 @@ function sourceFacts(source: ContentSource): string {
 }
 
 /**
- * 指定媒体の user プロンプトを生成。
+ * 媒体をまたいで共通の文脈（告知情報＋全媒体共通ルール）を生成する。
+ * これは1回の生成リクエスト内では媒体によって変化しないため、
+ * プロンプトキャッシュの対象プレフィックスとして system 側に置く。
+ */
+export function buildSharedContextPrompt(
+  source: ContentSource,
+  rules: BrandRule[],
+): string {
+  return [
+    "# 告知情報",
+    sourceFacts(source),
+    "",
+    "# 共通ブランドルール（全媒体で厳守）",
+    globalRuleLines(rules),
+  ].join("\n");
+}
+
+/**
+ * 指定媒体だけに固有の user プロンプトを生成（媒体固有ルール＋生成指示）。
+ * 告知情報と共通ルールは buildSharedContextPrompt 側（system）にあるため含めない。
  * postTypes を絞ると一部再生成に使える（未指定なら媒体の全タイプ）。
  */
-export function buildUserPrompt(
-  source: ContentSource,
+export function buildPlatformPrompt(
   rules: BrandRule[],
   platform: Platform,
   postTypes?: string[],
@@ -104,11 +131,8 @@ export function buildUserPrompt(
     `# 対象媒体: ${PLATFORM_LABELS[platform]}`,
     `本文の文字数上限の目安: ${maxLen}文字（超えないこと）`,
     "",
-    "# 告知情報",
-    sourceFacts(source),
-    "",
-    "# ブランドルール（厳守）",
-    ruleLines(rules, platform),
+    "# この媒体固有のブランドルール（厳守）",
+    platformRuleLines(rules, platform),
     "",
     "# 生成する投稿タイプ",
     typeList,
