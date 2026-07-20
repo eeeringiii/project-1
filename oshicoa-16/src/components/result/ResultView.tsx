@@ -131,6 +131,9 @@ export default function ResultView({ type }: { type: OshicoaType }) {
           <Link href="/bingo" className="text-sm text-violet hover:underline">
             ヲタク業ビンゴで遊ぶ →
           </Link>
+          <Link href="/resume" className="text-sm text-violet hover:underline">
+            ヲタク履歴書をつくる →
+          </Link>
         </div>
       </div>
     </div>

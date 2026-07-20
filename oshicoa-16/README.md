@@ -184,7 +184,9 @@ UIから完全に分離し、単体テスト可能です（`src/lib/diagnosis/`�
 ## シェア / 画像 / OG
 
 - **シェア**: X・LINE・URLコピー・Web Share API（`components/share/ShareButtons.tsx`）。共有URLはタイプページのみで、**推し名などの個人入力情報はクエリに含めません**。
-- **結果画像**: ブラウザCanvasでPNG生成（`lib/share/generateResultImage.ts`）。正方形1080×1080 / 縦長1080×1350の2種。端末のシステムフォントで日本語を描画し、`document.fonts.ready` を待ってから生成。推し名が長い場合は自動で省略。
+- **結果画像**: ブラウザCanvasでPNG生成（`lib/share/generateResultImage.ts`）。正方形1080×1080 / 縦長1080×1350の2種。「上位◯%（突出能力）」バッジを載せ、`public/characters/{CODE}` が存在すればキャラクター画像も合成する。端末のシステムフォントで日本語を描画し、`document.fonts.ready` を待ってから生成。推し名が長い場合は自動で省略。
+- **ヲタク履歴書（`/resume`）**: 推し活プロフィールを入力すると1枚のカードに整形し、Canvas画像で保存・シェアできる（`lib/share/generateResumeImage.ts`）。入力はサーバー送信せず端末内のみ。
+- **ヲタク業ビンゴ（`/bingo`）**: あるある/業を5×5でタップし、ビンゴ数とヲタクランクを判定して拡散できるミニ機能。
 - **OG画像**: `app/api/og/route.tsx`（`next/og` の `ImageResponse`）。タイプコードだけで生成でき、SNSクローラーでも動作。日本語は、OGで使う文字だけを含む**サブセットwoffを同梱**（`NotoSansJP-subset.woff`）して実行時ネットワークに依存せず確実に描画します。
 
 ---
@@ -226,7 +228,7 @@ UIから完全に分離し、単体テスト可能です（`src/lib/diagnosis/`�
 ## 将来拡張する場合の注意点
 
 - 診断データを増やす際も**表示コンポーネントに文言を直書きしない**こと（`data/`に集約）。
-- **実装済みの拡張**: 精密48問版（問題セット選択）／同担相性診断（`/compatibility`）。
+- **実装済みの拡張**: 精密48問版（問題セット選択）／同担相性診断（`/compatibility`）／ヲタク業ビンゴ（`/bingo`）／ヲタク履歴書（`/resume`）／有料note導線（`data/premium.ts`）／結果画像・OGのリッチ化。
 - 多言語・ジャンル別版などは、`questionSets.ts` / `types.ts` の構造を維持したまま追加できます。
 - 相性診断（`/compatibility`）はデータ構造（7項目スコア・順序非依存参照）を用意済み。UIを実装すれば公開できます。
 - 会員登録・Stripe決済・管理画面などサーバー側機能を追加する場合も、**推しの名前などの個人情報を端末外へ出さない**方針を維持してください。

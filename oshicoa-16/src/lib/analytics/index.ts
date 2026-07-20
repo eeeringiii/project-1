@@ -18,7 +18,9 @@ export type AnalyticsEvent =
   | "premium_cta_clicked"
   | "type_detail_viewed"
   | "bingo_played"
-  | "bingo_shared";
+  | "bingo_shared"
+  | "resume_saved"
+  | "resume_shared";
 
 type EventParams = Record<string, string | number | boolean>;
 

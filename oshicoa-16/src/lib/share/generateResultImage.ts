@@ -1,5 +1,6 @@
 import type { ChartMetricId, OshicoaType, OtakuTag } from "@/types";
 import { chartMetrics } from "@/data/chartMetrics";
+import { standoutMetric } from "@/lib/result/resultMeta";
 
 export type ImageFormat = "square" | "portrait";
 
@@ -17,60 +18,13 @@ const SIZES: Record<ImageFormat, { w: number; h: number }> = {
 };
 
 const JP_FONT =
-  '"Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", system-ui, sans-serif';
+  '"Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Yu Gothic", system-ui, sans-serif';
 
 function fitText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string {
   if (ctx.measureText(text).width <= maxWidth) return text;
   let t = text;
   while (t.length > 1 && ctx.measureText(`${t}…`).width > maxWidth) t = t.slice(0, -1);
   return `${t}…`;
-}
-
-function drawMiniRadar(
-  ctx: CanvasRenderingContext2D,
-  cx: number,
-  cy: number,
-  radius: number,
-  values: Record<ChartMetricId, number>,
-) {
-  const count = chartMetrics.length;
-  const angle = (i: number) => (Math.PI * 2 * i) / count - Math.PI / 2;
-
-  // グリッド
-  ctx.strokeStyle = "rgba(150,120,210,0.3)";
-  ctx.lineWidth = 1.5;
-  for (const ring of [0.5, 1]) {
-    ctx.beginPath();
-    for (let i = 0; i < count; i++) {
-      const a = angle(i);
-      const x = cx + Math.cos(a) * radius * ring;
-      const y = cy + Math.sin(a) * radius * ring;
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    }
-    ctx.closePath();
-    ctx.stroke();
-  }
-
-  // データ
-  ctx.beginPath();
-  chartMetrics.forEach((m, i) => {
-    const v = Math.max(0, Math.min(100, values[m.id] ?? 0)) / 100;
-    const a = angle(i);
-    const x = cx + Math.cos(a) * radius * v;
-    const y = cy + Math.sin(a) * radius * v;
-    if (i === 0) ctx.moveTo(x, y);
-    else ctx.lineTo(x, y);
-  });
-  ctx.closePath();
-  const grad = ctx.createLinearGradient(cx - radius, cy - radius, cx + radius, cy + radius);
-  grad.addColorStop(0, "rgba(255,143,192,0.6)");
-  grad.addColorStop(1, "rgba(157,127,224,0.45)");
-  ctx.fillStyle = grad;
-  ctx.fill();
-  ctx.strokeStyle = "#ff8fc0";
-  ctx.lineWidth = 3;
-  ctx.stroke();
 }
 
 /** 角丸矩形パスを引く（塗り/線は呼び出し側で行う）。 */
@@ -91,16 +45,75 @@ function roundRect(
   ctx.closePath();
 }
 
+function drawMiniRadar(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  radius: number,
+  values: Record<ChartMetricId, number>,
+) {
+  const count = chartMetrics.length;
+  const angle = (i: number) => (Math.PI * 2 * i) / count - Math.PI / 2;
+
+  ctx.strokeStyle = "rgba(150,120,210,0.3)";
+  ctx.lineWidth = 1.5;
+  for (const ring of [0.5, 1]) {
+    ctx.beginPath();
+    for (let i = 0; i < count; i++) {
+      const a = angle(i);
+      const x = cx + Math.cos(a) * radius * ring;
+      const y = cy + Math.sin(a) * radius * ring;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.stroke();
+  }
+
+  ctx.beginPath();
+  chartMetrics.forEach((m, i) => {
+    const v = Math.max(0, Math.min(100, values[m.id] ?? 0)) / 100;
+    const a = angle(i);
+    const x = cx + Math.cos(a) * radius * v;
+    const y = cy + Math.sin(a) * radius * v;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.closePath();
+  const grad = ctx.createLinearGradient(cx - radius, cy - radius, cx + radius, cy + radius);
+  grad.addColorStop(0, "rgba(255,143,192,0.6)");
+  grad.addColorStop(1, "rgba(157,127,224,0.45)");
+  ctx.fillStyle = grad;
+  ctx.fill();
+  ctx.strokeStyle = "#ff8fc0";
+  ctx.lineWidth = 3;
+  ctx.stroke();
+}
+
+/** キャラクター画像を読み込む（webp→png、無ければnull）。同一オリジンなのでcanvasは汚染されない。 */
+function loadCharacter(code: string): Promise<HTMLImageElement | null> {
+  const tryLoad = (ext: string): Promise<HTMLImageElement | null> =>
+    new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = () => resolve(null);
+      img.src = `/characters/${code}.${ext}`;
+    });
+  return tryLoad("webp").then((img) => img ?? tryLoad("png"));
+}
+
 /**
  * 結果カードをCanvasに描画してPNG Blobを返す。
+ * キャラクター画像があれば右側に配置し、「上位◯%」バッジも載せる。
  * ブラウザのシステムフォントで日本語を描画するため文字化けしない。
- * 呼び出し前にフォント読み込み完了を待つ（下部 waitForFonts 参照）。
  */
 export async function generateResultImage(params: Params): Promise<Blob> {
   const { type, tags, chartScores, oshiName, format } = params;
   const { w, h } = SIZES[format];
 
   await waitForFonts();
+  const character = await loadCharacter(type.code);
+  const standout = standoutMetric(chartScores);
 
   const canvas = document.createElement("canvas");
   canvas.width = w;
@@ -115,20 +128,20 @@ export async function generateResultImage(params: Params): Promise<Blob> {
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, w, h);
 
-  // 淡いグロー
   const glow = ctx.createRadialGradient(w * 0.5, h * 0.3, 0, w * 0.5, h * 0.3, w * 0.7);
   glow.addColorStop(0, "rgba(255,182,220,0.4)");
   glow.addColorStop(1, "transparent");
   ctx.fillStyle = glow;
   ctx.fillRect(0, 0, w, h);
 
-  // 丸い枠
   ctx.strokeStyle = "rgba(157,127,224,0.4)";
   ctx.lineWidth = 3;
   roundRect(ctx, 36, 36, w - 72, h - 72, 40);
   ctx.stroke();
 
   const pad = 90;
+  const charW = character ? Math.min(360, w * 0.36) : 0;
+  const textMaxW = character ? w - pad * 2 - charW - 20 : w - pad * 2;
   ctx.textAlign = "left";
 
   // ロゴ
@@ -141,41 +154,78 @@ export async function generateResultImage(params: Params): Promise<Blob> {
   ctx.fillText("ヲタク生態診断", w - pad, 130);
   ctx.textAlign = "left";
 
-  // 推し名（あれば）
-  let y = 250;
+  // キャラクター（右側）
+  if (character) {
+    const charX = w - pad - charW;
+    const charY = 190;
+    const charH = charW;
+    const cgx = ctx.createRadialGradient(
+      charX + charW / 2,
+      charY + charH / 2,
+      0,
+      charX + charW / 2,
+      charY + charH / 2,
+      charW * 0.62,
+    );
+    cgx.addColorStop(0, "rgba(255,182,220,0.5)");
+    cgx.addColorStop(0.6, "rgba(157,127,224,0.22)");
+    cgx.addColorStop(1, "transparent");
+    ctx.fillStyle = cgx;
+    ctx.fillRect(charX - 30, charY - 30, charW + 60, charH + 60);
+    // アスペクト比を保って収める
+    const ratio = Math.min(charW / character.width, charH / character.height);
+    const dw = character.width * ratio;
+    const dh = character.height * ratio;
+    ctx.drawImage(character, charX + (charW - dw) / 2, charY + (charH - dh) / 2, dw, dh);
+  }
+
+  // 推し名
+  let y = 240;
   if (oshiName) {
     ctx.fillStyle = "#7466a0";
     ctx.font = `500 34px ${JP_FONT}`;
-    const line = fitText(ctx, `${oshiName}を推しているときのあなた`, w - pad * 2);
-    ctx.fillText(line, pad, y);
-    y += 20;
+    ctx.fillText(fitText(ctx, `${oshiName}を推しているときのあなた`, textMaxW), pad, y);
+    y += 16;
   }
 
   // タイプコード
   ctx.fillStyle = "#ff8fc0";
-  ctx.font = `700 64px ${JP_FONT}`;
-  ctx.fillText(type.code.split("").join(" "), pad, y + 90);
+  ctx.font = `700 60px ${JP_FONT}`;
+  ctx.fillText(type.code.split("").join(" "), pad, y + 84);
 
   // タイプ名
   ctx.fillStyle = "#4b3f77";
-  ctx.font = `700 84px ${JP_FONT}`;
-  ctx.fillText(fitText(ctx, type.name, w - pad * 2), pad, y + 190);
+  ctx.font = `700 82px ${JP_FONT}`;
+  ctx.fillText(fitText(ctx, type.name, textMaxW), pad, y + 178);
 
   // キャッチコピー
   ctx.fillStyle = "#6a5c95";
-  ctx.font = `500 34px ${JP_FONT}`;
-  ctx.fillText(fitText(ctx, `「${type.catchphrase}」`, w - pad * 2), pad, y + 250);
+  ctx.font = `500 32px ${JP_FONT}`;
+  ctx.fillText(fitText(ctx, `“${type.catchphrase}”`, textMaxW), pad, y + 234);
+
+  // 上位◯% バッジ
+  const badgeText = `♛ 上位${standout.topPercent}%  ${standout.metric.name}が高め`;
+  ctx.font = `700 30px ${JP_FONT}`;
+  const badgeW = ctx.measureText(badgeText).width + 44;
+  const badgeGrad = ctx.createLinearGradient(pad, 0, pad + badgeW, 0);
+  badgeGrad.addColorStop(0, "#c9b3f2");
+  badgeGrad.addColorStop(1, "#ffc2df");
+  ctx.fillStyle = badgeGrad;
+  roundRect(ctx, pad, y + 268, badgeW, 56, 28);
+  ctx.fill();
+  ctx.fillStyle = "#ffffff";
+  ctx.fillText(badgeText, pad + 22, y + 305);
 
   // 業タグ
   if (tags.length) {
     ctx.fillStyle = "#e57fb8";
     ctx.font = `700 32px ${JP_FONT}`;
     const tagLine = tags.map((t) => `#${t.name}`).join("  ");
-    ctx.fillText(fitText(ctx, tagLine, w - pad * 2), pad, y + 320);
+    ctx.fillText(fitText(ctx, tagLine, textMaxW), pad, y + 388);
   }
 
-  // ミニレーダー
-  const radarCy = format === "portrait" ? h - 340 : h - 250;
+  // ミニレーダー（下部）
+  const radarCy = format === "portrait" ? h - 320 : h - 240;
   drawMiniRadar(ctx, w - pad - 150, radarCy, 130, chartScores);
 
   // フッター
