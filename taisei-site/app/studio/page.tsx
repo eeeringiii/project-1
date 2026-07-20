@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
 import StudioTabs from "./StudioTabs";
-import { getLiveEvents, getMovies, getProfile, getReleases, getSettings } from "@/lib/data";
+import {
+  getGoods,
+  getLiveEvents,
+  getMovies,
+  getProfile,
+  getReleases,
+  getSettings,
+  getShopConfig,
+} from "@/lib/data";
 import { getAllNews } from "@/lib/news";
 
 export const metadata: Metadata = {
@@ -12,7 +20,7 @@ export default function StudioPage() {
   return (
     <main className="mx-auto max-w-2xl px-6 py-14">
       <div className="mb-10 border-b border-line pb-6">
-        <p className="mb-2 text-[0.68rem] tracking-[0.4em] text-gold">TAISEI FUKUMOTO — STUDIO</p>
+        <p className="mb-2 text-[0.68rem] tracking-[0.4em] text-gold">ARTIST — STUDIO</p>
         <h1 className="font-display text-2xl tracking-[0.2em]">入稿ページ</h1>
         <p className="mt-4 text-sm leading-loose text-sub">
           NEWS・リリース・LIVE・動画・写真・SNSリンクなど、サイトの内容をここから更新できます。
@@ -26,6 +34,8 @@ export default function StudioPage() {
         movies={getMovies()}
         settings={getSettings()}
         profile={getProfile()}
+        goods={getGoods()}
+        shop={getShopConfig()}
       />
     </main>
   );

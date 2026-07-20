@@ -5,7 +5,7 @@ import Reveal from "@/components/Reveal";
 export const metadata: Metadata = {
   title: "BUSINESS",
   description:
-    "福本大晴への出演・タイアップ・メディア取材など、お仕事のご依頼はこちらから。",
+    "アーティストへの出演・タイアップ・メディア取材など、お仕事のご依頼はこちらから。",
 };
 
 const services = [
@@ -20,7 +20,7 @@ export default function BusinessPage() {
       <div className="mx-auto max-w-3xl">
         <Reveal>
           <p className="mb-10 text-sm leading-loose text-sub">
-            福本大晴への出演・タイアップ・取材など、お仕事のご依頼を受け付けております。
+            アーティストへの出演・タイアップ・取材など、お仕事のご依頼を受け付けております。
             下記の窓口よりお気軽にご相談ください。（文面はサンプルです）
           </p>
           <div className="mb-12 grid gap-4 md:grid-cols-3">

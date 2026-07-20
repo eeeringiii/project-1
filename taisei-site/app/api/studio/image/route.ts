@@ -4,7 +4,7 @@ import { getRepoFile, putRepoFile, toBase64 } from "@/lib/github";
 // 写真アップロード。クライアント側で縮小済みのJPEG(dataURL)を受け取り、
 // public/uploads/ にコミットする。hero/profile はsettings.jsonの参照も更新する。
 
-const ROLES = ["hero", "profile", "jacket", "news"] as const;
+const ROLES = ["hero", "profile", "jacket", "news", "goods"] as const;
 type Role = (typeof ROLES)[number];
 
 function bad(message: string, status = 400) {
