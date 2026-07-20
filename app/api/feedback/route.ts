@@ -1,38 +1,24 @@
-import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest, NextResponse } from "next/server";
+import {
+  buildNutritionFeedback,
+  type Meal,
+  type NutritionTargets,
+} from "@/lib/nutrition-feedback";
 
-const client = new Anthropic();
-
-// 短い栄養アドバイスの生成は軽量タスクで、Haiku で十分。
-// 上位モデルが必要な場合のみ ANTHROPIC_MODEL で上書きする。
-const MODEL = process.env.ANTHROPIC_MODEL ?? "claude-haiku-4-5";
-
+// 栄養アドバイスは計算＋テンプレートで生成できるため、AI（外部API）を呼ばない。
+// これにより Anthropic API の使用量を削減する。
 export async function POST(req: NextRequest) {
   try {
-    const { meals } = await req.json();
+    const { meals, targets } = (await req.json()) as {
+      meals?: Meal[];
+      targets?: NutritionTargets;
+    };
 
     if (!meals || meals.length === 0) {
       return NextResponse.json({ error: "食事記録がありません" }, { status: 400 });
     }
 
-    const mealSummary = meals
-      .map((m: { name: string; calories: number; protein: number; carbs: number; fat: number; mealType: string }) =>
-        `${m.mealType}：${m.name}（${m.calories}kcal、たんぱく質${m.protein}g、炭水化物${m.carbs}g、脂質${m.fat}g）`
-      )
-      .join("\n");
-
-    const response = await client.messages.create({
-      model: MODEL,
-      max_tokens: 512,
-      messages: [
-        {
-          role: "user",
-          content: `今日の食事記録です：\n${mealSummary}\n\n栄養バランスについて、友達のように親しみやすく日本語でアドバイスしてください。具体的に何が足りないか、何を食べると良いかを教えてください。200文字以内で簡潔に。`,
-        },
-      ],
-    });
-
-    const feedback = response.content[0].type === "text" ? response.content[0].text : "";
+    const feedback = buildNutritionFeedback(meals, targets);
     return NextResponse.json({ feedback });
   } catch (error) {
     console.error("Feedback error:", error);
