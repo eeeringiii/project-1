@@ -4,6 +4,8 @@ import { siteMeta } from "@/lib/site";
 const footerLinks = [
   { href: "/about", label: "OSHICOA 16とは" },
   { href: "/types", label: "16タイプ一覧" },
+  { href: "/bingo", label: "ヲタク業ビンゴ" },
+  { href: "/compatibility", label: "同担相性診断" },
   { href: "/terms", label: "利用規約" },
   { href: "/privacy", label: "プライバシーポリシー" },
 ];

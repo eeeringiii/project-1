@@ -124,9 +124,12 @@ export default function ResultView({ type }: { type: OshicoaType }) {
           </div>
         </section>
 
-        <div className="text-center">
+        <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-center">
           <Link href="/types" className="text-sm text-violet hover:underline">
             16タイプの一覧を見る →
+          </Link>
+          <Link href="/bingo" className="text-sm text-violet hover:underline">
+            ヲタク業ビンゴで遊ぶ →
           </Link>
         </div>
       </div>
