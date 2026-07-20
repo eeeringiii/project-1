@@ -1,16 +1,33 @@
 import type { OshicoaType } from "@/types";
 
-function ListBlock({ title, items, accent }: { title: string; items: string[]; accent: string }) {
+function NumberedList({
+  title,
+  badge,
+  items,
+  accent,
+}: {
+  title: string;
+  badge: string;
+  items: string[];
+  accent: string;
+}) {
   return (
     <div className="panel p-6">
-      <p className={`type-code text-xs mb-4 ${accent}`}>{title}</p>
-      <ul className="space-y-3">
+      <h3 className="mb-4 text-center font-display text-base font-bold text-purple">
+        <span className="sparkle mr-1" aria-hidden="true">✦</span>
+        {title} <span className={accent}>{badge}</span>
+      </h3>
+      <ul className="space-y-2.5">
         {items.map((item, i) => (
-          <li key={i} className="flex gap-3 text-sm text-text-sub leading-relaxed">
-            <span aria-hidden="true" className={`mt-1 shrink-0 ${accent}`}>
-              ◆
+          <li key={i} className="flex items-start gap-3 rounded-xl bg-panel-soft p-3 text-sm text-text-sub">
+            <span
+              className={`type-code flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs text-white ${accent === "text-pink" ? "bg-pink" : "bg-violet"}`}
+              style={{ background: accent === "text-pink" ? "#ff8fc0" : "#a98bec" }}
+              aria-hidden="true"
+            >
+              {i + 1}
             </span>
-            {item}
+            <span className="leading-relaxed">{item}</span>
           </li>
         ))}
       </ul>
@@ -21,8 +38,34 @@ function ListBlock({ title, items, accent }: { title: string; items: string[]; a
 export default function ResultSummary({ type }: { type: OshicoaType }) {
   return (
     <div className="space-y-6">
+      <NumberedList title="あなたのヲタクあるある" badge="TOP5" items={type.traits} accent="text-violet" />
+      <NumberedList title="あなたの強み" badge="BEST3" items={type.strengths} accent="text-pink" />
+
+      {/* ヲタクの業（ピル） */}
+      <div className="panel p-6">
+        <h3 className="mb-4 text-center font-display text-base font-bold text-purple">
+          <span className="sparkle mr-1" aria-hidden="true">✦</span>
+          あなたのヲタクの業
+        </h3>
+        <ul className="space-y-2.5">
+          {type.shadowTraits.map((item, i) => (
+            <li
+              key={i}
+              className="flex items-start gap-2 rounded-2xl bg-[rgba(139,111,214,0.12)] px-4 py-3 text-sm text-text-sub"
+            >
+              <span className="mt-0.5 shrink-0 text-magenta" aria-hidden="true">♡</span>
+              <span className="leading-relaxed">{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* タイプの深掘り説明 */}
       <div className="panel p-6 sm:p-8">
-        <p className="type-code text-xs text-violet mb-4">ABOUT YOU</p>
+        <h3 className="mb-4 font-display text-base font-bold text-purple">
+          <span className="sparkle mr-1" aria-hidden="true">✦</span>
+          あなたという“生態”について
+        </h3>
         <div className="space-y-4">
           {type.description.map((para, i) => (
             <p key={i} className="text-[15px] leading-loose text-text-sub">
@@ -31,10 +74,6 @@ export default function ResultSummary({ type }: { type: OshicoaType }) {
           ))}
         </div>
       </div>
-
-      <ListBlock title="ヲタクあるある" items={type.traits} accent="text-violet" />
-      <ListBlock title="あなたの強み" items={type.strengths} accent="text-blue" />
-      <ListBlock title="ヲタクの業" items={type.shadowTraits} accent="text-magenta" />
     </div>
   );
 }

@@ -9,8 +9,8 @@ import { getBestMatch } from "@/data/compatibility";
 import { phases } from "@/data/phases";
 import { trackEvent } from "@/lib/analytics";
 import ResultHero from "@/components/result/ResultHero";
+import ResultStatus from "@/components/result/ResultStatus";
 import ResultSummary from "@/components/result/ResultSummary";
-import RadarChart from "@/components/charts/RadarChart";
 import OtakuTagList from "@/components/result/OtakuTagList";
 import RelationshipPhaseCard from "@/components/result/RelationshipPhaseCard";
 import CompatibilityCard from "@/components/result/CompatibilityCard";
@@ -73,31 +73,27 @@ export default function ResultView({ type }: { type: OshicoaType }) {
           </div>
         )}
 
-        <ResultHero type={type} tags={tags} oshiName={oshiName} undiagnosed={!diagnosed} />
+        <ResultHero
+          type={type}
+          tags={tags}
+          oshiName={oshiName}
+          undiagnosed={!diagnosed}
+          completedAt={diagnosed ? storeResult!.completedAt : undefined}
+        />
 
-        <ShareButtons type={type} tags={tags} chartScores={chartScores} oshiName={oshiName} />
-
-        {/* レーダーチャート */}
-        <section className="panel p-6">
-          <p className="type-code text-xs text-violet mb-4">ABILITY</p>
-          <div className="mx-auto max-w-sm">
-            <RadarChart values={chartScores} size={340} />
-          </div>
-          {!diagnosed && (
-            <p className="mt-3 text-center text-xs text-text-muted">
-              ※ 診断前はタイプの基準値を表示しています。回答するとあなた個人の値になります。
-            </p>
-          )}
-        </section>
+        <ResultStatus chartScores={chartScores} undiagnosed={!diagnosed} />
 
         {/* 業タグ */}
         <section className="panel p-6">
-          <p className="type-code text-xs text-magenta mb-4">OTAKU KARMA</p>
+          <h2 className="mb-4 text-center font-display text-base font-bold text-purple">
+            <span className="sparkle mr-1" aria-hidden="true">✦</span>
+            あなたのヲタクの業タグ
+          </h2>
           {diagnosed ? (
             <OtakuTagList tags={tags} showDescription />
           ) : (
-            <p className="text-sm text-text-muted">
-              あなたの業タグは、24問の診断で判定されます。
+            <p className="text-center text-sm text-text-muted">
+              あなたの業タグは、診断（回答）で判定されます。
             </p>
           )}
         </section>
@@ -109,6 +105,8 @@ export default function ResultView({ type }: { type: OshicoaType }) {
         <CompatibilityCard bestType={best.type} description={best.description} />
 
         <PremiumCta type={type} oshiName={oshiName} />
+
+        <ShareButtons type={type} tags={tags} chartScores={chartScores} oshiName={oshiName} />
 
         {/* 再診断・導線 */}
         <section className="panel p-6">
