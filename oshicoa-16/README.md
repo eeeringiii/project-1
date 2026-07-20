@@ -72,9 +72,20 @@ npm test
 すべて任意です。未設定でもビルド・動作します。
 
 ```env
-NEXT_PUBLIC_SITE_URL=      # 公開URL（OG/canonical/sitemapの絶対URLに使用。未設定時はフォールバック）
-NEXT_PUBLIC_GA_ID=         # Google Analytics 測定ID（設定時のみ計測スクリプトを読み込む）
-NEXT_PUBLIC_GTM_ID=        # Google Tag Manager ID（同上）
+NEXT_PUBLIC_SITE_URL=          # 公開URL（OG/canonical/sitemapの絶対URLに使用。未設定時はフォールバック）
+NEXT_PUBLIC_GA_ID=             # Google Analytics 測定ID（設定時のみ計測スクリプトを読み込む）
+NEXT_PUBLIC_GTM_ID=            # Google Tag Manager ID（同上）
+NEXT_PUBLIC_PREMIUM_ENABLED=   # 1 で有料導線を一括有効化（動作確認用。本番はタイプ個別設定を推奨）
+```
+
+### 有料コンテンツ（note等）の設定
+
+タイプ別の販売導線は `src/data/premium.ts` に集約しています。公開したいタイプを `overrides` に追記するだけで購入ボタンが有効になり、未設定のタイプは結果画面で「準備中」表示になります（デッドリンクにしません）。
+
+```ts
+const overrides = {
+  RCGT: { url: "https://note.com/xxxx/n/xxxxxxxx", price: 500, available: true },
+};
 ```
 
 ---
