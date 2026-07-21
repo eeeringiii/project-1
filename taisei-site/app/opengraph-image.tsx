@@ -3,7 +3,7 @@ import { siteMeta } from "@/lib/content";
 
 // SNSでURLをシェアしたときに表示されるカード画像。
 // アー写が届いたら写真ベースのデザインに差し替える
-export const alt = "福本大晴 OFFICIAL SITE";
+export const alt = "アーティスト OFFICIAL SITE";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

@@ -17,7 +17,7 @@ export default function ContactPage() {
             <br />
             宛先住所が入ります（サンプル）
             <br />
-            「福本大晴」宛
+            「アーティスト」宛
           </p>
         </section>
         <section>
