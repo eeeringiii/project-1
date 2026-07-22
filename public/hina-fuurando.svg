@@ -1,0 +1,198 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="1200" height="1200" viewBox="0 0 1200 1200"
+     id="ひなふうらんど_アクリルスタンド">
+  <title>ひなふうらんど アクリルスタンド（ハイブリッドSVG）</title>
+  <desc>Illustratorで個別編集できるレイヤー分割SVG。台座・背景・装飾・文字を分離。文字はアウトライン化せず編集可能なSVGテキスト。</desc>
+
+  <!-- ===================== 定義 ===================== -->
+  <defs>
+    <!-- 雲の外形（台座アクリル） -->
+    <path id="雲外形パス" d="
+      M 200,400
+      A 86,86 0 0 1 372,400 A 86,86 0 0 1 544,400 A 86,86 0 0 1 716,400 A 86,86 0 0 1 888,400 A 86,86 0 0 1 1060,400
+      A 75,75 0 0 1 1060,550 A 75,75 0 0 1 1060,700 A 75,75 0 0 1 1060,850
+      A 86,86 0 0 1 888,850 A 86,86 0 0 1 716,850 A 86,86 0 0 1 544,850 A 86,86 0 0 1 372,850 A 86,86 0 0 1 200,850
+      A 75,75 0 0 1 200,700 A 75,75 0 0 1 200,550 A 75,75 0 0 1 200,400 Z"/>
+
+    <!-- 雲の内形（印刷背景・レース縁取り） -->
+    <path id="雲内形パス" d="
+      M 228,428
+      A 80,80 0 0 1 389,428 A 80,80 0 0 1 550,428 A 80,80 0 0 1 710,428 A 80,80 0 0 1 871,428 A 80,80 0 0 1 1032,428
+      A 66,66 0 0 1 1032,559 A 66,66 0 0 1 1032,690 A 66,66 0 0 1 1032,822
+      A 80,80 0 0 1 871,822 A 80,80 0 0 1 710,822 A 80,80 0 0 1 550,822 A 80,80 0 0 1 389,822 A 80,80 0 0 1 228,822
+      A 66,66 0 0 1 228,690 A 66,66 0 0 1 228,559 A 66,66 0 0 1 228,428 Z"/>
+
+    <!-- 星（原点中心・外半径28） -->
+    <path id="星パス" d="M0,-28 L7.05,-9.71 L26.63,-8.65 L11.41,3.71 L16.46,22.65 L0,12 L-16.46,22.65 L-11.41,3.71 L-26.63,-8.65 L-7.05,-9.71 Z"/>
+
+    <!-- ハート（原点中心・幅約32） -->
+    <path id="ハートパス" d="M0,12 C -2,6 -16,-4 -16,-16 C -16,-24 -8,-26 0,-16 C 8,-26 16,-24 16,-16 C 16,-4 2,6 0,12 Z"/>
+
+    <!-- キラキラ（4方向） -->
+    <path id="キラキラパス" d="M0,-14 C1.5,-4 4,-1.5 14,0 C4,1.5 1.5,4 0,14 C-1.5,4 -4,1.5 -14,0 C-4,-1.5 -1.5,-4 0,-14 Z"/>
+
+    <!-- 背景グラデーション（ピンク→オレンジ→イエロー） -->
+    <linearGradient id="背景グラデ" gradientUnits="userSpaceOnUse" x1="228" y1="625" x2="1032" y2="625">
+      <stop offset="0"    stop-color="#F3A6CB"/>
+      <stop offset="0.40" stop-color="#F8C6A2"/>
+      <stop offset="0.66" stop-color="#FBDD9A"/>
+      <stop offset="1"    stop-color="#FBEC9C"/>
+    </linearGradient>
+
+    <!-- アクリル質感グラデーション -->
+    <linearGradient id="アクリルグラデ" gradientUnits="userSpaceOnUse" x1="600" y1="300" x2="600" y2="940">
+      <stop offset="0"   stop-color="#FFFFFF" stop-opacity="0.55"/>
+      <stop offset="0.5" stop-color="#FFFFFF" stop-opacity="0.12"/>
+      <stop offset="1"   stop-color="#DCE6EC" stop-opacity="0.30"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ===================== 台座レイヤー ===================== -->
+  <g id="台座レイヤー" data-name="台座レイヤー">
+    <use id="雲型台座" data-name="雲型台座" xlink:href="#雲外形パス"
+         fill="url(#アクリルグラデ)" stroke="#CBD6DD" stroke-width="3"/>
+  </g>
+
+  <!-- ===================== 背景レイヤー ===================== -->
+  <g id="背景レイヤー" data-name="背景レイヤー">
+    <use id="背景グラデーション" data-name="背景グラデーション" xlink:href="#雲内形パス" fill="url(#背景グラデ)"/>
+    <!-- レース白縁取り -->
+    <use id="レース縁取り" data-name="レース縁取り" xlink:href="#雲内形パス"
+         fill="none" stroke="#FFFFFF" stroke-width="26" stroke-linejoin="round"/>
+    <!-- レース内側のドットライン -->
+    <use id="レースドット" data-name="レースドット" xlink:href="#雲内形パス"
+         fill="none" stroke="#FBD3E1" stroke-width="4" stroke-linecap="round"
+         stroke-dasharray="2 14" transform="translate(600,625) scale(0.955) translate(-600,-625)"/>
+  </g>
+
+  <!-- ===================== 装飾レイヤー ===================== -->
+  <g id="装飾レイヤー" data-name="装飾レイヤー">
+
+    <!-- 水玉模様 -->
+    <g id="水玉" data-name="水玉" fill="#FFFFFF" fill-opacity="0.85">
+      <circle cx="320" cy="470" r="8"/><circle cx="268" cy="548" r="7"/><circle cx="372" cy="610" r="9"/>
+      <circle cx="300" cy="690" r="7"/><circle cx="240" cy="628" r="6"/><circle cx="430" cy="690" r="8"/>
+      <circle cx="470" cy="478" r="7"/><circle cx="352" cy="752" r="8"/><circle cx="430" cy="560" r="6"/>
+      <circle cx="560" cy="452" r="7"/><circle cx="650" cy="442" r="8"/><circle cx="724" cy="468" r="7"/>
+      <circle cx="600" cy="510" r="6"/>
+      <circle cx="872" cy="470" r="8"/><circle cx="948" cy="500" r="7"/><circle cx="1000" cy="560" r="9"/>
+      <circle cx="916" cy="612" r="7"/><circle cx="1030" cy="632" r="8"/><circle cx="884" cy="700" r="7"/>
+      <circle cx="980" cy="706" r="8"/><circle cx="1004" cy="500" r="6"/><circle cx="792" cy="462" r="7"/>
+    </g>
+
+    <!-- 星 -->
+    <g id="星" data-name="星">
+      <use xlink:href="#星パス" transform="translate(430,486)"            fill="#F7D04B"/>
+      <use xlink:href="#星パス" transform="translate(372,648) scale(0.6)"  fill="#F7D04B"/>
+      <use xlink:href="#星パス" transform="translate(946,566) scale(0.72)" fill="#F7D04B"/>
+      <use xlink:href="#星パス" transform="translate(904,648) scale(0.85)" fill="#F49AC2"/>
+      <use xlink:href="#星パス" transform="translate(1012,596) scale(0.6)" fill="#F49AC2"/>
+      <use xlink:href="#星パス" transform="translate(846,724) scale(0.7)"  fill="#F49AC2"/>
+    </g>
+
+    <!-- ハート -->
+    <g id="ハート" data-name="ハート">
+      <use xlink:href="#ハートパス" transform="translate(300,520) scale(1.6)"  fill="none" stroke="#FFFFFF" stroke-width="4"/>
+      <use xlink:href="#ハートパス" transform="translate(214,566) scale(1.3)"  fill="none" stroke="#FFFFFF" stroke-width="4"/>
+      <use xlink:href="#ハートパス" transform="translate(300,764) scale(1.5)"  fill="none" stroke="#FFFFFF" stroke-width="4"/>
+      <use xlink:href="#ハートパス" transform="translate(944,544) scale(1.5)"  fill="#F7D04B"/>
+      <use xlink:href="#ハートパス" transform="translate(1024,664) scale(1.6)" fill="#F49AC2"/>
+      <use xlink:href="#ハートパス" transform="translate(864,704) scale(1.1)"  fill="#F49AC2"/>
+    </g>
+
+    <!-- ロゴ雲（白いレース地） -->
+    <g id="ロゴ雲" data-name="ロゴ雲">
+      <!-- 城の土台となる白い雲パフ -->
+      <g fill="#FFFFFF">
+        <circle cx="560" cy="602" r="34"/><circle cx="605" cy="582" r="40"/>
+        <circle cx="655" cy="580" r="40"/><circle cx="700" cy="596" r="34"/>
+        <circle cx="630" cy="614" r="44"/>
+      </g>
+      <!-- レース地バナー -->
+      <rect x="402" y="588" width="456" height="224" rx="74" fill="#FFFFFF"/>
+      <rect x="416" y="602" width="428" height="196" rx="64"
+            fill="none" stroke="#F3B8CF" stroke-width="3" stroke-dasharray="3 9" stroke-linecap="round"/>
+    </g>
+
+    <!-- お城 -->
+    <g id="お城" data-name="お城">
+      <!-- 左塔 -->
+      <rect x="584" y="575" width="26" height="42" fill="#F7B2D0"/>
+      <path d="M597,550 L580,578 L614,578 Z" fill="#C98FCF"/>
+      <!-- 右塔 -->
+      <rect x="654" y="575" width="26" height="42" fill="#F7B2D0"/>
+      <path d="M667,550 L650,578 L684,578 Z" fill="#C98FCF"/>
+      <!-- 中央塔 -->
+      <rect x="611" y="558" width="42" height="60" fill="#F7B2D0"/>
+      <path d="M632,524 L604,560 L660,560 Z" fill="#C98FCF"/>
+      <!-- 旗 -->
+      <line x1="632" y1="524" x2="632" y2="508" stroke="#8A5FA6" stroke-width="2.5"/>
+      <path d="M632,509 L652,515 L632,521 Z" fill="#F08FB5"/>
+      <!-- 扉・窓 -->
+      <path d="M624,594 h16 v20 a8 8 0 0 1 -16 0 Z" fill="#EE9BC4"/>
+      <circle cx="597" cy="590" r="4" fill="#FFF6FB"/>
+      <circle cx="667" cy="590" r="4" fill="#FFF6FB"/>
+    </g>
+
+    <!-- 風船 -->
+    <g id="風船" data-name="風船">
+      <line x1="500" y1="604" x2="496" y2="648" stroke="#E7A8C6" stroke-width="2"/>
+      <line x1="484" y1="622" x2="496" y2="648" stroke="#9CC9DE" stroke-width="2"/>
+      <circle cx="502" cy="590" r="14" fill="#F49AC2"/>
+      <circle cx="482" cy="612" r="12" fill="#8FD0EE"/>
+    </g>
+
+    <!-- 木 -->
+    <g id="木" data-name="木">
+      <rect x="756" y="612" width="8" height="16" fill="#C79A6B"/>
+      <rect x="788" y="616" width="7" height="14" fill="#C79A6B"/>
+      <circle cx="760" cy="602" r="20" fill="#9BD05A"/>
+      <circle cx="791" cy="614" r="15" fill="#7FC24A"/>
+    </g>
+
+    <!-- キラキラ装飾 -->
+    <g id="キラキラ" data-name="キラキラ" fill="#FFFFFF">
+      <use xlink:href="#キラキラパス" transform="translate(690,558) scale(0.9)"/>
+      <use xlink:href="#キラキラパス" transform="translate(574,588) scale(0.7)"/>
+      <use xlink:href="#キラキラパス" transform="translate(724,636) scale(0.6)" fill="#F7D04B"/>
+    </g>
+
+    <!-- リボン -->
+    <g id="リボン" data-name="リボン">
+      <g transform="translate(432,700)">
+        <path d="M0,0 L-16,-9 L-16,9 Z" fill="#F49AC2"/>
+        <path d="M0,0 L16,-9 L16,9 Z" fill="#F49AC2"/>
+        <circle cx="0" cy="0" r="4" fill="#EE7FB0"/>
+      </g>
+      <g transform="translate(828,700)">
+        <path d="M0,0 L-16,-9 L-16,9 Z" fill="#F7D04B"/>
+        <path d="M0,0 L16,-9 L16,9 Z" fill="#F7D04B"/>
+        <circle cx="0" cy="0" r="4" fill="#EBBE35"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- ===================== スリットレイヤー（台座の差込口） ===================== -->
+  <!-- アクリルを貫通するスタンド差込スリット。印刷面の上に透明な溝として見える -->
+  <g id="スリットレイヤー" data-name="スリットレイヤー">
+    <rect id="差込スリット" data-name="差込スリット" x="405" y="478" width="420" height="30" rx="15"
+          fill="#FFFFFF" fill-opacity="0.35" stroke="#C4D0D8" stroke-width="3"/>
+    <line x1="418" y1="487" x2="812" y2="487" stroke="#FFFFFF" stroke-opacity="0.85" stroke-width="2.5"/>
+  </g>
+
+  <!-- ===================== 文字レイヤー ===================== -->
+  <!-- 文字はアウトライン化せず、1文字ずつ独立したSVGテキスト（色・位置・サイズ個別編集可） -->
+  <g id="文字レイヤー" data-name="文字レイヤー"
+     font-family="'Hiragino Maru Gothic ProN','M PLUS Rounded 1c','Rounded Mplus 1c',sans-serif"
+     font-weight="700" font-size="76" text-anchor="middle"
+     stroke="#FFFFFF" stroke-width="9" stroke-linejoin="round"
+     style="paint-order:stroke fill">
+    <text id="文字_ひ" data-name="ひ" x="444" y="772" fill="#EE6FA6">ひ</text>
+    <text id="文字_な" data-name="な" x="506" y="772" fill="#EE6FA6">な</text>
+    <text id="文字_ふ" data-name="ふ" x="568" y="772" fill="#8FC94A">ふ</text>
+    <text id="文字_う" data-name="う" x="630" y="772" fill="#F5C842">う</text>
+    <text id="文字_ら" data-name="ら" x="692" y="772" fill="#6FC5E8">ら</text>
+    <text id="文字_ん" data-name="ん" x="754" y="772" fill="#6FC5E8">ん</text>
+    <text id="文字_ど" data-name="ど" x="816" y="772" fill="#6FC5E8">ど</text>
+  </g>
+</svg>
