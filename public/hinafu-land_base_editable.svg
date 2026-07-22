@@ -1,139 +1,56 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-     width="1240" height="1240" viewBox="0 0 1240 1240" id="ひなふうらんど_アクリルスタンド">
-  <title>ひなふうらんど アクリルスタンド（ハイブリッドSVG）</title>
-  <desc>元PNGをトレースしたレイヤー分割・編集可能SVG。文字はアウトライン化せずSVGテキスト。</desc>
+     width="1500" height="1000" viewBox="0 0 1500 1000" id="ひなふうらんど_アクリルスタンド">
+  <title>ひなふうらんど アクリルスタンド（第1段階：台座のみ）</title>
   <defs>
-    <linearGradient id="カラーグラデ" gradientUnits="userSpaceOnUse" x1="160" y1="630" x2="1090" y2="630">
-      <stop offset="0"    stop-color="#F4A6C7"/>
-      <stop offset="0.30" stop-color="#F7BCAE"/>
-      <stop offset="0.52" stop-color="#F9CE9E"/>
-      <stop offset="0.74" stop-color="#FADE97"/>
-      <stop offset="1"    stop-color="#FBEB9C"/>
+    <linearGradient id="カラーグラデ" gradientUnits="userSpaceOnUse" x1="50" y1="476" x2="1450" y2="476">
+      <stop offset="0"    stop-color="#F6B7D0"/>
+      <stop offset="0.30" stop-color="#F9CBBE"/>
+      <stop offset="0.50" stop-color="#FBDEC1"/>
+      <stop offset="0.72" stop-color="#FCEBBA"/>
+      <stop offset="1"    stop-color="#FAEFA6"/>
     </linearGradient>
-    <linearGradient id="アクリルグラデ" gradientUnits="userSpaceOnUse" x1="620" y1="300" x2="620" y2="960">
-      <stop offset="0"   stop-color="#FFFFFF" stop-opacity="0.60"/>
-      <stop offset="0.5" stop-color="#F1F5F7" stop-opacity="0.16"/>
-      <stop offset="1"   stop-color="#D8E2E8" stop-opacity="0.42"/>
+    <linearGradient id="アクリルグラデ" gradientUnits="userSpaceOnUse" x1="750" y1="160" x2="750" y2="800">
+      <stop offset="0"   stop-color="#FFFFFF" stop-opacity="0.50"/>
+      <stop offset="0.5" stop-color="#F1F6F8" stop-opacity="0.10"/>
+      <stop offset="1"   stop-color="#DAE4E9" stop-opacity="0.34"/>
     </linearGradient>
-    <linearGradient id="スリットグラデ" gradientUnits="userSpaceOnUse" x1="0" y1="474" x2="0" y2="512">
-      <stop offset="0"   stop-color="#CBD6DD" stop-opacity="0.55"/>
-      <stop offset="0.5" stop-color="#FFFFFF" stop-opacity="0.25"/>
-      <stop offset="1"   stop-color="#FFFFFF" stop-opacity="0.55"/>
+    <linearGradient id="スリットグラデ" gradientUnits="userSpaceOnUse" x1="0" y1="336" x2="0" y2="370">
+      <stop offset="0"   stop-color="#C8D3DA" stop-opacity="0.45"/>
+      <stop offset="0.5" stop-color="#FFFFFF" stop-opacity="0.20"/>
+      <stop offset="1"   stop-color="#FFFFFF" stop-opacity="0.48"/>
     </linearGradient>
-    <radialGradient id="下影グラデ" gradientUnits="userSpaceOnUse" cx="620" cy="930" r="470">
-      <stop offset="0" stop-color="#B9A9AE" stop-opacity="0.30"/>
-      <stop offset="1" stop-color="#B9A9AE" stop-opacity="0"/>
+    <radialGradient id="下影グラデ" gradientUnits="userSpaceOnUse" cx="765" cy="800" r="600">
+      <stop offset="0" stop-color="#ADA0A5" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#ADA0A5" stop-opacity="0"/>
     </radialGradient>
   </defs>
+
+  <!-- 背景（接地影） -->
   <g id="背景" inkscape:label="背景">
-    <ellipse id="台座下影" inkscape:label="台座下影" cx="620" cy="928" rx="430" ry="70" fill="url(#下影グラデ)"/>
+    <ellipse id="接地影" inkscape:label="接地影" cx="765" cy="798" rx="540" ry="58" fill="url(#下影グラデ)"/>
   </g>
+
+  <!-- 台座_透明アクリル外周（厚み+面+ハイライト） -->
   <g id="台座_透明アクリル外周" inkscape:label="台座_透明アクリル外周">
-    <path id="アクリル外周面" inkscape:label="アクリル外周面" data-name="アクリル外周面" fill="url(#アクリルグラデ)" stroke="#C4D2DA" stroke-width="2.5" d="M 164.7,411.6 A 72.1,72.1 0 0 1 308.9,411.6 A 98.9,98.9 0 0 1 506.7,411.6 A 107.1,107.1 0 0 1 720.9,411.6 A 94.8,94.8 0 0 1 910.5,411.6 A 61.8,61.8 0 0 1 1034.1,411.6 A 82.4,82.4 0 0 1 1034.1,576.4 A 80.3,80.3 0 0 1 1034.1,737.1 A 61.8,61.8 0 0 1 1034.1,860.7 A 65.9,65.9 0 0 1 902.2,860.7 A 92.7,92.7 0 0 1 716.8,860.7 A 107.1,107.1 0 0 1 502.6,860.7 A 98.9,98.9 0 0 1 304.8,860.7 A 86.5,86.5 0 0 1 131.8,860.7 A 68.0,68.0 0 0 1 131.8,724.8 A 76.2,76.2 0 0 1 131.8,572.3 A 68.0,68.0 0 0 1 131.8,436.4 Z"/>
-    <path id="アクリル外周ハイライト" inkscape:label="アクリル外周ハイライト" data-name="アクリル外周ハイライト" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-opacity="0.55" transform="translate(0,-4)" d="M 164.7,411.6 A 72.1,72.1 0 0 1 308.9,411.6 A 98.9,98.9 0 0 1 506.7,411.6 A 107.1,107.1 0 0 1 720.9,411.6 A 94.8,94.8 0 0 1 910.5,411.6 A 61.8,61.8 0 0 1 1034.1,411.6 A 82.4,82.4 0 0 1 1034.1,576.4 A 80.3,80.3 0 0 1 1034.1,737.1 A 61.8,61.8 0 0 1 1034.1,860.7 A 65.9,65.9 0 0 1 902.2,860.7 A 92.7,92.7 0 0 1 716.8,860.7 A 107.1,107.1 0 0 1 502.6,860.7 A 98.9,98.9 0 0 1 304.8,860.7 A 86.5,86.5 0 0 1 131.8,860.7 A 68.0,68.0 0 0 1 131.8,724.8 A 76.2,76.2 0 0 1 131.8,572.3 A 68.0,68.0 0 0 1 131.8,436.4 Z"/>
+    <path id="アクリル厚み" inkscape:label="アクリル厚み" transform="translate(0,11)" fill="#E2EAEF" fill-opacity="0.38" d="M 1448.34,476.00 A 60.69,60.69 0 0 1 1396.02,585.53 A 61.93,61.93 0 0 1 1294.55,656.56 A 62.28,62.28 0 0 1 1179.17,703.51 A 62.64,62.64 0 0 1 1057.88,734.86 A 62.20,62.20 0 0 1 934.98,754.10 A 61.98,61.98 0 0 1 811.35,763.28 A 62.08,62.08 0 0 1 687.19,763.23 A 61.97,61.97 0 0 1 563.61,753.94 A 62.16,62.16 0 0 1 440.80,734.59 A 62.57,62.57 0 0 1 319.67,703.14 A 62.19,62.19 0 0 1 204.54,656.08 A 61.81,61.81 0 0 1 103.43,584.97 A 60.32,60.32 0 0 1 51.66,476.00 A 60.69,60.69 0 0 1 103.98,366.47 A 61.93,61.93 0 0 1 205.45,295.44 A 62.28,62.28 0 0 1 320.83,248.49 A 62.64,62.64 0 0 1 442.12,217.14 A 62.20,62.20 0 0 1 565.02,197.90 A 61.98,61.98 0 0 1 688.65,188.72 A 62.08,62.08 0 0 1 812.81,188.77 A 61.97,61.97 0 0 1 936.39,198.06 A 62.16,62.16 0 0 1 1059.20,217.41 A 62.57,62.57 0 0 1 1180.33,248.86 A 62.19,62.19 0 0 1 1295.46,295.92 A 61.81,61.81 0 0 1 1396.57,367.03 A 60.32,60.32 0 0 1 1448.34,476.00 Z"/>
+    <path id="アクリル外周面" inkscape:label="アクリル外周面" fill="url(#アクリルグラデ)" stroke="#CFDBE1" stroke-width="1.6" stroke-opacity="0.6" d="M 1448.34,476.00 A 60.69,60.69 0 0 1 1396.02,585.53 A 61.93,61.93 0 0 1 1294.55,656.56 A 62.28,62.28 0 0 1 1179.17,703.51 A 62.64,62.64 0 0 1 1057.88,734.86 A 62.20,62.20 0 0 1 934.98,754.10 A 61.98,61.98 0 0 1 811.35,763.28 A 62.08,62.08 0 0 1 687.19,763.23 A 61.97,61.97 0 0 1 563.61,753.94 A 62.16,62.16 0 0 1 440.80,734.59 A 62.57,62.57 0 0 1 319.67,703.14 A 62.19,62.19 0 0 1 204.54,656.08 A 61.81,61.81 0 0 1 103.43,584.97 A 60.32,60.32 0 0 1 51.66,476.00 A 60.69,60.69 0 0 1 103.98,366.47 A 61.93,61.93 0 0 1 205.45,295.44 A 62.28,62.28 0 0 1 320.83,248.49 A 62.64,62.64 0 0 1 442.12,217.14 A 62.20,62.20 0 0 1 565.02,197.90 A 61.98,61.98 0 0 1 688.65,188.72 A 62.08,62.08 0 0 1 812.81,188.77 A 61.97,61.97 0 0 1 936.39,198.06 A 62.16,62.16 0 0 1 1059.20,217.41 A 62.57,62.57 0 0 1 1180.33,248.86 A 62.19,62.19 0 0 1 1295.46,295.92 A 61.81,61.81 0 0 1 1396.57,367.03 A 60.32,60.32 0 0 1 1448.34,476.00 Z"/>
+    <path id="アクリル外周ハイライト" inkscape:label="アクリル外周ハイライト" transform="translate(0,-3)" fill="none" stroke="#FFFFFF" stroke-opacity="0.45" stroke-width="2.5" d="M 1448.34,476.00 A 60.69,60.69 0 0 1 1396.02,585.53 A 61.93,61.93 0 0 1 1294.55,656.56 A 62.28,62.28 0 0 1 1179.17,703.51 A 62.64,62.64 0 0 1 1057.88,734.86 A 62.20,62.20 0 0 1 934.98,754.10 A 61.98,61.98 0 0 1 811.35,763.28 A 62.08,62.08 0 0 1 687.19,763.23 A 61.97,61.97 0 0 1 563.61,753.94 A 62.16,62.16 0 0 1 440.80,734.59 A 62.57,62.57 0 0 1 319.67,703.14 A 62.19,62.19 0 0 1 204.54,656.08 A 61.81,61.81 0 0 1 103.43,584.97 A 60.32,60.32 0 0 1 51.66,476.00 A 60.69,60.69 0 0 1 103.98,366.47 A 61.93,61.93 0 0 1 205.45,295.44 A 62.28,62.28 0 0 1 320.83,248.49 A 62.64,62.64 0 0 1 442.12,217.14 A 62.20,62.20 0 0 1 565.02,197.90 A 61.98,61.98 0 0 1 688.65,188.72 A 62.08,62.08 0 0 1 812.81,188.77 A 61.97,61.97 0 0 1 936.39,198.06 A 62.16,62.16 0 0 1 1059.20,217.41 A 62.57,62.57 0 0 1 1180.33,248.86 A 62.19,62.19 0 0 1 1295.46,295.92 A 61.81,61.81 0 0 1 1396.57,367.03 A 60.32,60.32 0 0 1 1448.34,476.00 Z"/>
   </g>
+
+  <!-- 台座_白フチ（外周に沿った細い白いふわふわ縁） -->
   <g id="台座_白フチ" inkscape:label="台座_白フチ">
-    <path id="白フチ面" inkscape:label="白フチ面" data-name="白フチ面" fill="#FFFFFF" d="M 178.0,418.0 A 70.0,70.0 0 0 1 318.0,418.0 A 96.0,96.0 0 0 1 510.0,418.0 A 104.0,104.0 0 0 1 718.0,418.0 A 92.0,92.0 0 0 1 902.0,418.0 A 60.0,60.0 0 0 1 1022.0,418.0 A 80.0,80.0 0 0 1 1022.0,578.0 A 78.0,78.0 0 0 1 1022.0,734.0 A 60.0,60.0 0 0 1 1022.0,854.0 A 64.0,64.0 0 0 1 894.0,854.0 A 90.0,90.0 0 0 1 714.0,854.0 A 104.0,104.0 0 0 1 506.0,854.0 A 96.0,96.0 0 0 1 314.0,854.0 A 84.0,84.0 0 0 1 146.0,854.0 A 66.0,66.0 0 0 1 146.0,722.0 A 74.0,74.0 0 0 1 146.0,574.0 A 66.0,66.0 0 0 1 146.0,442.0 Z"/>
+    <path id="白フチ面" inkscape:label="白フチ面" fill="#FFFFFF" d="M 1428.00,476.00 A 58.92,58.92 0 0 1 1377.20,582.34 A 60.13,60.13 0 0 1 1278.69,651.30 A 60.47,60.47 0 0 1 1166.67,696.88 A 60.81,60.81 0 0 1 1048.92,727.32 A 60.39,60.39 0 0 1 929.59,746.00 A 60.18,60.18 0 0 1 809.56,754.92 A 60.27,60.27 0 0 1 689.02,754.87 A 60.16,60.16 0 0 1 569.04,745.84 A 60.35,60.35 0 0 1 449.81,727.06 A 60.75,60.75 0 0 1 332.21,696.52 A 60.38,60.38 0 0 1 220.42,650.84 A 60.01,60.01 0 0 1 122.26,581.80 A 58.56,58.56 0 0 1 72.00,476.00 A 58.92,58.92 0 0 1 122.80,369.66 A 60.13,60.13 0 0 1 221.31,300.70 A 60.47,60.47 0 0 1 333.33,255.12 A 60.81,60.81 0 0 1 451.08,224.68 A 60.39,60.39 0 0 1 570.41,206.00 A 60.18,60.18 0 0 1 690.44,197.08 A 60.27,60.27 0 0 1 810.98,197.13 A 60.16,60.16 0 0 1 930.96,206.16 A 60.35,60.35 0 0 1 1050.19,224.94 A 60.75,60.75 0 0 1 1167.79,255.48 A 60.38,60.38 0 0 1 1279.58,301.16 A 60.01,60.01 0 0 1 1377.74,370.20 A 58.56,58.56 0 0 1 1428.00,476.00 Z"/>
   </g>
+
+  <!-- 台座_カラー面（ピンク→ピーチ→イエロー） -->
   <g id="台座_カラー面" inkscape:label="台座_カラー面">
-    <path id="カラー面" inkscape:label="カラー面" data-name="カラー面" fill="url(#カラーグラデ)" d="M 208.9,432.8 A 65.1,65.1 0 0 1 339.1,432.8 A 89.3,89.3 0 0 1 517.7,432.8 A 96.7,96.7 0 0 1 711.1,432.8 A 85.6,85.6 0 0 1 882.3,432.8 A 55.8,55.8 0 0 1 993.9,432.8 A 74.4,74.4 0 0 1 993.9,581.6 A 72.5,72.5 0 0 1 993.9,726.7 A 55.8,55.8 0 0 1 993.9,838.3 A 59.5,59.5 0 0 1 874.8,838.3 A 83.7,83.7 0 0 1 707.4,838.3 A 96.7,96.7 0 0 1 514.0,838.3 A 89.3,89.3 0 0 1 335.4,838.3 A 78.1,78.1 0 0 1 179.2,838.3 A 61.4,61.4 0 0 1 179.2,715.6 A 68.8,68.8 0 0 1 179.2,577.9 A 61.4,61.4 0 0 1 179.2,455.2 Z"/>
-    <path id="レース点線" inkscape:label="レース点線" data-name="レース点線" fill="none" stroke="#F6CBDC" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 15" d="M 237.7,446.6 A 60.5,60.5 0 0 1 358.8,446.6 A 83.0,83.0 0 0 1 524.8,446.6 A 90.0,90.0 0 0 1 704.8,446.6 A 79.6,79.6 0 0 1 863.9,446.6 A 51.9,51.9 0 0 1 967.7,446.6 A 69.2,69.2 0 0 1 967.7,585.0 A 67.5,67.5 0 0 1 967.7,720.0 A 51.9,51.9 0 0 1 967.7,823.8 A 55.4,55.4 0 0 1 857.0,823.8 A 77.8,77.8 0 0 1 701.3,823.8 A 90.0,90.0 0 0 1 521.4,823.8 A 83.0,83.0 0 0 1 355.3,823.8 A 72.7,72.7 0 0 1 210.0,823.8 A 57.1,57.1 0 0 1 210.0,709.6 A 64.0,64.0 0 0 1 210.0,581.6 A 57.1,57.1 0 0 1 210.0,467.4 Z"/>
+    <path id="カラー面" inkscape:label="カラー面" fill="url(#カラーグラデ)" d="M 1390.71,476.00 A 55.68,55.68 0 0 1 1342.71,576.49 A 56.82,56.82 0 0 1 1249.61,641.66 A 57.14,57.14 0 0 1 1143.76,684.73 A 57.47,57.47 0 0 1 1032.48,713.50 A 57.07,57.07 0 0 1 919.71,731.15 A 56.87,56.87 0 0 1 806.29,739.58 A 56.96,56.96 0 0 1 692.38,739.53 A 56.85,56.85 0 0 1 578.99,731.00 A 57.03,57.03 0 0 1 466.32,713.25 A 57.41,57.41 0 0 1 355.19,684.39 A 57.06,57.06 0 0 1 249.55,641.22 A 56.71,56.71 0 0 1 156.79,575.98 A 55.59,55.59 0 0 1 109.29,475.45 A 55.43,55.43 0 0 1 157.29,375.51 A 56.82,56.82 0 0 1 250.39,310.34 A 57.14,57.14 0 0 1 356.24,267.27 A 57.47,57.47 0 0 1 467.52,238.50 A 57.07,57.07 0 0 1 580.29,220.85 A 56.87,56.87 0 0 1 693.71,212.42 A 56.96,56.96 0 0 1 807.62,212.47 A 56.85,56.85 0 0 1 921.01,221.00 A 57.03,57.03 0 0 1 1033.68,238.75 A 57.41,57.41 0 0 1 1144.81,267.61 A 57.06,57.06 0 0 1 1250.45,310.78 A 56.71,56.71 0 0 1 1343.21,376.02 A 55.34,55.34 0 0 1 1390.71,476.00 Z"/>
   </g>
+
+  <!-- 差し込みスリット -->
   <g id="差し込みスリット" inkscape:label="差し込みスリット">
-    <rect id="スリット外枠" inkscape:label="スリット外枠" x="402" y="476" width="430" height="30" rx="15" fill="url(#スリットグラデ)" stroke="#B9C6CE" stroke-width="2.5"/>
-    <path id="スリット内側影" inkscape:label="スリット内側影" d="M412,483 h410" stroke="#9FB0B9" stroke-width="4" stroke-linecap="round" stroke-opacity="0.5" fill="none"/>
-    <path id="スリットハイライト" inkscape:label="スリットハイライト" d="M414,498 h406" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-opacity="0.85" fill="none"/>
-  </g>
-  <g id="装飾_左側" inkscape:label="装飾_左側">
-    <path id="左上ハート" inkscape:label="左上ハート" data-name="左上ハート" transform="translate(300,512) rotate(-8) scale(1.5)" fill="none" stroke="#FFFFFF" stroke-width="4" d="M0,13 C -2,6.5 -17,-4 -17,-17 C -17,-25.5 -8.5,-27.5 0,-17 C 8.5,-27.5 17,-25.5 17,-17 C 17,-4 2,6.5 0,13 Z"/>
-    <path id="左下ハート" inkscape:label="左下ハート" data-name="左下ハート" transform="translate(300,772) rotate(-6) scale(1.5)" fill="none" stroke="#FFFFFF" stroke-width="4" d="M0,13 C -2,6.5 -17,-4 -17,-17 C -17,-25.5 -8.5,-27.5 0,-17 C 8.5,-27.5 17,-25.5 17,-17 C 17,-4 2,6.5 0,13 Z"/>
-    <path id="左上星" inkscape:label="左上星" data-name="左上星" transform="translate(454,556) rotate(-12) scale(0.9)" fill="#F6CE48" d="M0,-30 L7.9,-10.6 L29.3,-9.3 L12.3,4.0 L18.1,24.3 L0,12.9 L-18.1,24.3 L-12.3,4.0 L-29.3,-9.3 L-7.9,-10.6 Z"/>
-    <path id="左中星" inkscape:label="左中星" data-name="左中星" transform="translate(372,672) rotate(10) scale(0.6)" fill="#F6CE48" d="M0,-30 L7.9,-10.6 L29.3,-9.3 L12.3,4.0 L18.1,24.3 L0,12.9 L-18.1,24.3 L-12.3,4.0 L-29.3,-9.3 L-7.9,-10.6 Z"/>
-    <circle id="白水玉_01" inkscape:label="白水玉_01" data-name="白水玉_01" cx="320" cy="470" r="8" fill="#FFFFFF" />
-    <circle id="白水玉_02" inkscape:label="白水玉_02" data-name="白水玉_02" cx="262" cy="552" r="7" fill="#FFFFFF" />
-    <circle id="白水玉_03" inkscape:label="白水玉_03" data-name="白水玉_03" cx="372" cy="612" r="9" fill="#FFFFFF" />
-    <circle id="白水玉_04" inkscape:label="白水玉_04" data-name="白水玉_04" cx="300" cy="700" r="7" fill="#FFFFFF" />
-    <circle id="白水玉_05" inkscape:label="白水玉_05" data-name="白水玉_05" cx="238" cy="636" r="6" fill="#FFFFFF" />
-    <circle id="白水玉_06" inkscape:label="白水玉_06" data-name="白水玉_06" cx="436" cy="700" r="8" fill="#FFFFFF" />
-    <circle id="白水玉_07" inkscape:label="白水玉_07" data-name="白水玉_07" cx="470" cy="478" r="6" fill="#FFFFFF" />
-    <circle id="白水玉_08" inkscape:label="白水玉_08" data-name="白水玉_08" cx="352" cy="760" r="8" fill="#FFFFFF" />
-    <circle id="白水玉_09" inkscape:label="白水玉_09" data-name="白水玉_09" cx="250" cy="470" r="6" fill="#FFFFFF" />
-  </g>
-  <g id="装飾_中央" inkscape:label="装飾_中央">
-    <circle id="白水玉_10" inkscape:label="白水玉_10" data-name="白水玉_10" cx="556" cy="452" r="7" fill="#FFFFFF" />
-    <circle id="白水玉_11" inkscape:label="白水玉_11" data-name="白水玉_11" cx="648" cy="442" r="8" fill="#FFFFFF" />
-    <circle id="白水玉_12" inkscape:label="白水玉_12" data-name="白水玉_12" cx="726" cy="466" r="7" fill="#FFFFFF" />
-    <circle id="白水玉_13" inkscape:label="白水玉_13" data-name="白水玉_13" cx="600" cy="512" r="6" fill="#FFFFFF" />
-    <circle id="白水玉_14" inkscape:label="白水玉_14" data-name="白水玉_14" cx="690" cy="540" r="6" fill="#FFFFFF" />
-    <circle id="白水玉_15" inkscape:label="白水玉_15" data-name="白水玉_15" cx="792" cy="462" r="7" fill="#FFFFFF" />
-  </g>
-  <g id="装飾_右側" inkscape:label="装飾_右側">
-    <path id="右上ハート_黄" inkscape:label="右上ハート_黄" data-name="右上ハート_黄" transform="translate(948,548) rotate(8) scale(1.5)" fill="#F6CE48" d="M0,13 C -2,6.5 -17,-4 -17,-17 C -17,-25.5 -8.5,-27.5 0,-17 C 8.5,-27.5 17,-25.5 17,-17 C 17,-4 2,6.5 0,13 Z"/>
-    <path id="右中ハート_桃" inkscape:label="右中ハート_桃" data-name="右中ハート_桃" transform="translate(1026,668) rotate(10) scale(1.6)" fill="#F49AC2" d="M0,13 C -2,6.5 -17,-4 -17,-17 C -17,-25.5 -8.5,-27.5 0,-17 C 8.5,-27.5 17,-25.5 17,-17 C 17,-4 2,6.5 0,13 Z"/>
-    <path id="右下ハート_桃" inkscape:label="右下ハート_桃" data-name="右下ハート_桃" transform="translate(866,708) rotate(-6) scale(1.05)" fill="#F49AC2" d="M0,13 C -2,6.5 -17,-4 -17,-17 C -17,-25.5 -8.5,-27.5 0,-17 C 8.5,-27.5 17,-25.5 17,-17 C 17,-4 2,6.5 0,13 Z"/>
-    <path id="右上星_桃" inkscape:label="右上星_桃" data-name="右上星_桃" transform="translate(906,650) rotate(12) scale(0.85)" fill="#F49AC2" d="M0,-30 L7.9,-10.6 L29.3,-9.3 L12.3,4.0 L18.1,24.3 L0,12.9 L-18.1,24.3 L-12.3,4.0 L-29.3,-9.3 L-7.9,-10.6 Z"/>
-    <path id="右中星_桃" inkscape:label="右中星_桃" data-name="右中星_桃" transform="translate(1014,596) rotate(-10) scale(0.6)" fill="#F49AC2" d="M0,-30 L7.9,-10.6 L29.3,-9.3 L12.3,4.0 L18.1,24.3 L0,12.9 L-18.1,24.3 L-12.3,4.0 L-29.3,-9.3 L-7.9,-10.6 Z"/>
-    <path id="右下星_桃" inkscape:label="右下星_桃" data-name="右下星_桃" transform="translate(848,726) rotate(6) scale(0.7)" fill="#F49AC2" d="M0,-30 L7.9,-10.6 L29.3,-9.3 L12.3,4.0 L18.1,24.3 L0,12.9 L-18.1,24.3 L-12.3,4.0 L-29.3,-9.3 L-7.9,-10.6 Z"/>
-    <path id="右星_黄" inkscape:label="右星_黄" data-name="右星_黄" transform="translate(948,570) rotate(-14) scale(0.7)" fill="#F6CE48" d="M0,-30 L7.9,-10.6 L29.3,-9.3 L12.3,4.0 L18.1,24.3 L0,12.9 L-18.1,24.3 L-12.3,4.0 L-29.3,-9.3 L-7.9,-10.6 Z"/>
-    <circle id="白水玉_16" inkscape:label="白水玉_16" data-name="白水玉_16" cx="872" cy="470" r="8" fill="#FFFFFF" />
-    <circle id="白水玉_17" inkscape:label="白水玉_17" data-name="白水玉_17" cx="948" cy="500" r="7" fill="#FFFFFF" />
-    <circle id="白水玉_18" inkscape:label="白水玉_18" data-name="白水玉_18" cx="1002" cy="560" r="9" fill="#FFFFFF" />
-    <circle id="白水玉_19" inkscape:label="白水玉_19" data-name="白水玉_19" cx="916" cy="614" r="7" fill="#FFFFFF" />
-    <circle id="白水玉_20" inkscape:label="白水玉_20" data-name="白水玉_20" cx="1032" cy="634" r="8" fill="#FFFFFF" />
-    <circle id="白水玉_21" inkscape:label="白水玉_21" data-name="白水玉_21" cx="884" cy="702" r="7" fill="#FFFFFF" />
-    <circle id="白水玉_22" inkscape:label="白水玉_22" data-name="白水玉_22" cx="982" cy="708" r="8" fill="#FFFFFF" />
-    <circle id="白水玉_23" inkscape:label="白水玉_23" data-name="白水玉_23" cx="1006" cy="500" r="6" fill="#FFFFFF" />
-    <circle id="白水玉_24" inkscape:label="白水玉_24" data-name="白水玉_24" cx="940" cy="660" r="6" fill="#FFFFFF" />
-  </g>
-  <g id="ロゴ背景" inkscape:label="ロゴ背景">
-    <circle id="ロゴ雲パフ_01" inkscape:label="ロゴ雲パフ_01" data-name="ロゴ雲パフ_01" cx="560" cy="600" r="34" fill="#FFFFFF" />
-    <circle id="ロゴ雲パフ_02" inkscape:label="ロゴ雲パフ_02" data-name="ロゴ雲パフ_02" cx="605" cy="580" r="40" fill="#FFFFFF" />
-    <circle id="ロゴ雲パフ_03" inkscape:label="ロゴ雲パフ_03" data-name="ロゴ雲パフ_03" cx="656" cy="578" r="40" fill="#FFFFFF" />
-    <circle id="ロゴ雲パフ_04" inkscape:label="ロゴ雲パフ_04" data-name="ロゴ雲パフ_04" cx="702" cy="596" r="34" fill="#FFFFFF" />
-    <circle id="ロゴ雲パフ_05" inkscape:label="ロゴ雲パフ_05" data-name="ロゴ雲パフ_05" cx="630" cy="614" r="44" fill="#FFFFFF" />
-    <rect id="ロゴバナー" inkscape:label="ロゴバナー" x="400" y="588" width="460" height="226" rx="76" fill="#FFFFFF"/>
-    <rect id="ロゴ点線枠" inkscape:label="ロゴ点線枠" x="414" y="602" width="432" height="198" rx="66" fill="none" stroke="#F3B8CF" stroke-width="3" stroke-dasharray="3 9" stroke-linecap="round"/>
-  </g>
-  <g id="ロゴ装飾" inkscape:label="ロゴ装飾">
-    <path id="城_左塔" inkscape:label="城_左塔" data-name="城_左塔" fill="#F7B2D0" d="M584,617 v-42 h26 v42 Z"/>
-    <path id="城_左屋根" inkscape:label="城_左屋根" data-name="城_左屋根" fill="#C98FCF" d="M597,550 L580,578 L614,578 Z"/>
-    <path id="城_右塔" inkscape:label="城_右塔" data-name="城_右塔" fill="#F7B2D0" d="M654,617 v-42 h26 v42 Z"/>
-    <path id="城_右屋根" inkscape:label="城_右屋根" data-name="城_右屋根" fill="#C98FCF" d="M667,550 L650,578 L684,578 Z"/>
-    <path id="城_中央塔" inkscape:label="城_中央塔" data-name="城_中央塔" fill="#F7B2D0" d="M611,618 v-60 h42 v60 Z"/>
-    <path id="城_中央屋根" inkscape:label="城_中央屋根" data-name="城_中央屋根" fill="#C98FCF" d="M632,522 L603,560 L661,560 Z"/>
-    <path id="城_扉" inkscape:label="城_扉" data-name="城_扉" fill="#EE9BC4" d="M624,594 h16 v20 a8 8 0 0 1 -16 0 Z"/>
-    <circle id="城_左窓" inkscape:label="城_左窓" data-name="城_左窓" cx="597" cy="590" r="4" fill="#FFF6FB" />
-    <circle id="城_右窓" inkscape:label="城_右窓" data-name="城_右窓" cx="667" cy="590" r="4" fill="#FFF6FB" />
-    <line id="城_旗ポール" inkscape:label="城_旗ポール" x1="632" y1="522" x2="632" y2="506" stroke="#8A5FA6" stroke-width="2.5"/>
-    <path id="城_旗" inkscape:label="城_旗" data-name="城_旗" fill="#F08FB5" d="M632,507 L653,513 L632,519 Z"/>
-    <line id="風船_糸1" inkscape:label="風船_糸1" x1="502" y1="604" x2="497" y2="650" stroke="#E7A8C6" stroke-width="2"/>
-    <line id="風船_糸2" inkscape:label="風船_糸2" x1="482" y1="624" x2="497" y2="650" stroke="#9CC9DE" stroke-width="2"/>
-    <circle id="風船_桃" inkscape:label="風船_桃" data-name="風船_桃" cx="503" cy="589" r="14" fill="#F49AC2" />
-    <circle id="風船_青" inkscape:label="風船_青" data-name="風船_青" cx="482" cy="613" r="12" fill="#8FD0EE" />
-    <path id="木_幹1" inkscape:label="木_幹1" data-name="木_幹1" fill="#C79A6B" d="M756,612 h8 v16 h-8 Z"/>
-    <path id="木_幹2" inkscape:label="木_幹2" data-name="木_幹2" fill="#C79A6B" d="M788,616 h7 v14 h-7 Z"/>
-    <circle id="木_葉1" inkscape:label="木_葉1" data-name="木_葉1" cx="760" cy="602" r="20" fill="#9BD05A" />
-    <circle id="木_葉2" inkscape:label="木_葉2" data-name="木_葉2" cx="791" cy="614" r="15" fill="#7FC24A" />
-    <path id="キラキラ_1" inkscape:label="キラキラ_1" data-name="キラキラ_1" transform="translate(690,556) scale(0.9)" fill="#FFFFFF" d="M0,-15 C1.6,-4.3 4.3,-1.6 15,0 C4.3,1.6 1.6,4.3 0,15 C-1.6,4.3 -4.3,-1.6 -15,0 C-4.3,-1.6 -1.6,-4.3 0,-15 Z"/>
-    <path id="キラキラ_2" inkscape:label="キラキラ_2" data-name="キラキラ_2" transform="translate(574,588) scale(0.7)" fill="#FFFFFF" d="M0,-15 C1.6,-4.3 4.3,-1.6 15,0 C4.3,1.6 1.6,4.3 0,15 C-1.6,4.3 -4.3,-1.6 -15,0 C-4.3,-1.6 -1.6,-4.3 0,-15 Z"/>
-    <path id="キラキラ_3" inkscape:label="キラキラ_3" data-name="キラキラ_3" transform="translate(726,636) scale(0.6)" fill="#F6CE48" d="M0,-15 C1.6,-4.3 4.3,-1.6 15,0 C4.3,1.6 1.6,4.3 0,15 C-1.6,4.3 -4.3,-1.6 -15,0 C-4.3,-1.6 -1.6,-4.3 0,-15 Z"/>
-    <path id="左リボン_左羽" inkscape:label="左リボン_左羽" data-name="左リボン_左羽" transform="translate(432,700)" fill="#F49AC2" d="M0,0 L-16,-9 L-16,9 Z"/>
-    <path id="左リボン_右羽" inkscape:label="左リボン_右羽" data-name="左リボン_右羽" transform="translate(432,700)" fill="#F49AC2" d="M0,0 L16,-9 L16,9 Z"/>
-    <circle id="左リボン_結び" inkscape:label="左リボン_結び" data-name="左リボン_結び" cx="432" cy="700" r="4" fill="#EE7FB0" />
-    <path id="右リボン_左羽" inkscape:label="右リボン_左羽" data-name="右リボン_左羽" transform="translate(828,700)" fill="#F6CE48" d="M0,0 L-16,-9 L-16,9 Z"/>
-    <path id="右リボン_右羽" inkscape:label="右リボン_右羽" data-name="右リボン_右羽" transform="translate(828,700)" fill="#F6CE48" d="M0,0 L16,-9 L16,9 Z"/>
-    <circle id="右リボン_結び" inkscape:label="右リボン_結び" data-name="右リボン_結び" cx="828" cy="700" r="4" fill="#EBBE35" />
-  </g>
-  <g id="ロゴ文字" inkscape:label="ロゴ文字"
-     font-family="'Zen Maru Gothic','M PLUS Rounded 1c','Kosugi Maru',sans-serif"
-     font-weight="700" font-size="76" text-anchor="middle"
-     stroke="#FFFFFF" stroke-width="9" stroke-linejoin="round" style="paint-order:stroke fill">
-    <text id="文字_ひ" inkscape:label="文字_ひ" data-name="ひ" x="446" y="774" fill="#EF6FA8">ひ</text>
-    <text id="文字_な" inkscape:label="文字_な" data-name="な" x="508" y="774" fill="#EF6FA8">な</text>
-    <text id="文字_ふ" inkscape:label="文字_ふ" data-name="ふ" x="570" y="774" fill="#83C24A">ふ</text>
-    <text id="文字_う" inkscape:label="文字_う" data-name="う" x="632" y="774" fill="#F4C63C">う</text>
-    <text id="文字_ら" inkscape:label="文字_ら" data-name="ら" x="694" y="774" fill="#67C4E8">ら</text>
-    <text id="文字_ん" inkscape:label="文字_ん" data-name="ん" x="756" y="774" fill="#67C4E8">ん</text>
-    <text id="文字_ど" inkscape:label="文字_ど" data-name="ど" x="818" y="774" fill="#67C4E8">ど</text>
+    <rect id="スリット外枠" inkscape:label="スリット外枠" x="492.0" y="336" width="516" height="34" rx="17" fill="url(#スリットグラデ)" stroke="#BDCAD1" stroke-width="1.8"/>
+    <path id="スリット内側影" inkscape:label="スリット内側影" d="M505.0,344 h490" stroke="#9FB0B9" stroke-width="3.5" stroke-linecap="round" stroke-opacity="0.4" fill="none"/>
+    <path id="スリットハイライト" inkscape:label="スリットハイライト" d="M507.0,361 h486" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-opacity="0.85" fill="none"/>
   </g>
 </svg>
