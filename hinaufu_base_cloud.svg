@@ -1,186 +1,194 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1000" viewBox="0 0 1500 1000" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="650" viewBox="0 0 1000 650" fill="none">
   <defs>
-    <linearGradient id="base_gradient" x1="0" y1="0" x2="1500" y2="0" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#f7cbd9"/>
-      <stop offset="0.30" stop-color="#fbe4ea"/>
-      <stop offset="0.50" stop-color="#fefbf5"/>
-      <stop offset="0.72" stop-color="#fdf3d2"/>
-      <stop offset="1" stop-color="#fbeba8"/>
+    <linearGradient id="base_gradient" x1="0" y1="0" x2="1000" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f6d0dd"/>
+      <stop offset="0.28" stop-color="#fbe6ee"/>
+      <stop offset="0.50" stop-color="#fefdf9"/>
+      <stop offset="0.72" stop-color="#fdf5da"/>
+      <stop offset="1" stop-color="#faefb8"/>
     </linearGradient>
-    <radialGradient id="balloon_pink_grad" cx="0.36" cy="0.30" r="0.85">
-      <stop offset="0" stop-color="#f7a6bf"/>
+    <radialGradient id="balloon_pink_grad" cx="0.36" cy="0.30" r="0.9">
+      <stop offset="0" stop-color="#f6a7c0"/>
       <stop offset="1" stop-color="#ec6f97"/>
     </radialGradient>
-    <radialGradient id="balloon_yellow_grad" cx="0.36" cy="0.30" r="0.85">
-      <stop offset="0" stop-color="#fbe38a"/>
-      <stop offset="1" stop-color="#f3c94e"/>
+    <radialGradient id="balloon_yellow_grad" cx="0.36" cy="0.30" r="0.9">
+      <stop offset="0" stop-color="#fbe491"/>
+      <stop offset="1" stop-color="#f2c948"/>
     </radialGradient>
   </defs>
   <g id="01_base_outline">
-    <path id="base_outline" d="M 1354.30 498.42 Q 1413.25 577.23 1283.94 634.12 Q 1310.97 714.76 1155.30 725.46 Q 1154.43 836.29 955.38 782.33 Q 853.63 964.99 676.26 808.35 Q 513.28 891.39 480.01 759.96 Q 251.47 799.20 263.53 694.03 Q 133.14 646.05 192.99 553.03 Q 75.19 483.17 138.23 417.82 Q 104.00 344.00 263.98 317.08 Q 250.83 232.20 449.23 260.81 Q 484.10 112.83 692.36 217.32 Q 825.97 85.79 910.72 220.62 Q 1117.58 149.94 1126.27 267.99 Q 1349.22 271.21 1318.98 371.10 Q 1418.05 425.70 1354.30 498.42 Z" fill="#ffffff"/>
+    <path id="base_outline" d="M 235.00 70.00 Q 293.05 26.00 351.09 70.00 Q 409.14 26.00 467.18 70.00 Q 525.23 26.00 583.27 70.00 Q 641.32 26.00 699.36 70.00 Q 757.41 26.00 814.56 78.14 Q 893.19 72.79 901.30 151.19 Q 962.52 200.81 920.00 264.16 Q 964.00 322.20 920.00 380.25 Q 963.47 441.49 904.75 494.05 Q 900.50 572.74 821.70 571.26 Q 765.00 626.00 706.95 582.00 Q 648.91 626.00 590.86 582.00 Q 532.82 626.00 474.77 582.00 Q 416.73 626.00 358.68 582.00 Q 300.64 626.00 242.59 582.00 Q 171.37 615.55 135.15 545.55 Q 60.01 521.77 81.15 445.84 Q 36.00 387.84 80.00 329.80 Q 36.00 271.75 80.41 213.72 Q 55.58 138.92 129.46 111.48 Q 162.21 39.79 235.00 70.00 Z" fill="#ffffff"/>
   </g>
   <g id="02_background_gradient">
-    <path id="base_gradient_fill" d="M 1333.14 498.49 Q 1389.31 573.67 1265.25 628.08 Q 1291.15 705.02 1141.11 715.31 Q 1140.60 821.43 948.19 769.63 Q 850.36 945.66 678.84 794.47 Q 521.13 874.49 489.46 748.26 Q 268.70 785.86 280.55 685.30 Q 155.44 639.31 212.49 550.64 Q 99.59 483.94 159.65 421.51 Q 126.94 351.09 280.99 325.31 Q 268.16 244.17 459.75 271.57 Q 492.84 129.44 694.38 230.04 Q 823.55 103.14 905.10 233.19 Q 1105.14 165.29 1113.10 278.43 Q 1328.12 281.55 1299.06 376.90 Q 1393.92 429.13 1333.14 498.49 Z" fill="url(#base_gradient)"/>
+    <path id="base_gradient_fill" d="M 240.00 79.00 Q 296.49 38.00 352.99 79.00 Q 409.48 38.00 465.98 79.00 Q 522.47 38.00 578.97 79.00 Q 635.46 38.00 691.95 79.00 Q 748.45 38.00 804.28 85.64 Q 879.49 79.72 890.67 154.33 Q 949.82 201.16 911.00 263.73 Q 952.00 320.22 911.00 376.72 Q 951.47 436.24 896.07 487.46 Q 890.63 562.71 815.19 562.55 Q 760.00 614.00 703.51 573.00 Q 647.01 614.00 590.52 573.00 Q 534.02 614.00 477.53 573.00 Q 421.03 614.00 364.54 573.00 Q 308.05 614.00 251.55 573.00 Q 183.69 605.56 146.02 540.19 Q 73.85 518.21 90.71 444.68 Q 48.00 388.27 89.00 331.78 Q 48.00 275.28 89.42 218.80 Q 66.98 146.77 137.26 119.34 Q 169.83 51.28 240.00 79.00 Z" fill="url(#base_gradient)"/>
   </g>
   <g id="03_inner_dots">
     <g id="dots_pink" fill="#ec7ba3">
-      <circle id="dot_pink_01" cx="735.93" cy="792.78" r="4.2"/>
-      <circle id="dot_pink_02" cx="706.77" cy="772.61" r="4.2"/>
-      <circle id="dot_pink_03" cx="677.28" cy="760.47" r="4.2"/>
-      <circle id="dot_pink_04" cx="650.88" cy="771.64" r="4.2"/>
-      <circle id="dot_pink_05" cx="619.24" cy="780.87" r="4.2"/>
-      <circle id="dot_pink_06" cx="585.40" cy="783.29" r="4.2"/>
-      <circle id="dot_pink_07" cx="553.17" cy="772.83" r="4.2"/>
-      <circle id="dot_pink_08" cx="530.07" cy="747.78" r="4.2"/>
-      <circle id="dot_pink_09" cx="517.81" cy="715.77" r="4.2"/>
-      <circle id="dot_pink_10" cx="480.45" cy="721.15" r="4.2"/>
-      <circle id="dot_pink_11" cx="447.26" cy="724.12" r="4.2"/>
-      <circle id="dot_pink_12" cx="418.23" cy="724.68" r="4.2"/>
-      <circle id="dot_pink_13" cx="379.11" cy="720.25" r="4.2"/>
-      <circle id="dot_pink_14" cx="351.55" cy="709.12" r="4.2"/>
-      <circle id="dot_pink_15" cx="332.40" cy="682.28" r="4.2"/>
-      <circle id="dot_pink_16" cx="317.67" cy="655.51" r="4.2"/>
-      <circle id="dot_pink_17" cx="288.97" cy="640.25" r="4.2"/>
-      <circle id="dot_pink_18" cx="263.67" cy="615.50" r="4.2"/>
-      <circle id="dot_pink_19" cx="255.71" cy="586.77" r="4.2"/>
-      <circle id="dot_pink_20" cx="265.10" cy="554.08" r="4.2"/>
-      <circle id="dot_pink_21" cx="252.69" cy="532.47" r="4.2"/>
-      <circle id="dot_pink_22" cx="225.16" cy="509.58" r="4.2"/>
-      <circle id="dot_pink_23" cx="207.24" cy="479.53" r="4.2"/>
-      <circle id="dot_pink_24" cx="212.73" cy="446.33" r="4.2"/>
-      <circle id="dot_pink_25" cx="219.84" cy="419.96" r="4.2"/>
-      <circle id="dot_pink_26" cx="230.21" cy="386.11" r="4.2"/>
-      <circle id="dot_pink_27" cx="259.29" cy="367.50" r="4.2"/>
-      <circle id="dot_pink_28" cx="291.07" cy="356.77" r="4.2"/>
-      <circle id="dot_pink_29" cx="323.10" cy="349.72" r="4.2"/>
-      <circle id="dot_pink_30" cx="334.64" cy="323.69" r="4.2"/>
-      <circle id="dot_pink_31" cx="360.87" cy="302.82" r="4.2"/>
-      <circle id="dot_pink_32" cx="397.61" cy="296.00" r="4.2"/>
-      <circle id="dot_pink_33" cx="430.22" cy="295.67" r="4.2"/>
-      <circle id="dot_pink_34" cx="458.95" cy="297.62" r="4.2"/>
-      <circle id="dot_pink_35" cx="493.39" cy="293.36" r="4.2"/>
-      <circle id="dot_pink_36" cx="505.00" cy="265.68" r="4.2"/>
-      <circle id="dot_pink_37" cx="527.13" cy="241.80" r="4.2"/>
-      <circle id="dot_pink_38" cx="557.75" cy="229.83" r="4.2"/>
-      <circle id="dot_pink_39" cx="596.83" cy="229.77" r="4.2"/>
-      <circle id="dot_pink_40" cx="624.35" cy="235.45" r="4.2"/>
-      <circle id="dot_pink_41" cx="665.79" cy="249.69" r="4.2"/>
-      <circle id="dot_pink_42" cx="688.55" cy="259.67" r="4.2"/>
-      <circle id="dot_pink_43" cx="715.66" cy="251.32" r="4.2"/>
+      <circle id="dot_pink_01" cx="243.02" cy="106.84" r="3.4"/>
+      <circle id="dot_pink_02" cx="266.30" cy="95.32" r="3.4"/>
+      <circle id="dot_pink_03" cx="290.69" cy="86.87" r="3.4"/>
+      <circle id="dot_pink_04" cx="316.19" cy="90.35" r="3.4"/>
+      <circle id="dot_pink_05" cx="339.57" cy="101.59" r="3.4"/>
+      <circle id="dot_pink_06" cx="363.68" cy="102.69" r="3.4"/>
+      <circle id="dot_pink_07" cx="387.06" cy="91.44" r="3.4"/>
+      <circle id="dot_pink_08" cx="412.36" cy="86.60" r="3.4"/>
+      <circle id="dot_pink_09" cx="437.10" cy="93.92" r="3.4"/>
+      <circle id="dot_pink_10" cx="460.62" cy="104.84" r="3.4"/>
+      <circle id="dot_pink_11" cx="484.74" cy="99.44" r="3.4"/>
+      <circle id="dot_pink_12" cx="495.21" cy="552.13" r="3.4"/>
+      <circle id="dot_pink_13" cx="471.10" cy="547.59" r="3.4"/>
+      <circle id="dot_pink_14" cx="447.62" cy="558.62" r="3.4"/>
+      <circle id="dot_pink_15" cx="422.75" cy="565.44" r="3.4"/>
+      <circle id="dot_pink_16" cx="397.55" cy="560.09" r="3.4"/>
+      <circle id="dot_pink_17" cx="374.16" cy="548.88" r="3.4"/>
+      <circle id="dot_pink_18" cx="350.04" cy="550.85" r="3.4"/>
+      <circle id="dot_pink_19" cx="326.66" cy="562.08" r="3.4"/>
+      <circle id="dot_pink_20" cx="301.09" cy="565.01" r="3.4"/>
+      <circle id="dot_pink_21" cx="276.83" cy="556.12" r="3.4"/>
+      <circle id="dot_pink_22" cx="253.36" cy="545.12" r="3.4"/>
+      <circle id="dot_pink_23" cx="228.40" cy="552.31" r="3.4"/>
+      <circle id="dot_pink_24" cx="202.86" cy="555.16" r="3.4"/>
+      <circle id="dot_pink_25" cx="181.23" cy="541.60" r="3.4"/>
+      <circle id="dot_pink_26" cx="165.48" cy="520.93" r="3.4"/>
+      <circle id="dot_pink_27" cx="142.71" cy="509.17" r="3.4"/>
+      <circle id="dot_pink_28" cx="122.04" cy="493.90" r="3.4"/>
+      <circle id="dot_pink_29" cx="115.57" cy="469.21" r="3.4"/>
+      <circle id="dot_pink_30" cx="117.84" cy="443.32" r="3.4"/>
+      <circle id="dot_pink_31" cx="107.69" cy="420.02" r="3.4"/>
+      <circle id="dot_pink_32" cx="97.80" cy="396.15" r="3.4"/>
+      <circle id="dot_pink_33" cx="99.76" cy="370.52" r="3.4"/>
+      <circle id="dot_pink_34" cx="110.84" cy="347.08" r="3.4"/>
+      <circle id="dot_pink_35" cx="113.45" cy="322.96" r="3.4"/>
+      <circle id="dot_pink_36" cx="102.29" cy="299.55" r="3.4"/>
+      <circle id="dot_pink_37" cx="96.64" cy="274.41" r="3.4"/>
+      <circle id="dot_pink_38" cx="103.29" cy="249.50" r="3.4"/>
+      <circle id="dot_pink_39" cx="115.38" cy="226.50" r="3.4"/>
+      <circle id="dot_pink_40" cx="113.72" cy="201.17" r="3.4"/>
+      <circle id="dot_pink_41" cx="113.39" cy="175.43" r="3.4"/>
+      <circle id="dot_pink_42" cx="128.78" cy="155.13" r="3.4"/>
+      <circle id="dot_pink_43" cx="151.49" cy="142.51" r="3.4"/>
+      <circle id="dot_pink_44" cx="167.30" cy="122.56" r="3.4"/>
+      <circle id="dot_pink_45" cx="184.75" cy="103.64" r="3.4"/>
+      <circle id="dot_pink_46" cx="209.88" cy="99.53" r="3.4"/>
+      <circle id="dot_pink_47" cx="235.22" cy="105.25" r="3.4"/>
     </g>
-    <g id="dots_yellow" fill="#f2c94c">
-      <circle id="dot_yellow_01" cx="1269.69" cy="498.69" r="4.2"/>
-      <circle id="dot_yellow_02" cx="1284.37" cy="532.18" r="4.2"/>
-      <circle id="dot_yellow_03" cx="1276.64" cy="563.16" r="4.2"/>
-      <circle id="dot_yellow_04" cx="1251.49" cy="588.20" r="4.2"/>
-      <circle id="dot_yellow_05" cx="1223.02" cy="604.91" r="4.2"/>
-      <circle id="dot_yellow_06" cx="1212.46" cy="628.09" r="4.2"/>
-      <circle id="dot_yellow_07" cx="1199.55" cy="658.32" r="4.2"/>
-      <circle id="dot_yellow_08" cx="1170.10" cy="674.67" r="4.2"/>
-      <circle id="dot_yellow_09" cx="1131.33" cy="683.68" r="4.2"/>
-      <circle id="dot_yellow_10" cx="1098.56" cy="687.13" r="4.2"/>
-      <circle id="dot_yellow_11" cx="1091.76" cy="718.71" r="4.2"/>
-      <circle id="dot_yellow_12" cx="1066.39" cy="741.56" r="4.2"/>
-      <circle id="dot_yellow_13" cx="1036.78" cy="748.66" r="4.2"/>
-      <circle id="dot_yellow_14" cx="997.59" cy="748.07" r="4.2"/>
-      <circle id="dot_yellow_15" cx="969.48" cy="744.03" r="4.2"/>
-      <circle id="dot_yellow_16" cx="926.63" cy="734.34" r="4.2"/>
-      <circle id="dot_yellow_17" cx="908.68" cy="762.70" r="4.2"/>
-      <circle id="dot_yellow_18" cx="889.38" cy="785.25" r="4.2"/>
-      <circle id="dot_yellow_19" cx="861.56" cy="806.24" r="4.2"/>
-      <circle id="dot_yellow_20" cx="831.34" cy="816.89" r="4.2"/>
-      <circle id="dot_yellow_21" cx="798.74" cy="817.18" r="4.2"/>
-      <circle id="dot_yellow_22" cx="763.74" cy="807.12" r="4.2"/>
-      <circle id="dot_yellow_23" cx="744.95" cy="229.32" r="4.2"/>
-      <circle id="dot_yellow_24" cx="772.69" cy="215.45" r="4.2"/>
-      <circle id="dot_yellow_25" cx="805.20" cy="209.55" r="4.2"/>
-      <circle id="dot_yellow_26" cx="841.02" cy="219.25" r="4.2"/>
-      <circle id="dot_yellow_27" cx="868.21" cy="241.31" r="4.2"/>
-      <circle id="dot_yellow_28" cx="888.22" cy="268.11" r="4.2"/>
-      <circle id="dot_yellow_29" cx="922.33" cy="257.73" r="4.2"/>
-      <circle id="dot_yellow_30" cx="952.98" cy="250.54" r="4.2"/>
-      <circle id="dot_yellow_31" cx="988.46" cy="245.89" r="4.2"/>
-      <circle id="dot_yellow_32" cx="1017.79" cy="246.89" r="4.2"/>
-      <circle id="dot_yellow_33" cx="1050.25" cy="258.99" r="4.2"/>
-      <circle id="dot_yellow_34" cx="1070.62" cy="289.19" r="4.2"/>
-      <circle id="dot_yellow_35" cx="1086.11" cy="307.71" r="4.2"/>
-      <circle id="dot_yellow_36" cx="1120.77" cy="309.60" r="4.2"/>
-      <circle id="dot_yellow_37" cx="1160.22" cy="314.62" r="4.2"/>
-      <circle id="dot_yellow_38" cx="1191.97" cy="322.47" r="4.2"/>
-      <circle id="dot_yellow_39" cx="1220.79" cy="336.29" r="4.2"/>
-      <circle id="dot_yellow_40" cx="1239.47" cy="358.74" r="4.2"/>
-      <circle id="dot_yellow_41" cx="1239.32" cy="393.01" r="4.2"/>
-      <circle id="dot_yellow_42" cx="1267.08" cy="411.82" r="4.2"/>
-      <circle id="dot_yellow_43" cx="1287.23" cy="438.71" r="4.2"/>
-      <circle id="dot_yellow_44" cx="1286.86" cy="471.43" r="4.2"/>
+    <g id="dots_yellow" fill="#f0c748">
+      <circle id="dot_yellow_01" cx="508.23" cy="88.53" r="3.4"/>
+      <circle id="dot_yellow_02" cx="533.95" cy="87.83" r="3.4"/>
+      <circle id="dot_yellow_03" cx="557.60" cy="98.30" r="3.4"/>
+      <circle id="dot_yellow_04" cx="581.68" cy="105.91" r="3.4"/>
+      <circle id="dot_yellow_05" cx="605.34" cy="95.28" r="3.4"/>
+      <circle id="dot_yellow_06" cx="629.74" cy="86.86" r="3.4"/>
+      <circle id="dot_yellow_07" cx="655.24" cy="90.38" r="3.4"/>
+      <circle id="dot_yellow_08" cx="678.61" cy="101.63" r="3.4"/>
+      <circle id="dot_yellow_09" cx="702.73" cy="102.67" r="3.4"/>
+      <circle id="dot_yellow_10" cx="726.22" cy="91.65" r="3.4"/>
+      <circle id="dot_yellow_11" cx="751.71" cy="88.74" r="3.4"/>
+      <circle id="dot_yellow_12" cx="775.44" cy="98.89" r="3.4"/>
+      <circle id="dot_yellow_13" cx="797.39" cy="112.40" r="3.4"/>
+      <circle id="dot_yellow_14" cx="823.36" cy="113.62" r="3.4"/>
+      <circle id="dot_yellow_15" cx="847.23" cy="122.79" r="3.4"/>
+      <circle id="dot_yellow_16" cx="860.03" cy="145.01" r="3.4"/>
+      <circle id="dot_yellow_17" cx="867.68" cy="169.64" r="3.4"/>
+      <circle id="dot_yellow_18" cx="885.96" cy="188.12" r="3.4"/>
+      <circle id="dot_yellow_19" cx="897.89" cy="210.83" r="3.4"/>
+      <circle id="dot_yellow_20" cx="893.90" cy="236.16" r="3.4"/>
+      <circle id="dot_yellow_21" cx="884.41" cy="260.32" r="3.4"/>
+      <circle id="dot_yellow_22" cx="891.34" cy="284.42" r="3.4"/>
+      <circle id="dot_yellow_23" cx="901.98" cy="308.01" r="3.4"/>
+      <circle id="dot_yellow_24" cx="901.66" cy="333.72" r="3.4"/>
+      <circle id="dot_yellow_25" cx="890.85" cy="357.25" r="3.4"/>
+      <circle id="dot_yellow_26" cx="884.85" cy="381.37" r="3.4"/>
+      <circle id="dot_yellow_27" cx="895.12" cy="405.20" r="3.4"/>
+      <circle id="dot_yellow_28" cx="899.75" cy="430.43" r="3.4"/>
+      <circle id="dot_yellow_29" cx="889.09" cy="453.82" r="3.4"/>
+      <circle id="dot_yellow_30" cx="872.25" cy="473.62" r="3.4"/>
+      <circle id="dot_yellow_31" cx="866.32" cy="498.67" r="3.4"/>
+      <circle id="dot_yellow_32" cx="855.47" cy="521.92" r="3.4"/>
+      <circle id="dot_yellow_33" cx="832.49" cy="533.11" r="3.4"/>
+      <circle id="dot_yellow_34" cx="806.69" cy="536.28" r="3.4"/>
+      <circle id="dot_yellow_35" cx="785.45" cy="550.89" r="3.4"/>
+      <circle id="dot_yellow_36" cx="762.23" cy="562.16" r="3.4"/>
+      <circle id="dot_yellow_37" cx="736.75" cy="559.81" r="3.4"/>
+      <circle id="dot_yellow_38" cx="713.21" cy="548.90" r="3.4"/>
+      <circle id="dot_yellow_39" cx="689.09" cy="550.81" r="3.4"/>
+      <circle id="dot_yellow_40" cx="665.71" cy="562.05" r="3.4"/>
+      <circle id="dot_yellow_41" cx="640.14" cy="565.01" r="3.4"/>
+      <circle id="dot_yellow_42" cx="615.87" cy="556.16" r="3.4"/>
+      <circle id="dot_yellow_43" cx="592.15" cy="545.66" r="3.4"/>
+      <circle id="dot_yellow_44" cx="568.16" cy="554.31" r="3.4"/>
+      <circle id="dot_yellow_45" cx="544.36" cy="564.41" r="3.4"/>
+      <circle id="dot_yellow_46" cx="518.67" cy="563.15" r="3.4"/>
     </g>
   </g>
   <g id="04_balloons">
     <g id="balloon_pink_01">
-      <path id="balloon_pink_01_string" d="M 250.00 421.00 C 237.40 467.50 258.40 520.00 236.00 565.00" fill="none" stroke="#c9a3d6" stroke-width="2.4" stroke-linecap="round"/>
-      <ellipse id="balloon_pink_01_body" cx="250.00" cy="360.00" rx="46.00" ry="55.00" fill="url(#balloon_pink_grad)"/>
-      <path id="balloon_pink_01_knot" d="M 244.00 414.00 L 256.00 414.00 L 250.00 424.00 Z" fill="#ec6f97"/>
-      <ellipse id="balloon_pink_01_highlight" cx="234.36" cy="339.10" rx="11.96" ry="11.00" fill="#ffffff" fill-opacity="0.55"/>
+      <path id="balloon_pink_01_string" d="M 162.00 283.00 C 142.40 313.65 167.60 348.30 148.00 378.00" fill="none" stroke="#c39ad4" stroke-width="1.8" stroke-linecap="round"/>
+      <ellipse id="balloon_pink_01_body" cx="162.00" cy="228.00" rx="41.00" ry="51.00" fill="url(#balloon_pink_grad)"/>
+      <path id="balloon_pink_01_knot" d="M 157.00 278.00 L 167.00 278.00 L 162.00 287.00 Z" fill="#ec6f97"/>
+      <ellipse id="balloon_pink_01_highlight" cx="147.24" cy="207.60" rx="9.84" ry="9.18" fill="#ffffff" fill-opacity="0.5"/>
     </g>
     <g id="balloon_yellow_01">
-      <path id="balloon_yellow_01_string" d="M 330.00 606.00 C 340.80 641.30 322.80 682.60 342.00 718.00" fill="none" stroke="#c9a3d6" stroke-width="2.4" stroke-linecap="round"/>
-      <ellipse id="balloon_yellow_01_body" cx="330.00" cy="560.00" rx="33.00" ry="40.00" fill="url(#balloon_yellow_grad)"/>
-      <path id="balloon_yellow_01_knot" d="M 324.00 599.00 L 336.00 599.00 L 330.00 609.00 Z" fill="#f3c94e"/>
-      <ellipse id="balloon_yellow_01_highlight" cx="318.78" cy="544.80" rx="8.58" ry="8.00" fill="#ffffff" fill-opacity="0.55"/>
+      <path id="balloon_yellow_01_string" d="M 216.00 415.00 C 204.80 434.45 219.20 457.90 208.00 478.00" fill="none" stroke="#c39ad4" stroke-width="1.8" stroke-linecap="round"/>
+      <ellipse id="balloon_yellow_01_body" cx="216.00" cy="374.00" rx="29.00" ry="37.00" fill="url(#balloon_yellow_grad)"/>
+      <path id="balloon_yellow_01_knot" d="M 211.00 410.00 L 221.00 410.00 L 216.00 419.00 Z" fill="#f2c948"/>
+      <ellipse id="balloon_yellow_01_highlight" cx="205.56" cy="359.20" rx="6.96" ry="6.66" fill="#ffffff" fill-opacity="0.5"/>
     </g>
     <g id="balloon_yellow_02">
-      <path id="balloon_yellow_02_string" d="M 1300.00 449.00 C 1312.60 495.50 1291.60 548.00 1314.00 593.00" fill="none" stroke="#c9a3d6" stroke-width="2.4" stroke-linecap="round"/>
-      <ellipse id="balloon_yellow_02_body" cx="1300.00" cy="388.00" rx="46.00" ry="55.00" fill="url(#balloon_yellow_grad)"/>
-      <path id="balloon_yellow_02_knot" d="M 1294.00 442.00 L 1306.00 442.00 L 1300.00 452.00 Z" fill="#f3c94e"/>
-      <ellipse id="balloon_yellow_02_highlight" cx="1284.36" cy="367.10" rx="11.96" ry="11.00" fill="#ffffff" fill-opacity="0.55"/>
+      <path id="balloon_yellow_02_string" d="M 868.00 301.00 C 849.80 332.35 873.20 367.70 855.00 398.00" fill="none" stroke="#c39ad4" stroke-width="1.8" stroke-linecap="round"/>
+      <ellipse id="balloon_yellow_02_body" cx="868.00" cy="246.00" rx="41.00" ry="51.00" fill="url(#balloon_yellow_grad)"/>
+      <path id="balloon_yellow_02_knot" d="M 863.00 296.00 L 873.00 296.00 L 868.00 305.00 Z" fill="#f2c948"/>
+      <ellipse id="balloon_yellow_02_highlight" cx="853.24" cy="225.60" rx="9.84" ry="9.18" fill="#ffffff" fill-opacity="0.5"/>
     </g>
     <g id="balloon_pink_02">
-      <path id="balloon_pink_02_string" d="M 1205.00 736.00 C 1194.20 771.30 1212.20 812.60 1193.00 848.00" fill="none" stroke="#c9a3d6" stroke-width="2.4" stroke-linecap="round"/>
-      <ellipse id="balloon_pink_02_body" cx="1205.00" cy="690.00" rx="33.00" ry="40.00" fill="url(#balloon_pink_grad)"/>
-      <path id="balloon_pink_02_knot" d="M 1199.00 729.00 L 1211.00 729.00 L 1205.00 739.00 Z" fill="#ec6f97"/>
-      <ellipse id="balloon_pink_02_highlight" cx="1193.78" cy="674.80" rx="8.58" ry="8.00" fill="#ffffff" fill-opacity="0.55"/>
+      <path id="balloon_pink_02_string" d="M 802.00 485.00 C 792.20 504.45 804.80 527.90 795.00 548.00" fill="none" stroke="#c39ad4" stroke-width="1.8" stroke-linecap="round"/>
+      <ellipse id="balloon_pink_02_body" cx="802.00" cy="444.00" rx="29.00" ry="37.00" fill="url(#balloon_pink_grad)"/>
+      <path id="balloon_pink_02_knot" d="M 797.00 480.00 L 807.00 480.00 L 802.00 489.00 Z" fill="#ec6f97"/>
+      <ellipse id="balloon_pink_02_highlight" cx="791.56" cy="429.20" rx="6.96" ry="6.66" fill="#ffffff" fill-opacity="0.5"/>
     </g>
   </g>
   <g id="05_stars">
-    <path id="star_01" d="M 430.00 280.00 L 435.17 292.88 L 449.02 293.82 L 438.37 302.72 L 441.76 316.18 L 430.00 308.80 L 418.24 316.18 L 421.63 302.72 L 410.98 293.82 L 424.83 292.88 Z" fill="#f4d155" fill-opacity="0.9"/>
-    <path id="star_02" d="M 470.00 668.00 L 475.69 682.17 L 490.92 683.20 L 479.21 692.99 L 482.93 707.80 L 470.00 699.68 L 457.07 707.80 L 460.79 692.99 L 449.08 683.20 L 464.31 682.17 Z" fill="#f6cf52" fill-opacity="0.9"/>
-    <path id="star_03" d="M 390.00 728.00 L 394.40 738.95 L 406.17 739.75 L 397.11 747.31 L 399.99 758.75 L 390.00 752.48 L 380.01 758.75 L 382.89 747.31 L 373.83 739.75 L 385.60 738.95 Z" fill="#ef8fb0" fill-opacity="0.9"/>
-    <path id="star_04" d="M 545.00 685.00 L 548.88 694.66 L 559.27 695.36 L 551.28 702.04 L 553.82 712.14 L 545.00 706.60 L 536.18 712.14 L 538.72 702.04 L 530.73 695.36 L 541.12 694.66 Z" fill="#b79fe0" fill-opacity="0.9"/>
-    <path id="star_05" d="M 1010.00 484.00 L 1014.14 494.30 L 1025.22 495.06 L 1016.70 502.18 L 1019.40 512.94 L 1010.00 507.04 L 1000.60 512.94 L 1003.30 502.18 L 994.78 495.06 L 1005.86 494.30 Z" fill="#f4a95f" fill-opacity="0.9"/>
-    <path id="star_06" d="M 1070.00 742.00 L 1074.66 753.59 L 1087.12 754.44 L 1077.53 762.45 L 1080.58 774.56 L 1070.00 767.92 L 1059.42 774.56 L 1062.47 762.45 L 1052.88 754.44 L 1065.34 753.59 Z" fill="#ef86a8" fill-opacity="0.9"/>
-    <path id="star_07" d="M 1285.00 630.00 L 1290.17 642.88 L 1304.02 643.82 L 1293.37 652.72 L 1296.76 666.18 L 1285.00 658.80 L 1273.24 666.18 L 1276.63 652.72 L 1265.98 643.82 L 1279.83 642.88 Z" fill="#f1a0c0" fill-opacity="0.9"/>
-    <path id="star_08" d="M 1140.00 285.00 L 1143.88 294.66 L 1154.27 295.36 L 1146.28 302.04 L 1148.82 312.14 L 1140.00 306.60 L 1131.18 312.14 L 1133.72 302.04 L 1125.73 295.36 L 1136.12 294.66 Z" fill="#c3a6e6" fill-opacity="0.9"/>
-    <path id="star_09" d="M 660.00 777.00 L 663.36 785.37 L 672.36 785.98 L 665.44 791.77 L 667.64 800.52 L 660.00 795.72 L 652.36 800.52 L 654.56 791.77 L 647.64 785.98 L 656.64 785.37 Z" fill="#f6d24e" fill-opacity="0.9"/>
+    <path id="star_01" d="M 275.00 169.00 L 279.91 181.24 L 293.07 182.13 L 282.95 190.58 L 286.17 203.37 L 275.00 196.36 L 263.83 203.37 L 267.05 190.58 L 256.93 182.13 L 270.09 181.24 Z" fill="#f3cf50" fill-opacity="0.92"/>
+    <path id="star_02" d="M 150.00 432.00 L 155.17 444.88 L 169.02 445.82 L 158.37 454.72 L 161.76 468.18 L 150.00 460.80 L 138.24 468.18 L 141.63 454.72 L 130.98 445.82 L 144.83 444.88 Z" fill="#f4cf52" fill-opacity="0.92"/>
+    <path id="star_03" d="M 302.00 339.00 L 305.36 347.37 L 314.36 347.98 L 307.44 353.77 L 309.64 362.52 L 302.00 357.72 L 294.36 362.52 L 296.56 353.77 L 289.64 347.98 L 298.64 347.37 Z" fill="#ef8fb0" fill-opacity="0.92"/>
+    <path id="star_04" d="M 348.00 454.00 L 352.14 464.30 L 363.22 465.06 L 354.70 472.18 L 357.40 482.94 L 348.00 477.04 L 338.60 482.94 L 341.30 472.18 L 332.78 465.06 L 343.86 464.30 Z" fill="#f3cf50" fill-opacity="0.92"/>
+    <path id="star_05" d="M 406.00 465.00 L 409.36 473.37 L 418.36 473.98 L 411.44 479.77 L 413.64 488.52 L 406.00 483.72 L 398.36 488.52 L 400.56 479.77 L 393.64 473.98 L 402.64 473.37 Z" fill="#b79fe0" fill-opacity="0.92"/>
+    <path id="star_06" d="M 676.00 309.00 L 680.40 319.95 L 692.17 320.75 L 683.11 328.31 L 685.99 339.75 L 676.00 333.48 L 666.01 339.75 L 668.89 328.31 L 659.83 320.75 L 671.60 319.95 Z" fill="#f2a95f" fill-opacity="0.92"/>
+    <path id="star_07" d="M 878.00 413.00 L 882.91 425.24 L 896.07 426.13 L 885.95 434.58 L 889.17 447.37 L 878.00 440.36 L 866.83 447.37 L 870.05 434.58 L 859.93 426.13 L 873.09 425.24 Z" fill="#ef86a8" fill-opacity="0.92"/>
+    <path id="star_08" d="M 760.00 193.00 L 763.36 201.37 L 772.36 201.98 L 765.44 207.77 L 767.64 216.52 L 760.00 211.72 L 752.36 216.52 L 754.56 207.77 L 747.64 201.98 L 756.64 201.37 Z" fill="#b79fe0" fill-opacity="0.92"/>
+    <path id="star_09" d="M 916.00 400.00 L 919.62 409.02 L 929.31 409.67 L 921.86 415.90 L 924.23 425.33 L 916.00 420.16 L 907.77 425.33 L 910.14 415.90 L 902.69 409.67 L 912.38 409.02 Z" fill="#f1a0c0" fill-opacity="0.92"/>
+    <path id="star_10" d="M 452.00 516.00 L 455.10 523.73 L 463.41 524.29 L 457.02 529.63 L 459.05 537.71 L 452.00 533.28 L 444.95 537.71 L 446.98 529.63 L 440.59 524.29 L 448.90 523.73 Z" fill="#f4cf52" fill-opacity="0.92"/>
+    <path id="star_11" d="M 702.00 488.00 L 705.10 495.73 L 713.41 496.29 L 707.02 501.63 L 709.05 509.71 L 702.00 505.28 L 694.95 509.71 L 696.98 501.63 L 690.59 496.29 L 698.90 495.73 Z" fill="#f3cf50" fill-opacity="0.92"/>
   </g>
   <g id="06_sparkles">
-    <path id="sparkle_01" d="M 355.00 455.00 L 356.70 468.30 L 370.00 470.00 L 356.70 471.70 L 355.00 485.00 L 353.30 471.70 L 340.00 470.00 L 353.30 468.30 Z" fill="#ffffff" fill-opacity="0.92"/>
-    <path id="sparkle_02" d="M 585.00 547.00 L 586.47 558.53 L 598.00 560.00 L 586.47 561.47 L 585.00 573.00 L 583.53 561.47 L 572.00 560.00 L 583.53 558.53 Z" fill="#ffffff" fill-opacity="0.92"/>
-    <path id="sparkle_03" d="M 700.00 610.00 L 701.13 618.87 L 710.00 620.00 L 701.13 621.13 L 700.00 630.00 L 698.87 621.13 L 690.00 620.00 L 698.87 618.87 Z" fill="#ffffff" fill-opacity="0.92"/>
-    <path id="sparkle_04" d="M 900.00 458.00 L 901.36 468.64 L 912.00 470.00 L 901.36 471.36 L 900.00 482.00 L 898.64 471.36 L 888.00 470.00 L 898.64 468.64 Z" fill="#ffffff" fill-opacity="0.92"/>
-    <path id="sparkle_05" d="M 1020.00 629.00 L 1021.24 638.76 L 1031.00 640.00 L 1021.24 641.24 L 1020.00 651.00 L 1018.76 641.24 L 1009.00 640.00 L 1018.76 638.76 Z" fill="#ffffff" fill-opacity="0.92"/>
-    <path id="sparkle_06" d="M 1240.00 457.00 L 1241.47 468.53 L 1253.00 470.00 L 1241.47 471.47 L 1240.00 483.00 L 1238.53 471.47 L 1227.00 470.00 L 1238.53 468.53 Z" fill="#ffffff" fill-opacity="0.92"/>
-    <path id="sparkle_07" d="M 200.00 609.00 L 201.24 618.76 L 211.00 620.00 L 201.24 621.24 L 200.00 631.00 L 198.76 621.24 L 189.00 620.00 L 198.76 618.76 Z" fill="#ffffff" fill-opacity="0.92"/>
-    <path id="sparkle_08" d="M 620.00 391.00 L 621.02 398.98 L 629.00 400.00 L 621.02 401.02 L 620.00 409.00 L 618.98 401.02 L 611.00 400.00 L 618.98 398.98 Z" fill="#ffffff" fill-opacity="0.92"/>
-    <path id="sparkle_09" d="M 1130.00 550.00 L 1131.13 558.87 L 1140.00 560.00 L 1131.13 561.13 L 1130.00 570.00 L 1128.87 561.13 L 1120.00 560.00 L 1128.87 558.87 Z" fill="#ffffff" fill-opacity="0.92"/>
-    <path id="sparkle_10" d="M 820.00 750.00 L 821.13 758.87 L 830.00 760.00 L 821.13 761.13 L 820.00 770.00 L 818.87 761.13 L 810.00 760.00 L 818.87 758.87 Z" fill="#ffffff" fill-opacity="0.92"/>
-    <path id="sparkle_11" d="M 480.00 462.00 L 480.91 469.09 L 488.00 470.00 L 480.91 470.91 L 480.00 478.00 L 479.09 470.91 L 472.00 470.00 L 479.09 469.09 Z" fill="#ffffff" fill-opacity="0.92"/>
-    <path id="sparkle_12" d="M 960.00 291.00 L 961.02 298.98 L 969.00 300.00 L 961.02 301.02 L 960.00 309.00 L 958.98 301.02 L 951.00 300.00 L 958.98 298.98 Z" fill="#ffffff" fill-opacity="0.92"/>
+    <path id="sparkle_01" d="M 236.00 298.00 L 237.70 312.30 L 252.00 314.00 L 237.70 315.70 L 236.00 330.00 L 234.30 315.70 L 220.00 314.00 L 234.30 312.30 Z" fill="#ffffff" fill-opacity="0.95"/>
+    <path id="sparkle_02" d="M 150.00 288.00 L 151.27 298.73 L 162.00 300.00 L 151.27 301.27 L 150.00 312.00 L 148.73 301.27 L 138.00 300.00 L 148.73 298.73 Z" fill="#ffffff" fill-opacity="0.95"/>
+    <path id="sparkle_03" d="M 340.00 245.00 L 341.17 254.83 L 351.00 256.00 L 341.17 257.17 L 340.00 267.00 L 338.83 257.17 L 329.00 256.00 L 338.83 254.83 Z" fill="#ffffff" fill-opacity="0.95"/>
+    <path id="sparkle_04" d="M 256.00 504.00 L 257.27 514.73 L 268.00 516.00 L 257.27 517.27 L 256.00 528.00 L 254.73 517.27 L 244.00 516.00 L 254.73 514.73 Z" fill="#ffffff" fill-opacity="0.95"/>
+    <path id="sparkle_05" d="M 430.00 287.00 L 431.38 298.62 L 443.00 300.00 L 431.38 301.38 L 430.00 313.00 L 428.62 301.38 L 417.00 300.00 L 428.62 298.62 Z" fill="#ffffff" fill-opacity="0.95"/>
+    <path id="sparkle_06" d="M 600.00 243.00 L 601.38 254.62 L 613.00 256.00 L 601.38 257.38 L 600.00 269.00 L 598.62 257.38 L 587.00 256.00 L 598.62 254.62 Z" fill="#ffffff" fill-opacity="0.95"/>
+    <path id="sparkle_07" d="M 590.00 399.00 L 591.17 408.83 L 601.00 410.00 L 591.17 411.17 L 590.00 421.00 L 588.83 411.17 L 579.00 410.00 L 588.83 408.83 Z" fill="#ffffff" fill-opacity="0.95"/>
+    <path id="sparkle_08" d="M 762.00 458.00 L 763.27 468.73 L 774.00 470.00 L 763.27 471.27 L 762.00 482.00 L 760.73 471.27 L 750.00 470.00 L 760.73 468.73 Z" fill="#ffffff" fill-opacity="0.95"/>
+    <path id="sparkle_09" d="M 832.00 535.00 L 833.17 544.83 L 843.00 546.00 L 833.17 547.17 L 832.00 557.00 L 830.83 547.17 L 821.00 546.00 L 830.83 544.83 Z" fill="#ffffff" fill-opacity="0.95"/>
+    <path id="sparkle_10" d="M 676.00 574.00 L 677.27 584.73 L 688.00 586.00 L 677.27 587.27 L 676.00 598.00 L 674.73 587.27 L 664.00 586.00 L 674.73 584.73 Z" fill="#ffffff" fill-opacity="0.95"/>
+    <path id="sparkle_11" d="M 916.00 290.00 L 917.27 300.73 L 928.00 302.00 L 917.27 303.27 L 916.00 314.00 L 914.73 303.27 L 904.00 302.00 L 914.73 300.73 Z" fill="#ffffff" fill-opacity="0.95"/>
+    <path id="sparkle_12" d="M 556.00 530.00 L 557.06 538.94 L 566.00 540.00 L 557.06 541.06 L 556.00 550.00 L 554.94 541.06 L 546.00 540.00 L 554.94 538.94 Z" fill="#ffffff" fill-opacity="0.95"/>
+    <path id="sparkle_13" d="M 500.00 350.00 L 501.06 358.94 L 510.00 360.00 L 501.06 361.06 L 500.00 370.00 L 498.94 361.06 L 490.00 360.00 L 498.94 358.94 Z" fill="#ffffff" fill-opacity="0.95"/>
   </g>
   <g id="07_other_decorations">
     <g id="diamond_lights">
-      <path id="diamond_light_01" d="M 770.00 153.00 L 774.67 170.33 L 792.00 175.00 L 774.67 179.67 L 770.00 197.00 L 765.33 179.67 L 748.00 175.00 L 765.33 170.33 Z" fill="#ee5f97"/>
-      <path id="diamond_light_02" d="M 770.00 835.00 L 774.24 850.76 L 790.00 855.00 L 774.24 859.24 L 770.00 875.00 L 765.76 859.24 L 750.00 855.00 L 765.76 850.76 Z" fill="#ef6f9f"/>
-      <path id="diamond_light_03" d="M 250.00 391.00 L 252.97 402.03 L 264.00 405.00 L 252.97 407.97 L 250.00 419.00 L 247.03 407.97 L 236.00 405.00 L 247.03 402.03 Z" fill="#f07ba6"/>
-      <path id="diamond_light_04" d="M 1285.00 292.00 L 1287.76 302.24 L 1298.00 305.00 L 1287.76 307.76 L 1285.00 318.00 L 1282.24 307.76 L 1272.00 305.00 L 1282.24 302.24 Z" fill="#f2b24e"/>
+      <path id="diamond_light_01" d="M 508.00 87.00 L 512.45 103.55 L 529.00 108.00 L 512.45 112.45 L 508.00 129.00 L 503.55 112.45 L 487.00 108.00 L 503.55 103.55 Z" fill="#ee5f97"/>
+      <path id="diamond_light_02" d="M 492.00 560.00 L 495.82 574.18 L 510.00 578.00 L 495.82 581.82 L 492.00 596.00 L 488.18 581.82 L 474.00 578.00 L 488.18 574.18 Z" fill="#ef6f9f"/>
+      <path id="diamond_light_03" d="M 210.00 402.00 L 212.55 411.45 L 222.00 414.00 L 212.55 416.55 L 210.00 426.00 L 207.45 416.55 L 198.00 414.00 L 207.45 411.45 Z" fill="#f07ba6"/>
+      <path id="diamond_light_04" d="M 892.00 288.00 L 894.55 297.45 L 904.00 300.00 L 894.55 302.55 L 892.00 312.00 L 889.45 302.55 L 880.00 300.00 L 889.45 297.45 Z" fill="#f2b24e"/>
     </g>
     <g id="pastel_decorations">
-      <circle id="pastel_01" cx="520" cy="400" r="6" fill="#f3b8cf"/>
-      <circle id="pastel_02" cx="660" cy="560" r="5" fill="#f7d78a"/>
-      <circle id="pastel_03" cx="890" cy="640" r="5" fill="#cbb3ea"/>
-      <circle id="pastel_04" cx="1090" cy="420" r="6" fill="#f6c96a"/>
-      <circle id="pastel_05" cx="300" cy="520" r="5" fill="#f4a9c5"/>
-      <circle id="pastel_06" cx="1180" cy="640" r="5" fill="#f2c17a"/>
-      <circle id="pastel_07" cx="720" cy="720" r="5" fill="#f6bcd0"/>
+      <circle id="pastel_01" cx="520" cy="300" r="6" fill="#f3b8cf"/>
+      <circle id="pastel_02" cx="640" cy="380" r="5" fill="#f6d78a"/>
+      <circle id="pastel_03" cx="300" cy="548" r="5" fill="#cbb3ea"/>
+      <circle id="pastel_04" cx="720" cy="300" r="6" fill="#f4cf6a"/>
+      <circle id="pastel_05" cx="400" cy="400" r="5" fill="#f4a9c5"/>
+      <circle id="pastel_06" cx="820" cy="400" r="5" fill="#f2c17a"/>
     </g>
   </g>
 </svg>
