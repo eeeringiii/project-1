@@ -1,20 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1536" height="1024" viewBox="0 0 1536 1024" fill="none">
   <defs>
     <linearGradient id="base_gradient" x1="0" y1="0" x2="1536" y2="0" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#fbe4ee"/>
-      <stop offset="0.11" stop-color="#fdd2e4"/>
-      <stop offset="0.22" stop-color="#fcd4da"/>
-      <stop offset="0.34" stop-color="#fce1ec"/>
-      <stop offset="0.46" stop-color="#fdf0f3"/>
-      <stop offset="0.52" stop-color="#fdf6f3"/>
-      <stop offset="0.62" stop-color="#fdf7e9"/>
-      <stop offset="0.74" stop-color="#fef5d0"/>
-      <stop offset="0.86" stop-color="#fdf2c6"/>
-      <stop offset="1" stop-color="#fbf4da"/>
+      <stop offset="0" stop-color="#fbe0ea"/>
+      <stop offset="0.14" stop-color="#fcd7e4"/>
+      <stop offset="0.28" stop-color="#fce3ec"/>
+      <stop offset="0.4" stop-color="#fdeef2"/>
+      <stop offset="0.48" stop-color="#fef8f5"/>
+      <stop offset="0.56" stop-color="#fefaf2"/>
+      <stop offset="0.64" stop-color="#fdf6e6"/>
+      <stop offset="0.78" stop-color="#fdf1cf"/>
+      <stop offset="0.9" stop-color="#fceec4"/>
+      <stop offset="1" stop-color="#fbf3d6"/>
     </linearGradient>
-    <radialGradient id="glow_center"><stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/><stop offset="0.55" stop-color="#ffffff" stop-opacity="0.18"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
-    <radialGradient id="glow_pink"><stop offset="0" stop-color="#fbd0e0" stop-opacity="0.22"/><stop offset="1" stop-color="#fbd0e0" stop-opacity="0"/></radialGradient>
-    <radialGradient id="glow_yellow"><stop offset="0" stop-color="#fbefb8" stop-opacity="0.22"/><stop offset="1" stop-color="#fbefb8" stop-opacity="0"/></radialGradient>
+    <radialGradient id="glow_center"><stop offset="0" stop-color="#ffffff" stop-opacity="0.6"/><stop offset="0.5" stop-color="#ffffff" stop-opacity="0.2"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="glow_soft"><stop offset="0" stop-color="#ffffff" stop-opacity="0.5"/><stop offset="0.6" stop-color="#ffffff" stop-opacity="0.12"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="glow_pink"><stop offset="0" stop-color="#fbd0e0" stop-opacity="0.18"/><stop offset="1" stop-color="#fbd0e0" stop-opacity="0"/></radialGradient>
+    <radialGradient id="glow_yellow"><stop offset="0" stop-color="#fbefb8" stop-opacity="0.18"/><stop offset="1" stop-color="#fbefb8" stop-opacity="0"/></radialGradient>
     <radialGradient id="grad_balloon_pink" cx="0.36" cy="0.28" r="0.9"><stop offset="0" stop-color="#ffb4c8"/><stop offset="0.55" stop-color="#f77e9f"/><stop offset="1" stop-color="#ee6389"/></radialGradient>
     <radialGradient id="grad_balloon_yellow" cx="0.36" cy="0.28" r="0.9"><stop offset="0" stop-color="#ffefa4"/><stop offset="0.55" stop-color="#f7d35c"/><stop offset="1" stop-color="#f0c343"/></radialGradient>
     <clipPath id="board_clip"><path d="M 597.89 63.35 C 575.78 65.09 552.94 69.57 532.30 77.46 C 511.66 85.35 493.84 103.63 474.07 110.68 C 454.30 117.73 434.78 116.96 413.66 119.77 C 392.54 122.58 368.05 120.65 347.36 127.54 C 326.67 134.44 309.34 151.58 289.51 161.12 C 269.67 170.67 248.78 176.51 228.34 184.81 C 207.90 193.10 184.66 198.33 166.87 210.90 C 149.09 223.47 132.95 241.52 121.62 260.24 C 110.29 278.95 103.25 301.66 98.89 323.20 C 94.54 344.73 102.49 369.29 95.47 389.45 C 88.44 409.61 64.41 423.95 56.74 444.16 C 49.07 464.37 49.14 488.58 49.46 510.70 C 49.77 532.83 51.00 556.52 58.62 576.90 C 66.24 597.28 86.91 612.83 95.16 632.98 C 103.42 653.12 101.38 676.87 108.16 697.78 C 114.94 718.69 122.67 741.18 135.84 758.43 C 149.00 775.68 167.89 790.97 187.15 801.27 C 206.42 811.57 232.50 809.57 251.43 820.25 C 270.36 830.92 282.41 853.08 300.71 865.31 C 319.00 877.54 339.97 888.73 361.19 893.61 C 382.42 898.50 406.67 891.12 428.06 894.60 C 449.45 898.07 468.91 907.01 489.53 914.47 C 510.15 921.92 530.27 934.31 551.80 939.33 C 573.33 944.35 596.66 946.11 618.72 944.58 C 640.78 943.05 662.78 935.09 684.17 930.16 C 705.57 925.23 725.63 917.96 747.09 915.00 C 768.56 912.04 791.56 908.76 812.94 912.42 C 834.33 916.07 853.90 931.37 875.40 936.93 C 896.89 942.49 919.79 946.14 941.90 945.78 C 964.01 945.42 987.10 941.70 1008.07 934.78 C 1029.04 927.85 1047.06 910.46 1067.74 904.23 C 1088.41 898.00 1110.38 900.18 1132.12 897.38 C 1153.87 894.58 1177.95 895.26 1198.20 887.43 C 1218.46 879.61 1235.32 862.40 1253.66 850.44 C 1271.99 838.48 1288.90 825.82 1308.22 815.67 C 1327.54 805.52 1351.93 802.16 1369.59 789.52 C 1387.25 776.88 1403.98 758.87 1414.17 739.83 C 1424.36 720.79 1423.63 695.99 1430.75 675.26 C 1437.87 654.54 1447.97 635.55 1456.90 615.47 C 1465.83 595.40 1479.14 576.11 1484.34 554.82 C 1489.55 533.53 1490.67 509.54 1488.12 487.73 C 1485.56 465.92 1477.97 443.90 1469.03 423.94 C 1460.10 403.97 1440.74 388.39 1434.51 367.95 C 1428.28 347.50 1437.17 322.32 1431.64 301.27 C 1426.10 280.22 1415.00 258.59 1401.28 241.63 C 1387.56 224.68 1368.81 209.21 1349.33 199.55 C 1329.86 189.89 1304.54 192.31 1284.42 183.67 C 1264.30 175.03 1248.37 157.56 1228.61 147.72 C 1208.85 137.89 1187.50 128.28 1165.87 124.64 C 1144.25 121.00 1119.50 131.59 1098.86 125.89 C 1078.21 120.19 1061.98 100.11 1041.99 90.44 C 1021.99 80.77 1000.58 71.63 978.87 67.84 C 957.17 64.06 933.61 64.39 911.76 67.72 C 889.91 71.06 868.43 79.78 847.77 87.87 C 827.11 95.96 807.86 115.63 787.80 116.26 C 767.73 116.89 747.86 99.86 727.38 91.65 C 706.91 83.45 686.51 71.76 664.93 67.04 C 643.34 62.32 619.99 61.62 597.89 63.35 Z"/></clipPath>
@@ -25,10 +26,16 @@
   <g id="02_背景グラデーション">
     <path id="base_gradient_fill" d="M 597.89 63.35 C 575.78 65.09 552.94 69.57 532.30 77.46 C 511.66 85.35 493.84 103.63 474.07 110.68 C 454.30 117.73 434.78 116.96 413.66 119.77 C 392.54 122.58 368.05 120.65 347.36 127.54 C 326.67 134.44 309.34 151.58 289.51 161.12 C 269.67 170.67 248.78 176.51 228.34 184.81 C 207.90 193.10 184.66 198.33 166.87 210.90 C 149.09 223.47 132.95 241.52 121.62 260.24 C 110.29 278.95 103.25 301.66 98.89 323.20 C 94.54 344.73 102.49 369.29 95.47 389.45 C 88.44 409.61 64.41 423.95 56.74 444.16 C 49.07 464.37 49.14 488.58 49.46 510.70 C 49.77 532.83 51.00 556.52 58.62 576.90 C 66.24 597.28 86.91 612.83 95.16 632.98 C 103.42 653.12 101.38 676.87 108.16 697.78 C 114.94 718.69 122.67 741.18 135.84 758.43 C 149.00 775.68 167.89 790.97 187.15 801.27 C 206.42 811.57 232.50 809.57 251.43 820.25 C 270.36 830.92 282.41 853.08 300.71 865.31 C 319.00 877.54 339.97 888.73 361.19 893.61 C 382.42 898.50 406.67 891.12 428.06 894.60 C 449.45 898.07 468.91 907.01 489.53 914.47 C 510.15 921.92 530.27 934.31 551.80 939.33 C 573.33 944.35 596.66 946.11 618.72 944.58 C 640.78 943.05 662.78 935.09 684.17 930.16 C 705.57 925.23 725.63 917.96 747.09 915.00 C 768.56 912.04 791.56 908.76 812.94 912.42 C 834.33 916.07 853.90 931.37 875.40 936.93 C 896.89 942.49 919.79 946.14 941.90 945.78 C 964.01 945.42 987.10 941.70 1008.07 934.78 C 1029.04 927.85 1047.06 910.46 1067.74 904.23 C 1088.41 898.00 1110.38 900.18 1132.12 897.38 C 1153.87 894.58 1177.95 895.26 1198.20 887.43 C 1218.46 879.61 1235.32 862.40 1253.66 850.44 C 1271.99 838.48 1288.90 825.82 1308.22 815.67 C 1327.54 805.52 1351.93 802.16 1369.59 789.52 C 1387.25 776.88 1403.98 758.87 1414.17 739.83 C 1424.36 720.79 1423.63 695.99 1430.75 675.26 C 1437.87 654.54 1447.97 635.55 1456.90 615.47 C 1465.83 595.40 1479.14 576.11 1484.34 554.82 C 1489.55 533.53 1490.67 509.54 1488.12 487.73 C 1485.56 465.92 1477.97 443.90 1469.03 423.94 C 1460.10 403.97 1440.74 388.39 1434.51 367.95 C 1428.28 347.50 1437.17 322.32 1431.64 301.27 C 1426.10 280.22 1415.00 258.59 1401.28 241.63 C 1387.56 224.68 1368.81 209.21 1349.33 199.55 C 1329.86 189.89 1304.54 192.31 1284.42 183.67 C 1264.30 175.03 1248.37 157.56 1228.61 147.72 C 1208.85 137.89 1187.50 128.28 1165.87 124.64 C 1144.25 121.00 1119.50 131.59 1098.86 125.89 C 1078.21 120.19 1061.98 100.11 1041.99 90.44 C 1021.99 80.77 1000.58 71.63 978.87 67.84 C 957.17 64.06 933.61 64.39 911.76 67.72 C 889.91 71.06 868.43 79.78 847.77 87.87 C 827.11 95.96 807.86 115.63 787.80 116.26 C 767.73 116.89 747.86 99.86 727.38 91.65 C 706.91 83.45 686.51 71.76 664.93 67.04 C 643.34 62.32 619.99 61.62 597.89 63.35 Z" fill="url(#base_gradient)"/>
     <g id="bg_texture" clip-path="url(#board_clip)">
-      <ellipse id="tex_center" cx="770" cy="500" rx="470" ry="300" fill="url(#glow_center)"/>
-      <ellipse id="tex_pink" cx="300" cy="470" rx="330" ry="300" fill="url(#glow_pink)"/>
-      <ellipse id="tex_yellow" cx="1230" cy="470" rx="330" ry="300" fill="url(#glow_yellow)"/>
-      <ellipse id="tex_top" cx="720" cy="230" rx="360" ry="150" fill="url(#glow_center)"/>
+      <ellipse id="tex_pink" cx="300" cy="470" rx="360" ry="320" fill="url(#glow_pink)"/>
+      <ellipse id="tex_yellow" cx="1240" cy="470" rx="360" ry="320" fill="url(#glow_yellow)"/>
+      <ellipse id="light_center" cx="770" cy="480" rx="500" ry="330" fill="url(#glow_center)"/>
+      <ellipse id="light_top" cx="720" cy="230" rx="400" ry="165" fill="url(#glow_soft)"/>
+      <ellipse id="light_01" cx="360" cy="410" rx="190" ry="170" fill="url(#glow_soft)" fill-opacity="0.75"/>
+      <ellipse id="light_02" cx="560" cy="600" rx="175" ry="150" fill="url(#glow_soft)" fill-opacity="0.7"/>
+      <ellipse id="light_03" cx="900" cy="330" rx="200" ry="165" fill="url(#glow_soft)" fill-opacity="0.7"/>
+      <ellipse id="light_04" cx="1050" cy="560" rx="185" ry="160" fill="url(#glow_soft)" fill-opacity="0.7"/>
+      <ellipse id="light_05" cx="470" cy="780" rx="150" ry="130" fill="url(#glow_soft)" fill-opacity="0.6"/>
+      <ellipse id="light_06" cx="1120" cy="760" rx="160" ry="140" fill="url(#glow_soft)" fill-opacity="0.6"/>
     </g>
   </g>
   <g id="03_内周ドット">
@@ -141,27 +148,27 @@
   <g id="04_風船">
     <g id="balloon_pink_01">
       <path id="balloon_pink_01_string" d="M 245.00 412.00 C 273.00 450.00 215.00 486.00 241.00 516.00 S 259.00 550.50 237.00 558.00" fill="none" stroke="#c39ad4" stroke-width="3.2" stroke-linecap="round"/>
-      <ellipse id="balloon_pink_01_body" cx="245.00" cy="349.00" rx="57.00" ry="59.00" fill="url(#grad_balloon_pink)"/>
-      <path id="balloon_pink_01_knot" d="M 238.00 405.00 L 252.00 405.00 L 245.00 420.00 Z" fill="#ee6389"/>
-      <ellipse id="balloon_pink_01_highlight" cx="262.10" cy="331.30" rx="9.69" ry="23.60" fill="#ffffff" fill-opacity="0.8" transform="rotate(22 262.10 331.30)"/>
+      <path id="balloon_pink_01_knot" d="M 238.00 404.00 L 252.00 404.00 L 245.00 420.00 Z" fill="#ee6389" stroke="#e0577f" stroke-width="1.5" stroke-linejoin="round"/>
+      <ellipse id="balloon_pink_01_body" cx="245.00" cy="349.00" rx="57.00" ry="59.00" fill="url(#grad_balloon_pink)" stroke="#e0577f" stroke-width="2.2"/>
+      <ellipse id="balloon_pink_01_highlight" cx="262.10" cy="330.12" rx="10.26" ry="24.78" fill="#ffffff" fill-opacity="0.85" transform="rotate(22 262.10 330.12)"/>
     </g>
     <g id="balloon_yellow_01">
       <path id="balloon_yellow_01_string" d="M 325.00 577.00 C 353.00 599.88 295.00 622.92 321.00 642.12 S 373.00 664.20 351.00 669.00" fill="none" stroke="#c39ad4" stroke-width="3.2" stroke-linecap="round"/>
-      <ellipse id="balloon_yellow_01_body" cx="325.00" cy="540.00" rx="31.00" ry="33.00" fill="url(#grad_balloon_yellow)"/>
-      <path id="balloon_yellow_01_knot" d="M 318.00 570.00 L 332.00 570.00 L 325.00 585.00 Z" fill="#f0c343"/>
-      <ellipse id="balloon_yellow_01_highlight" cx="334.30" cy="530.10" rx="5.27" ry="13.20" fill="#ffffff" fill-opacity="0.8" transform="rotate(22 334.30 530.10)"/>
+      <path id="balloon_yellow_01_knot" d="M 318.00 569.00 L 332.00 569.00 L 325.00 585.00 Z" fill="#f0c343" stroke="#e0ad33" stroke-width="1.5" stroke-linejoin="round"/>
+      <ellipse id="balloon_yellow_01_body" cx="325.00" cy="540.00" rx="31.00" ry="33.00" fill="url(#grad_balloon_yellow)" stroke="#e0ad33" stroke-width="2.2"/>
+      <ellipse id="balloon_yellow_01_highlight" cx="334.30" cy="529.44" rx="5.58" ry="13.86" fill="#ffffff" fill-opacity="0.85" transform="rotate(22 334.30 529.44)"/>
     </g>
     <g id="balloon_yellow_02">
       <path id="balloon_yellow_02_string" d="M 1304.00 416.00 C 1332.00 454.00 1274.00 490.00 1300.00 520.00 S 1336.00 554.50 1314.00 562.00" fill="none" stroke="#c39ad4" stroke-width="3.2" stroke-linecap="round"/>
-      <ellipse id="balloon_yellow_02_body" cx="1304.00" cy="353.00" rx="57.00" ry="59.00" fill="url(#grad_balloon_yellow)"/>
-      <path id="balloon_yellow_02_knot" d="M 1297.00 409.00 L 1311.00 409.00 L 1304.00 424.00 Z" fill="#f0c343"/>
-      <ellipse id="balloon_yellow_02_highlight" cx="1321.10" cy="335.30" rx="9.69" ry="23.60" fill="#ffffff" fill-opacity="0.8" transform="rotate(22 1321.10 335.30)"/>
+      <path id="balloon_yellow_02_knot" d="M 1297.00 408.00 L 1311.00 408.00 L 1304.00 424.00 Z" fill="#f0c343" stroke="#e0ad33" stroke-width="1.5" stroke-linejoin="round"/>
+      <ellipse id="balloon_yellow_02_body" cx="1304.00" cy="353.00" rx="57.00" ry="59.00" fill="url(#grad_balloon_yellow)" stroke="#e0ad33" stroke-width="2.2"/>
+      <ellipse id="balloon_yellow_02_highlight" cx="1321.10" cy="334.12" rx="10.26" ry="24.78" fill="#ffffff" fill-opacity="0.85" transform="rotate(22 1321.10 334.12)"/>
     </g>
     <g id="balloon_pink_02">
       <path id="balloon_pink_02_string" d="M 1212.00 697.00 C 1240.00 722.12 1182.00 747.08 1208.00 767.88 S 1220.00 791.80 1198.00 797.00" fill="none" stroke="#c39ad4" stroke-width="3.2" stroke-linecap="round"/>
-      <ellipse id="balloon_pink_02_body" cx="1212.00" cy="655.00" rx="35.00" ry="38.00" fill="url(#grad_balloon_pink)"/>
-      <path id="balloon_pink_02_knot" d="M 1205.00 690.00 L 1219.00 690.00 L 1212.00 705.00 Z" fill="#ee6389"/>
-      <ellipse id="balloon_pink_02_highlight" cx="1222.50" cy="643.60" rx="5.95" ry="15.20" fill="#ffffff" fill-opacity="0.8" transform="rotate(22 1222.50 643.60)"/>
+      <path id="balloon_pink_02_knot" d="M 1205.00 689.00 L 1219.00 689.00 L 1212.00 705.00 Z" fill="#ee6389" stroke="#e0577f" stroke-width="1.5" stroke-linejoin="round"/>
+      <ellipse id="balloon_pink_02_body" cx="1212.00" cy="655.00" rx="35.00" ry="38.00" fill="url(#grad_balloon_pink)" stroke="#e0577f" stroke-width="2.2"/>
+      <ellipse id="balloon_pink_02_highlight" cx="1222.50" cy="642.84" rx="6.30" ry="15.96" fill="#ffffff" fill-opacity="0.85" transform="rotate(22 1222.50 642.84)"/>
     </g>
   </g>
   <g id="05_星">
