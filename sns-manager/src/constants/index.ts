@@ -25,6 +25,7 @@ export const PLATFORMS: Platform[] = [
   "tiktok",
   "youtube",
   "website",
+  "note",
 ];
 
 export const PLATFORM_LABELS: Record<Platform, string> = {
@@ -33,6 +34,7 @@ export const PLATFORM_LABELS: Record<Platform, string> = {
   tiktok: "TikTok",
   youtube: "YouTube",
   website: "HP",
+  note: "note",
 };
 
 /** 媒体別の本文文字数上限（重要情報チェックで使用） */
@@ -42,6 +44,8 @@ export const PLATFORM_MAX_LENGTH: Record<Platform, number> = {
   tiktok: 2200,
   youtube: 5000,
   website: 100000,
+  // note は長文記事向け。厳密なAPI上限はないため長文前提の目安値。
+  note: 100000,
 };
 
 /** 媒体ごとに生成する投稿タイプ（value: ラベル） */
@@ -80,6 +84,12 @@ export const PLATFORM_POST_TYPES: Record<
     { value: "news", label: "NEWS記事" },
     { value: "page", label: "ページ" },
     { value: "ogp", label: "OGP/シェア文" },
+  ],
+  note: [
+    { value: "note_article", label: "note記事本文" },
+    { value: "note_title", label: "note記事タイトル" },
+    { value: "note_lead", label: "リード文（導入）" },
+    { value: "note_outline", label: "見出し構成" },
   ],
 };
 

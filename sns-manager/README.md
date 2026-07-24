@@ -1,6 +1,6 @@
 # SNS統合運用ツール（アーティスト事務所向け）
 
-所属アーティスト向けに、**1つの告知情報から各SNS媒体（X / Instagram / TikTok / YouTube / HP）の投稿案をAIが自動生成し、担当者・本人の確認/承認を経て、予約投稿・カレンダー管理**まで行うための統合運用ツールです。
+所属アーティスト向けに、**1つの告知情報から各SNS媒体（X / Instagram / TikTok / YouTube / HP / note）の投稿案をAIが自動生成し、担当者・本人の確認/承認を経て、予約投稿・カレンダー管理**まで行うための統合運用ツールです。
 
 > このリポジトリの `sns-manager/` は、既存の `taisei-site/`（アーティストHP）や `app/`（別アプリ）とは独立した Next.js アプリです。他プロジェクトには影響しません。
 
@@ -15,7 +15,16 @@
 
 Supabase接続の手順は [`docs/phase2-supabase.md`](./docs/phase2-supabase.md) を参照してください（マイグレーション適用・ユーザー登録・バケット作成込み）。
 
-**AI生成（Phase 3）**：`ANTHROPIC_API_KEY` を設定すると、サーバー(`/api/generate`)経由で Anthropic API を媒体ごとに呼び出し、ブランドルールを反映した投稿案を生成します（Zod検証・一部再生成・生成履歴つき）。未設定時はモック生成にフォールバックするため、キーなしでも動作確認できます。APIキーはサーバーサイドのみで扱い、クライアントには露出しません。
+**AI生成（Phase 3）**：`ANTHROPIC_API_KEY` を設定すると、サーバー(`/api/generate`)経由で Anthropic API を媒体ごとに呼び出し、ブランドルールを反映した投稿案を生成します（Zod検証・一部再生成・生成履歴つき）。未設定時はモック生成にフォールバックするため、キーなしでも動作確認できます。APIキーはサーバーサイドのみで扱い、クライアントには露出しません。**note の記事下書きも同じ生成フローで自動作成できます。**
+
+**note 自動公開について（重要な制約）**：note には公式の記事投稿APIが無いため、実公開は
+ヘッドレスブラウザ（Playwright 等）でのログイン自動操作に頼ります。認証情報は環境変数
+`NOTE_EMAIL` / `NOTE_PASSWORD` で管理し、コードやDBに平文で置きません。2要素認証・CAPTCHA・
+UI変更で壊れうるため**完全自動公開は非推奨**で、基本は「AIが下書き自動生成 → 承認 → 公開」です。
+また Vercel のサーバーレス関数では Chromium を起動できないため、実公開は Node ランタイム
+（常駐ワーカー / GitHub Actions 等）で実行します。承認前の投稿は公開しません（アダプタ側でもガード）。
+アダプタは `src/services/note-publisher.ts`、設計と Playwright driver の参考実装は
+[`docs/phase5-external-apis.md`](./docs/phase5-external-apis.md) の「6. note」を参照してください。
 
 ## Phase 1（モックMVP）で実装済みの機能
 

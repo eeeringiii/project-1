@@ -2,7 +2,14 @@
  * 媒体アイコン
  * 色だけでなくアイコン＋ラベルでも媒体を判別できるようにする。
  */
-import { Globe, Instagram, Music2, Twitter, Youtube } from "lucide-react";
+import {
+  Globe,
+  Instagram,
+  Music2,
+  NotebookPen,
+  Twitter,
+  Youtube,
+} from "lucide-react";
 import type { Platform } from "@/types/domain";
 import { PLATFORM_LABELS } from "@/constants";
 
@@ -12,6 +19,7 @@ const ICONS: Record<Platform, typeof Globe> = {
   tiktok: Music2,
   youtube: Youtube,
   website: Globe,
+  note: NotebookPen,
 };
 
 const COLORS: Record<Platform, string> = {
@@ -20,6 +28,7 @@ const COLORS: Record<Platform, string> = {
   tiktok: "bg-neutral-800 text-white",
   youtube: "bg-red-600 text-white",
   website: "bg-slate-600 text-white",
+  note: "bg-emerald-500 text-white",
 };
 
 export function PlatformIcon({

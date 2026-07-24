@@ -155,7 +155,7 @@ export const seedContentSources: ContentSource[] = [
     notes: "解禁は7月25日0:00。フラゲ情報は出さないこと。",
     aiInstruction: "爽やかで前向きなトーン。絵文字は控えめに。",
     requiresArtistApproval: true,
-    targetPlatforms: ["x", "instagram", "tiktok", "youtube", "website"],
+    targetPlatforms: ["x", "instagram", "tiktok", "youtube", "website", "note"],
     createdBy: CURRENT_USER_ID,
     createdAt: now,
     updatedAt: now,
@@ -421,6 +421,19 @@ export const seedPosts: SocialPost[] = [
     title: "NEWS: ラジオ出演のお知らせ",
     body: "サンプルアーティストがラジオ番組に出演します。放送日時は追ってお知らせいたします。",
     status: "staff_review",
+  }),
+
+  // --- note（1件） ---
+  makePost({
+    platform: "note",
+    campaignId: "camp_release",
+    contentSourceId: "src_release",
+    postType: "note_article",
+    title: "note: 新曲「アオイロ」制作の裏側",
+    body: "ニューシングル「アオイロ」を2026年7月25日（金）に配信リリースします。\n\nこの記事では、楽曲に込めた想いと制作の裏側をお届けします。夏の終わりの少し切ない空気を、音でどう表現したのか——。\n\n（本文はAIが自動生成した下書きです。公開前に担当者・本人の承認を経てください。）",
+    scheduledAt: iso(8, 12, 0),
+    embargoAt: iso(8, 0, 0),
+    status: "ai_generated",
   }),
 ];
 

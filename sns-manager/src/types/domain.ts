@@ -10,7 +10,13 @@
 
 export type UserRole = "admin" | "manager" | "staff" | "artist" | "viewer";
 
-export type Platform = "x" | "instagram" | "tiktok" | "youtube" | "website";
+export type Platform =
+  | "x"
+  | "instagram"
+  | "tiktok"
+  | "youtube"
+  | "website"
+  | "note";
 
 export type PostStatus =
   | "draft"
