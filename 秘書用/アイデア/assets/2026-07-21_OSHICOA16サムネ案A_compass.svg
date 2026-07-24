@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="670" viewBox="0 0 1280 670" font-family="'Noto Sans JP','Hiragino Kaku Gothic ProN',sans-serif">
+  <defs>
+    <radialGradient id="glow" cx="70%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#211a3a"/>
+      <stop offset="100%" stop-color="#090914"/>
+    </radialGradient>
+    <marker id="ah" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#e8c7ff"/>
+    </marker>
+    <marker id="ahp" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#f472b6"/>
+    </marker>
+  </defs>
+
+  <rect width="1280" height="670" fill="url(#glow)"/>
+  <rect x="24" y="24" width="1232" height="622" fill="none" stroke="#2b2545" stroke-width="1.5" rx="10"/>
+
+  <!-- Left: title block -->
+  <text x="70" y="150" fill="#8f8aa8" font-size="20" letter-spacing="6">OTAKU ECOLOGY ANALYSIS</text>
+  <text x="66" y="250" fill="#f4f2ff" font-size="96" font-weight="800" letter-spacing="2">OSHICOA <tspan fill="#e8c7ff">16</tspan></text>
+  <text x="70" y="330" fill="#e7e3f5" font-size="34" font-weight="700">推しが変わっても、</text>
+  <text x="70" y="378" fill="#e7e3f5" font-size="34" font-weight="700">あなたの&#8220;推し方&#8221;は変わらない。</text>
+  <text x="70" y="452" fill="#b8b2cc" font-size="22">愛の量ではなく、愛がどこへ向かうか。</text>
+  <text x="70" y="486" fill="#b8b2cc" font-size="22">16のヲタク生態で解析する、推し活診断。</text>
+  <text x="70" y="600" fill="#f472b6" font-size="24" font-weight="700">#OSHICOA16　#ヲタク生態診断</text>
+
+  <!-- Right: compass of 4 double-arrows (center 960,335 r=170) -->
+  <circle cx="960" cy="335" r="200" fill="none" stroke="#221c3c" stroke-width="1.5"/>
+  <circle cx="960" cy="335" r="4" fill="#f4f2ff"/>
+
+  <!-- axis R/C horizontal -->
+  <line x1="800" y1="335" x2="1120" y2="335" stroke="#e8c7ff" stroke-width="2.5" marker-start="url(#ah)" marker-end="url(#ah)"/>
+  <!-- axis E/P vertical -->
+  <line x1="960" y1="180" x2="960" y2="490" stroke="#e8c7ff" stroke-width="2.5" marker-start="url(#ah)" marker-end="url(#ah)"/>
+  <!-- axis G/M diagonal ↗↙ -->
+  <line x1="1073" y1="222" x2="847" y2="448" stroke="#f472b6" stroke-width="2.5" marker-start="url(#ahp)" marker-end="url(#ahp)"/>
+  <!-- axis T/S diagonal ↖↘ -->
+  <line x1="847" y1="222" x2="1073" y2="448" stroke="#f472b6" stroke-width="2.5" marker-start="url(#ahp)" marker-end="url(#ahp)"/>
+
+  <!-- pole labels -->
+  <text x="792" y="340" fill="#f4f2ff" font-size="22" font-weight="700" text-anchor="end">共鳴</text>
+  <text x="792" y="362" fill="#8f8aa8" font-size="14" text-anchor="end">R</text>
+  <text x="1128" y="340" fill="#f4f2ff" font-size="22" font-weight="700">接続</text>
+  <text x="1128" y="362" fill="#8f8aa8" font-size="14">C</text>
+
+  <text x="960" y="168" fill="#f4f2ff" font-size="22" font-weight="700" text-anchor="middle">体験</text>
+  <text x="960" y="510" fill="#f4f2ff" font-size="22" font-weight="700" text-anchor="middle">所有</text>
+
+  <text x="1090" y="212" fill="#f7b8d6" font-size="18" font-weight="700">成長支援</text>
+  <text x="830" y="470" fill="#f7b8d6" font-size="18" font-weight="700" text-anchor="end">自己充足</text>
+  <text x="830" y="212" fill="#f7b8d6" font-size="18" font-weight="700" text-anchor="end">連帯</text>
+  <text x="1090" y="470" fill="#f7b8d6" font-size="18" font-weight="700">単独</text>
+</svg>
