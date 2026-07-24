@@ -1,0 +1,63 @@
+# note（note.com）自動公開ワーカー
+#
+# 承認済み→予約済み（status=scheduled）で予定時刻を過ぎた note 投稿を、
+# ヘッドレスブラウザ（Playwright）でログイン公開する。
+# Vercel サーバーレスでは Chromium を起動できないため、公開はこの GitHub Actions で行う。
+#
+# 事前に GitHub のリポジトリ Secrets に以下を登録すること（Settings → Secrets and variables → Actions）:
+#   SUPABASE_URL                … Supabase プロジェクトURL
+#   SUPABASE_SERVICE_ROLE_KEY   … service role キー（RLSを跨ぐため。厳重管理）
+#   NOTE_EMAIL                  … note ログインメール
+#   NOTE_PASSWORD              … note ログインパスワード（2要素認証は無効にしておくこと）
+#
+# ⚠️ note には公式投稿APIが無く、UI変更・CAPTCHA で壊れうる。失敗時はログとスクショで調査する。
+
+name: note-publish
+
+on:
+  schedule:
+    # 15分ごと（UTC）。予定時刻の粒度に合わせて調整可。
+    - cron: "*/15 * * * *"
+  workflow_dispatch: {} # 手動実行も可能
+
+concurrency:
+  # 多重公開を防ぐため同時実行を1本に絞る
+  group: note-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sns-manager/worker
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install worker deps
+        run: npm ci || npm install
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Publish scheduled note posts
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          NOTE_EMAIL: ${{ secrets.NOTE_EMAIL }}
+          NOTE_PASSWORD: ${{ secrets.NOTE_PASSWORD }}
+          NOTE_HEADLESS: "true"
+          NOTE_ERROR_SCREENSHOT: ${{ github.workspace }}/note-error.png
+        run: npm run publish-notes
+
+      - name: Upload error screenshot (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: note-error-screenshot
+          path: note-error.png
+          if-no-files-found: ignore
