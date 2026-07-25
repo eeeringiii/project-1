@@ -16,6 +16,7 @@ export interface OshicoaType {
   name: string;
   reading: string;
   catchphrase: string;
+  characterImage: string;
   habitat: string;
   mainFood: string;
   habitPhrase: string;
@@ -38,4 +39,4 @@ export interface OshicoaType {
   premiumCtaTitle: string;
   premiumCtaDescription: string;
 }
-export interface DiagnosisResult { typeCode:TypeCode; axisScores:Record<AxisKey,number>; tags:OtakuTag[]; phase:RelationshipPhase; chartScores:Record<ChartMetricId,number>; answers:DiagnosisAnswer[]; oshiProfile?:OshiProfile; completedAt:string }
+export interface DiagnosisResult { typeCode:TypeCode; axisScores:Record<AxisKey,number>; tags:OtakuTag[]; phase:RelationshipPhase; chartScores:Record<ChartMetricId,number>; answers:DiagnosisAnswer[]; oshiProfile?:OshiProfile; completedAt:string; characterImage?:string }
