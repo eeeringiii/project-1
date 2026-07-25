@@ -1,53 +1,65 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="670" viewBox="0 0 1280 670" font-family="'Noto Sans JP','Hiragino Kaku Gothic ProN',sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="670" viewBox="0 0 1280 670" font-family="'Zen Maru Gothic','Hiragino Maru Gothic ProN','Yu Gothic',system-ui,sans-serif">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0d0b1c"/>
-      <stop offset="100%" stop-color="#090914"/>
+    <linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f3ecfc"/>
+      <stop offset="100%" stop-color="#fbeef6"/>
     </linearGradient>
-    <marker id="a2" markerWidth="12" markerHeight="12" refX="8" refY="4" orient="auto">
-      <path d="M0,0 L8,4 L0,8 Z" fill="#e8c7ff"/>
+    <radialGradient id="glow2" cx="50%" cy="28%" r="60%">
+      <stop offset="0%" stop-color="#ffb6dc" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#ffb6dc" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="pill2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#c9b3f2"/>
+      <stop offset="100%" stop-color="#ffc2df"/>
+    </linearGradient>
+    <marker id="b2" markerWidth="12" markerHeight="12" refX="6" refY="4" orient="auto">
+      <path d="M0,1 L8,4 L0,7 Z" fill="#ff8fc0" stroke="#ff8fc0" stroke-width="1.4" stroke-linejoin="round"/>
     </marker>
   </defs>
 
-  <rect width="1280" height="670" fill="url(#bg)"/>
+  <rect width="1280" height="670" fill="url(#bg2)"/>
+  <rect width="1280" height="670" fill="url(#glow2)"/>
+  <rect x="28" y="28" width="1224" height="614" rx="40" fill="none" stroke="#9d7fe0" stroke-opacity="0.4" stroke-width="3"/>
 
   <!-- header -->
-  <text x="80" y="118" fill="#8f8aa8" font-size="20" letter-spacing="6">FOUR DIRECTIONS OF LOVE</text>
-  <text x="76" y="196" fill="#f4f2ff" font-size="64" font-weight="800">OSHICOA <tspan fill="#e8c7ff">16</tspan></text>
-  <text x="80" y="242" fill="#c7c1dc" font-size="26" font-weight="600">あなたの&#8220;推し方の本性&#8221;を、16のヲタク生態に分類する。</text>
+  <text x="80" y="112" fill="#8b6fd6" font-size="40" font-weight="700">OSHICOA 16</text>
+  <text x="1200" y="110" fill="#9a8dc0" font-size="26" font-weight="500" text-anchor="end">ヲタク生態診断</text>
+  <text x="80" y="176" fill="#4b3f77" font-size="36" font-weight="700">あなたの&#8220;推し方の本性&#8221;を、16のヲタク生態に。</text>
+  <text x="82" y="216" fill="#6a5c95" font-size="24" font-weight="500">愛の量じゃなくて、愛が&#8220;どこへ向かうか&#8221;。</text>
 
   <!-- 4 axis rows -->
   <g>
-    <!-- row template: left pole (right-anchored) | arrow | right pole -->
     <!-- axis 1 -->
-    <text x="70" y="335" fill="#6d6788" font-size="16" font-weight="700">R / C</text>
-    <text x="470" y="336" fill="#f4f2ff" font-size="30" font-weight="700" text-anchor="end">共鳴</text>
-    <line x1="500" y1="328" x2="720" y2="328" stroke="#e8c7ff" stroke-width="2.5" marker-start="url(#a2)" marker-end="url(#a2)"/>
-    <text x="750" y="336" fill="#f4f2ff" font-size="30" font-weight="700">接続</text>
-    <text x="1210" y="336" fill="#8f8aa8" font-size="17" text-anchor="end">作品に潜る ↔ 本人とつながる</text>
+    <text x="80" y="316" fill="#c3a9e0" font-size="17" font-weight="700">R / C</text>
+    <text x="470" y="318" fill="#4b3f77" font-size="31" font-weight="700" text-anchor="end">共鳴</text>
+    <line x1="500" y1="310" x2="720" y2="310" stroke="#ff8fc0" stroke-width="5" stroke-linecap="round" marker-start="url(#b2)" marker-end="url(#b2)"/>
+    <text x="750" y="318" fill="#4b3f77" font-size="31" font-weight="700">接続</text>
+    <text x="1200" y="318" fill="#9a8dc0" font-size="18" font-weight="500" text-anchor="end">作品に潜る ↔ 本人とつながる</text>
 
     <!-- axis 2 -->
-    <text x="70" y="405" fill="#6d6788" font-size="16" font-weight="700">E / P</text>
-    <text x="470" y="406" fill="#f4f2ff" font-size="30" font-weight="700" text-anchor="end">体験</text>
-    <line x1="500" y1="398" x2="720" y2="398" stroke="#e8c7ff" stroke-width="2.5" marker-start="url(#a2)" marker-end="url(#a2)"/>
-    <text x="750" y="406" fill="#f4f2ff" font-size="30" font-weight="700">所有</text>
-    <text x="1210" y="406" fill="#8f8aa8" font-size="17" text-anchor="end">その瞬間を生きる ↔ 形に残す</text>
+    <text x="80" y="388" fill="#c3a9e0" font-size="17" font-weight="700">E / P</text>
+    <text x="470" y="390" fill="#4b3f77" font-size="31" font-weight="700" text-anchor="end">体験</text>
+    <line x1="500" y1="382" x2="720" y2="382" stroke="#9d7fe0" stroke-width="5" stroke-linecap="round" marker-start="url(#b2)" marker-end="url(#b2)"/>
+    <text x="750" y="390" fill="#4b3f77" font-size="31" font-weight="700">所有</text>
+    <text x="1200" y="390" fill="#9a8dc0" font-size="18" font-weight="500" text-anchor="end">その瞬間を生きる ↔ 形に残す</text>
 
     <!-- axis 3 -->
-    <text x="70" y="475" fill="#6d6788" font-size="16" font-weight="700">G / M</text>
-    <text x="470" y="476" fill="#f4f2ff" font-size="30" font-weight="700" text-anchor="end">成長支援</text>
-    <line x1="500" y1="468" x2="720" y2="468" stroke="#f472b6" stroke-width="2.5" marker-start="url(#a2)" marker-end="url(#a2)"/>
-    <text x="750" y="476" fill="#f4f2ff" font-size="30" font-weight="700">自己充足</text>
-    <text x="1210" y="476" fill="#8f8aa8" font-size="17" text-anchor="end">未来を動かす ↔ 感情を守る</text>
+    <text x="80" y="460" fill="#c3a9e0" font-size="17" font-weight="700">G / M</text>
+    <text x="470" y="462" fill="#4b3f77" font-size="31" font-weight="700" text-anchor="end">成長支援</text>
+    <line x1="500" y1="454" x2="720" y2="454" stroke="#ff8fc0" stroke-width="5" stroke-linecap="round" marker-start="url(#b2)" marker-end="url(#b2)"/>
+    <text x="750" y="462" fill="#4b3f77" font-size="31" font-weight="700">自己充足</text>
+    <text x="1200" y="462" fill="#9a8dc0" font-size="18" font-weight="500" text-anchor="end">未来を動かす ↔ 感情を守る</text>
 
     <!-- axis 4 -->
-    <text x="70" y="545" fill="#6d6788" font-size="16" font-weight="700">T / S</text>
-    <text x="470" y="546" fill="#f4f2ff" font-size="30" font-weight="700" text-anchor="end">連帯</text>
-    <line x1="500" y1="538" x2="720" y2="538" stroke="#f472b6" stroke-width="2.5" marker-start="url(#a2)" marker-end="url(#a2)"/>
-    <text x="750" y="546" fill="#f4f2ff" font-size="30" font-weight="700">単独</text>
-    <text x="1210" y="546" fill="#8f8aa8" font-size="17" text-anchor="end">ファンダムと熱狂 ↔ 自分のペース</text>
+    <text x="80" y="532" fill="#c3a9e0" font-size="17" font-weight="700">T / S</text>
+    <text x="470" y="534" fill="#4b3f77" font-size="31" font-weight="700" text-anchor="end">連帯</text>
+    <line x1="500" y1="526" x2="720" y2="526" stroke="#9d7fe0" stroke-width="5" stroke-linecap="round" marker-start="url(#b2)" marker-end="url(#b2)"/>
+    <text x="750" y="534" fill="#4b3f77" font-size="31" font-weight="700">単独</text>
+    <text x="1200" y="534" fill="#9a8dc0" font-size="18" font-weight="500" text-anchor="end">ファンダムと熱狂 ↔ 自分のペース</text>
   </g>
 
-  <text x="80" y="618" fill="#f472b6" font-size="22" font-weight="700">#OSHICOA16</text>
-  <text x="1210" y="618" fill="#8f8aa8" font-size="18" text-anchor="end">無料診断・全24問・約3〜4分</text>
+  <!-- hashtag pill + note -->
+  <rect x="80" y="576" width="316" height="54" rx="27" fill="url(#pill2)"/>
+  <text x="238" y="611" fill="#ffffff" font-size="25" font-weight="700" text-anchor="middle">#OSHICOA16</text>
+  <text x="1200" y="611" fill="#a99fc4" font-size="19" font-weight="500" text-anchor="end">無料診断・全24問・約3〜4分</text>
 </svg>
