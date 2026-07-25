@@ -16,7 +16,7 @@ export interface OshicoaType {
   name: string;
   reading: string;
   catchphrase: string;
-  characterImage: string;
+  characterImage?: string;
   habitat: string;
   mainFood: string;
   habitPhrase: string;
