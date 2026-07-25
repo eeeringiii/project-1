@@ -1,1 +1,44 @@
-'use client';import {useEffect,useState}from'react';import {useRouter}from'next/navigation';import {questions}from'@/data/questions';import {createResult,options}from'@/lib/diagnosis';import {useDiagnosisStore}from'@/stores/diagnosis';export default function Questions(){const router=useRouter(),{answers,answer,profile,setResult}=useDiagnosisStore();const [index,setIndex]=useState(Math.min(answers.length,23)),[loading,setLoading]=useState(false);const q=questions[index];useEffect(()=>{const h=(e:KeyboardEvent)=>{const n=Number(e.key);if(n>=1&&n<=4)choose(options[n-1][1])};addEventListener('keydown',h);return()=>removeEventListener('keydown',h)});const choose=(value:any)=>{answer({questionId:q.id,value});if(index===23){setLoading(true);setTimeout(()=>{try{const ordered=[...answers.filter(a=>a.questionId!==q.id),{questionId:q.id,value}];const result=createResult(ordered,profile);setResult(result);router.push(`/result/${result.typeCode}`)}catch{router.push('/diagnosis')}},900)}else setIndex(index+1)};if(loading)return <main className="shell question"><p className="eyebrow">ANALYSIS IN PROGRESS</p><h1>あなたのヲタク生態を解析中</h1><p className="lead">愛の向かう先を計測<br/>現場行動パターンを照合<br/>ヲタクの業を抽出</p></main>;return <main className="shell question"><p className="eyebrow">QUESTION {index+1} / 24</p><div className="progress"><b style={{width:`${((index+1)/24)*100}%`}}/></div><h1>{q.text}</h1><div className="answers">{options.map(([label,value],i)=><button className="answer" key={label} onClick={()=>choose(value)}><small>{i+1}</small>　{label}</button>)}</div><p><button className="button ghost" disabled={!index} onClick={()=>setIndex(index-1)}>← 前の質問へ</button>　<a href="/">診断を中断する</a></p></main>}
+'use client';
+
+import Link from 'next/link';
+import { useCallback, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { questions } from '@/data/questions';
+import { createResult, options } from '@/lib/diagnosis';
+import { useDiagnosisStore } from '@/stores/diagnosis';
+import { AnswerValue } from '@/types';
+
+export default function Questions() {
+  const router=useRouter();
+  const {answers,answer,profile,setResult}=useDiagnosisStore();
+  const [index,setIndex]=useState(Math.min(answers.length,23));
+  const [loading,setLoading]=useState(false);
+  const q=questions[index];
+
+  const choose=useCallback((value:AnswerValue)=>{
+    answer({questionId:q.id,value});
+    if(index===23){
+      setLoading(true);
+      setTimeout(()=>{
+        try{
+          const ordered=[...answers.filter(item=>item.questionId!==q.id),{questionId:q.id,value}];
+          const result=createResult(ordered,profile);
+          setResult(result);
+          router.push(`/result/${result.typeCode}`);
+        }catch{router.push('/diagnosis')}
+      },900);
+    }else setIndex(current=>current+1);
+  },[answer,answers,index,profile,q.id,router,setResult]);
+
+  useEffect(()=>{
+    const handleKey=(event:KeyboardEvent)=>{
+      const number=Number(event.key);
+      if(number>=1&&number<=4) choose(options[number-1][1]);
+    };
+    addEventListener('keydown',handleKey);
+    return()=>removeEventListener('keydown',handleKey);
+  },[choose]);
+
+  if(loading)return <main className="shell question"><p className="eyebrow">ANALYSIS IN PROGRESS</p><h1>あなたのヲタク生態を解析中</h1><p className="lead">愛の向かう先を計測<br/>現場行動パターンを照合<br/>ヲタクの業を抽出</p></main>;
+  return <main className="shell question"><p className="eyebrow">QUESTION {index+1} / 24</p><div className="progress"><b style={{width:`${((index+1)/24)*100}%`}}/></div><h1>{q.text}</h1><div className="answers">{options.map(([label,value],i)=><button className="answer" key={label} onClick={()=>choose(value)}><small>{i+1}</small>　{label}</button>)}</div><p><button className="button ghost" disabled={!index} onClick={()=>setIndex(current=>current-1)}>← 前の質問へ</button>　<Link href="/">診断を中断する</Link></p></main>;
+}
