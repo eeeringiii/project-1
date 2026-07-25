@@ -25,7 +25,7 @@ CPMT:{catchphrase:'「推しを迎えるためなら、初対面とも即交渉�
 CPMS:{catchphrase:'「推しの居場所は、私が一番きれいにする。」',habitat:'推し棚、祭壇、ディスプレイスペースの前。',mainFood:'アクスタ、ぬい、写真、統一された世界観。',habitPhrase:'「配置、ちょっと変えようかな。」',specialAbility:'普通のグッズを、一つの世界観として美しく並べ直す。',weakness:'日焼け、埃、傷、左右のズレ。',extremeBehavior:'グッズの収納ではなく、グッズに合わせて家具を買い替える。',top5:['推し棚の配置変更だけでかなり時間が溶ける','色味が合わない小物が気になって仕方ない','グッズのためのグッズを買う','写真を撮る前に数ミリ単位で位置を直す','新しいグッズが出ると「どこに置くか」まで考えて買う'],strengths:['世界観を作るセンス','物を大切に扱う力','好きを空間として表現する力'],sins:['グッズよりディスプレイ用品にお金がかかることがある','数ミリのズレが気になって撮影が終わらない','収納不足をグッズ過多ではなく家具不足と判断する'],karmaTagCandidates:['tag-6'],baseAbilities:{field:40,spending:88,evangelism:32,analysis:62,community:35,recognition:35,afterglow:72,archive:98}}
 };
 
-export const oshicoaTypes:OshicoaType[]=raw.map(([code,name,reading,_catchphrase,points],i)=>{
+export const oshicoaTypes:OshicoaType[]=raw.map(([code,name,reading,,points],i)=>{
   const chartBaseValues=Object.fromEntries(metrics.map((m,j)=>[m,45+((i*11+j*9)%42)])) as Record<ChartMetricId,number>;
   return {
     code,
