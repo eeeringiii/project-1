@@ -1,7 +1,7 @@
 // 「今日の推し活運勢」の決定論ロジック。
 // 日付（JST）×タイプコードをシードにするため、同じ日・同じタイプなら誰が引いても同じ結果になる。
 // ランダム性はなく、サーバーへ何も送らない（診断ロジックと同じ思想）。
-import { getType } from '@/data/types';
+import { getType, oshicoaTypes } from '@/data/types';
 import {
   LEVELS, fortuneCategories, luckyActions, luckyItems, luckyColors, typeLineTemplates,
   type FortuneColor, type FortuneLevel,
@@ -18,6 +18,8 @@ export interface Fortune {
   luckyAction: string;
   luckyItem: string;
   luckyColor: FortuneColor;
+  luckyTypeCode: string; // 今日のラッキー同担タイプ
+  luckyTypeName: string;
   typeCode?: string;
   typeName?: string;
   typeLine?: string;     // タイプ診断済みユーザー向けの導入文
@@ -42,11 +44,19 @@ function mulberry32(a: number): () => number {
 const pick = <T>(rng: () => number, arr: readonly T[]): T => arr[Math.floor(rng() * arr.length)] ?? arr[0];
 const tier = (s: number): 'high' | 'mid' | 'low' => (s >= 67 ? 'high' : s >= 34 ? 'mid' : 'low');
 
+const pad2 = (n: number) => String(n).padStart(2, '0');
+
 // UTC の Date から JST の日付キー（YYYY-MM-DD）を作る。
 export function toJstDateKey(d: Date = new Date()): string {
   const j = new Date(d.getTime() + 9 * 3600 * 1000);
-  const p = (n: number) => String(n).padStart(2, '0');
-  return `${j.getUTCFullYear()}-${p(j.getUTCMonth() + 1)}-${p(j.getUTCDate())}`;
+  return `${j.getUTCFullYear()}-${pad2(j.getUTCMonth() + 1)}-${pad2(j.getUTCDate())}`;
+}
+
+// 日付キーの前日を返す（前日比較用）。
+export function prevDateKey(dateKey: string): string {
+  const [y, m, d] = dateKey.split('-').map(Number);
+  const t = new Date(Date.UTC(y, m - 1, d) - 86400000);
+  return `${t.getUTCFullYear()}-${pad2(t.getUTCMonth() + 1)}-${pad2(t.getUTCDate())}`;
 }
 
 export function getFortune(opts: { date?: Date; dateKey?: string; typeCode?: string } = {}): Fortune {
@@ -65,6 +75,11 @@ export function getFortune(opts: { date?: Date; dateKey?: string; typeCode?: str
   const luckyItem = pick(rng, luckyItems);
   const luckyColor = pick(rng, luckyColors);
   const typeLine = type ? pick(rng, typeLineTemplates).replace('%s', type.name) : undefined;
+  // 今日のラッキー同担タイプ（自分自身は避ける）。
+  let luckyType = pick(rng, oshicoaTypes);
+  if (type && luckyType.code === type.code) {
+    luckyType = oshicoaTypes[(oshicoaTypes.indexOf(luckyType) + 1) % oshicoaTypes.length];
+  }
 
   const [y, m, d] = dateKey.split('-').map(Number);
   const wd = WEEKDAYS[new Date(Date.UTC(y, m - 1, d)).getUTCDay()];
@@ -73,6 +88,7 @@ export function getFortune(opts: { date?: Date; dateKey?: string; typeCode?: str
   return {
     dateKey, displayDate, score, level, headline, categories,
     luckyAction, luckyItem, luckyColor,
+    luckyTypeCode: luckyType.code, luckyTypeName: luckyType.name,
     typeCode: type?.code, typeName: type?.name, typeLine,
   };
 }
