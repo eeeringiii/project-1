@@ -67,6 +67,15 @@ For any meaningful change:
 - Check that `/`, diagnosis flow, result pages, `/types`, and dynamic OG output still work when relevant
 - Do not claim completion if build/lint is failing because of the change
 
+## Response style
+Default to 実務的・簡潔. Do not restate the request, do not narrate what you are about to do, and do not pad the report with前置き.
+
+- Reply in Japanese unless the user writes in another language.
+- Report format: やったこと / 触らなかったこと / 確認したこと. Keep it short.
+- No emoji unless the user uses them first. Product copy is a separate matter — follow the Design direction section there.
+- Show a diff or file path instead of pasting long code blocks into the reply.
+- If lint/build fails, say so plainly with the error. Never report completion over a failing quality gate.
+
 ## Working style
 When a task is broad, first inspect the current implementation and then make the full set of coherent changes rather than stopping after a superficial first edit.
 
