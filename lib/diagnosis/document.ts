@@ -8,6 +8,7 @@ export interface DiagnosisDocument {
   abilities: BaseAbilities;
   karmaTags: string[];
   rarity: number;
+  characterImage: string;
 }
 
 const toAbilities = (result: DiagnosisResult | undefined, type: OshicoaType): BaseAbilities => result ? {
@@ -20,6 +21,8 @@ const toAbilities = (result: DiagnosisResult | undefined, type: OshicoaType): Ba
   afterglow: result.chartScores.afterglow,
   archive: result.chartScores.archive,
 } : type.baseAbilities;
+
+const defaultCharacterPath = (type: OshicoaType) => `/characters/${type.code.toLowerCase()}.png`;
 
 export function createDiagnosisDocument(type: OshicoaType, result?: DiagnosisResult): DiagnosisDocument {
   const current = result?.typeCode === type.code ? result : undefined;
@@ -35,6 +38,7 @@ export function createDiagnosisDocument(type: OshicoaType, result?: DiagnosisRes
     abilities: toAbilities(current, type),
     karmaTags: (current?.tags.map(tag => tag.name) ?? candidateNames).slice(0, 3),
     rarity: Math.max(2, Math.min(5, Math.round(2 + distinctiveness / 15))),
+    characterImage: current?.characterImage ?? type.characterImage ?? defaultCharacterPath(type),
   };
 }
 

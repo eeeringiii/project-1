@@ -25,7 +25,10 @@ export default function ResultClient({type}:{type:OshicoaType}){
     <section className="resultIntro shell">
       <p className="eyebrow">YOUR OTAKU ECOLOGY</p>
       <p>{document.oshiName?`${document.oshiName}を推しているときのあなたは`:'あなたのヲタク生態は'}</p>
-      <div className="resultIdentity"><div className="miniCharacter" aria-hidden="true">♡<b>{type.code}</b></div><div><h1>{type.name}</h1><p className="resultCode">{type.code}　生態レア度 {'★'.repeat(document.rarity)}{'☆'.repeat(5-document.rarity)}</p><p className="catch">{type.catchphrase}</p></div></div>
+      <div className="resultIdentity">
+        <div aria-label={`${type.name}のキャラクター`} style={{backgroundImage:`url(${document.characterImage})`,width:'min(34vw,240px)',aspectRatio:'4 / 5',flex:'0 0 auto',backgroundSize:'contain',backgroundRepeat:'no-repeat',backgroundPosition:'center bottom'}} />
+        <div><h1>{type.name}</h1><p className="resultCode">{type.code}　生態レア度 {'★'.repeat(document.rarity)}{'☆'.repeat(5-document.rarity)}</p><p className="catch">{type.catchphrase}</p></div>
+      </div>
       <div className="resultTags">{document.karmaTags.map(tag=><span className="tag" key={tag}>#{tag}</span>)}</div>
       <Share type={type} tags={current?.tags??[]} name={document.oshiName}/>
     </section>
