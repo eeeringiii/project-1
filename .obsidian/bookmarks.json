@@ -1,0 +1,29 @@
+{
+  "items": [
+    {
+      "type": "file",
+      "path": "秘書用/ホーム.md",
+      "title": "🏠 ホーム"
+    },
+    {
+      "type": "folder",
+      "path": "秘書用/日報",
+      "title": "📓 日報"
+    },
+    {
+      "type": "folder",
+      "path": "秘書用/todo",
+      "title": "✅ todo"
+    },
+    {
+      "type": "folder",
+      "path": "秘書用/アイデア",
+      "title": "💡 アイデア"
+    },
+    {
+      "type": "file",
+      "path": "秘書用/Obsidian接続ガイド.md",
+      "title": "🔌 接続ガイド"
+    }
+  ]
+}

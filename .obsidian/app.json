@@ -1,0 +1,30 @@
+{
+  "livePreview": true,
+  "defaultViewMode": "source",
+  "readableLineLength": true,
+  "strictLineBreaks": false,
+  "showLineNumber": false,
+  "spellcheck": false,
+  "showUnsupportedFiles": false,
+  "alwaysUpdateLinks": true,
+  "newLinkFormat": "absolute",
+  "useMarkdownLinks": false,
+  "newFileLocation": "folder",
+  "newFileFolderPath": "秘書用/アイデア",
+  "attachmentFolderPath": "秘書用/添付",
+  "trashOption": "local",
+  "promptDelete": true,
+  "userIgnoreFilters": [
+    ".claude/",
+    ".next/",
+    "app/",
+    "components/",
+    "data/",
+    "lib/",
+    "node_modules/",
+    "public/",
+    "sns-manager/",
+    "stores/",
+    "taisei-site/"
+  ]
+}

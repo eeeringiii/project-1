@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# obsidian（端末ごとに変わる状態はコミットしない。設定本体は共有する）
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+.obsidian/plugins/
+.obsidian/themes/
+.obsidian/snippets/
+.trash/

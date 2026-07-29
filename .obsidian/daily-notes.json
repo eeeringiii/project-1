@@ -1,0 +1,6 @@
+{
+  "folder": "秘書用/日報",
+  "format": "YYYY-MM-DD",
+  "template": "秘書用/テンプレート/日報テンプレート",
+  "autorun": false
+}
