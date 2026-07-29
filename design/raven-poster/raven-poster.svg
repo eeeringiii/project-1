@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  RAVEN / ONE MAN LIVE poster  -  Illustrator編集可能ハイブリッドSVG
+  - 文字はすべて <text>（アウトライン化なし）
+  - 罫線・赤ライン・装飾・ブラシはすべてベクターパス
+  - 写真のみリンク画像 + 編集可能クリッピングマスク
+  - レイヤー名 / オブジェクト名は data-name（日本語）に格納
+-->
+<svg version="1.1"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     x="0px" y="0px"
+     width="1043px" height="1500px"
+     viewBox="0 0 1043 1500"
+     id="RAVEN_ONE_MAN_LIVE" data-name="RAVEN ONE MAN LIVE"
+     xml:space="preserve">
+
+  <defs>
+    <!-- ================= クリッピングマスク（Illustratorで編集可能） ================= -->
+    <clipPath id="mask_shashin_obi" data-name="写真帯マスク">
+      <rect id="mask_shashin_obi_kei" data-name="写真帯マスク形状" x="0" y="452" width="1043" height="836"/>
+    </clipPath>
+    <clipPath id="mask_haikei_shashin" data-name="背景写真マスク">
+      <rect id="mask_haikei_shashin_kei" data-name="背景写真マスク形状" x="0" y="452" width="1043" height="836"/>
+    </clipPath>
+    <clipPath id="mask_jinbutsu" data-name="人物マスク">
+      <rect id="mask_jinbutsu_kei" data-name="人物マスク形状" x="0" y="452" width="1043" height="836"/>
+    </clipPath>
+
+    <!-- ================= 影用グラデーション ================= -->
+    <linearGradient id="grad_kage_shita" data-name="影グラデ下" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#000000" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="grad_kage_ue" data-name="影グラデ上" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#000000" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- ================= ノイズフィルタ ================= -->
+    <filter id="filter_noise" data-name="ノイズ" x="0" y="0" width="1043" height="1500"
+            filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch" result="noise"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+
+    <!-- 写真リンク切れ時のプレースホルダ用ハッチ -->
+    <pattern id="pattern_placeholder" data-name="写真プレースホルダ柄"
+             patternUnits="userSpaceOnUse" width="28" height="28" patternTransform="rotate(45)">
+      <rect width="28" height="28" fill="#A81F1B"/>
+      <rect width="14" height="28" fill="#96201C"/>
+    </pattern>
+  </defs>
+
+  <!-- =====================================================================
+       レイヤー 1 : 背景
+       ===================================================================== -->
+  <g id="L_haikei" data-name="背景">
+
+    <!-- ========= 白背景 ========= -->
+    <g id="L_shirohaikei" data-name="白背景">
+      <rect id="shiro_base"   data-name="白ベース"       x="0" y="0"    width="1043" height="1500" fill="#FFFFFF"/>
+      <rect id="shiro_header" data-name="上部白ブロック"  x="0" y="0"    width="1043" height="452"  fill="#FFFFFF"/>
+      <rect id="shiro_footer" data-name="下部白ブロック"  x="0" y="1288" width="1043" height="212"  fill="#FFFFFF"/>
+    </g>
+
+    <!-- ========= 赤ライン ========= -->
+    <g id="L_akaline" data-name="赤ライン">
+      <line id="aka_migiue"   data-name="赤ライン_右上"
+            x1="1017.5" y1="104"  x2="1017.5" y2="452"
+            fill="none" stroke="#CE1126" stroke-width="7" stroke-linecap="butt"/>
+      <line id="aka_hidarishita" data-name="赤ライン_左下"
+            x1="38.5" y1="1288" x2="38.5" y2="1432"
+            fill="none" stroke="#CE1126" stroke-width="3" stroke-linecap="butt"/>
+    </g>
+
+    <!-- ========= 装飾（罫線・区切り線） ========= -->
+    <g id="L_soushoku" data-name="装飾">
+      <line id="keisen_onemanlive" data-name="罫線_ONE MAN LIVE"
+            x1="300" y1="68" x2="862" y2="68"
+            fill="none" stroke="#111111" stroke-width="1.6"/>
+      <line id="kugiri_hidari" data-name="区切り線_左"
+            x1="120" y1="288" x2="120" y2="410"
+            fill="none" stroke="#111111" stroke-width="1.6"/>
+      <line id="kugiri_migi" data-name="区切り線_右"
+            x1="548" y1="292" x2="548" y2="412"
+            fill="none" stroke="#111111" stroke-width="1.6"/>
+      <line id="keisen_at" data-name="罫線_AT"
+            x1="640" y1="344" x2="868" y2="344"
+            fill="none" stroke="#111111" stroke-width="1.6"/>
+      <line id="keisen_kabu" data-name="罫線_下部"
+            x1="122" y1="1447" x2="1005" y2="1447"
+            fill="none" stroke="#111111" stroke-width="1.6"/>
+    </g>
+
+  </g>
+
+  <!-- =====================================================================
+       レイヤー 2 : 写真   （リンク画像 + 編集可能クリッピングマスク）
+       images/ フォルダに写真を置いてください:
+         背景写真 : images/raven-bg.jpg      （ダイナー背景・高解像度）
+         人物     : images/raven-members.png （人物切り抜き・背景透過PNG）
+       ===================================================================== -->
+  <g id="L_shashin" data-name="写真">
+
+    <!-- ========= 背景写真 ========= -->
+    <g id="L_haikei_shashin" data-name="背景写真" clip-path="url(#mask_haikei_shashin)">
+      <image id="haikei_shashin_gazou" data-name="背景写真_画像"
+             x="0" y="452" width="1043" height="836"
+             preserveAspectRatio="xMidYMid slice"
+             xlink:href="images/raven-bg.jpg" href="images/raven-bg.jpg"/>
+    </g>
+
+    <!-- ========= 人物 ========= -->
+    <g id="L_jinbutsu" data-name="人物" clip-path="url(#mask_jinbutsu)">
+      <image id="jinbutsu_gazou" data-name="人物_画像"
+             x="18" y="466" width="1025" height="822"
+             preserveAspectRatio="xMidYMax meet"
+             xlink:href="images/raven-members.png" href="images/raven-members.png"/>
+    </g>
+
+    <!-- ========= 写真差し替えガイド（写真をリンクしたらこのグループは削除） ========= -->
+    <g id="L_sashikae_guide" data-name="写真差し替えガイド" clip-path="url(#mask_shashin_obi)">
+      <rect id="guide_men" data-name="ガイド面"
+            x="0" y="452" width="1043" height="836" fill="url(#pattern_placeholder)"/>
+      <text id="guide_txt_1" data-name="ガイド文字1"
+            x="521.5" y="846" text-anchor="middle"
+            font-family="'Hiragino Sans', 'Noto Sans JP', sans-serif"
+            font-size="34" font-weight="600" letter-spacing="2"
+            fill="#FFFFFF" fill-opacity="0.9">ここに写真をリンク配置</text>
+      <text id="guide_txt_2" data-name="ガイド文字2"
+            x="521.5" y="896" text-anchor="middle"
+            font-family="'Hiragino Sans', 'Noto Sans JP', sans-serif"
+            font-size="22" letter-spacing="1"
+            fill="#FFFFFF" fill-opacity="0.75">images/raven-bg.jpg ／ images/raven-members.png</text>
+      <text id="guide_txt_3" data-name="ガイド文字3"
+            x="521.5" y="938" text-anchor="middle"
+            font-family="'Hiragino Sans', 'Noto Sans JP', sans-serif"
+            font-size="22" letter-spacing="1"
+            fill="#FFFFFF" fill-opacity="0.75">配置後この「写真差し替えガイド」レイヤーを削除</text>
+    </g>
+
+  </g>
+
+  <!-- =====================================================================
+       レイヤー 3 : 装飾（前面）  写真の上に乗る装飾
+       ===================================================================== -->
+  <g id="L_soushoku_zenmen" data-name="装飾（前面）" clip-path="url(#mask_shashin_obi)">
+    <rect id="kiniro_bar" data-name="金色バー"
+          x="0" y="770" width="58" height="390" fill="#E2A612"/>
+    <text id="tate_raven" data-name="縦組み_RAVEN"
+          transform="translate(100 1285) rotate(-90)"
+          x="0" y="0"
+          font-family="Didot, 'Bodoni 72', 'Hiragino Mincho ProN', 'Yu Mincho', 'Noto Serif JP', serif"
+          font-size="140" letter-spacing="2"
+          fill="#FFFFFF" fill-opacity="0.88">【RAVEN】</text>
+  </g>
+
+  <!-- =====================================================================
+       レイヤー 4 : 文字   （すべて編集可能な SVG テキスト / アウトライン化なし）
+       ===================================================================== -->
+  <g id="L_moji" data-name="文字">
+
+    <g id="L_ONE_MAN_LIVE" data-name="ONE MAN LIVE">
+      <text id="txt_onemanlive" data-name="ONE MAN LIVE"
+            x="48" y="76"
+            font-family="'Helvetica Neue', Helvetica, Arial, 'Hiragino Sans', 'Noto Sans JP', sans-serif"
+            font-size="24" font-weight="600" letter-spacing="4.5"
+            fill="#111111">ONE MAN LIVE</text>
+    </g>
+
+    <g id="L_RAVEN" data-name="RAVEN">
+      <text id="txt_raven" data-name="【RAVEN】"
+            x="40" y="248"
+            font-family="Didot, 'Bodoni 72', 'Hiragino Mincho ProN', 'Yu Mincho', 'Noto Serif JP', serif"
+            font-size="180" letter-spacing="0"
+            fill="#111111">【RAVEN】</text>
+    </g>
+
+    <g id="L_2026" data-name="2026">
+      <text id="txt_2026" data-name="2026"
+            transform="translate(84 396) rotate(-90)"
+            x="0" y="0"
+            font-family="Didot, 'Bodoni 72', 'Hiragino Mincho ProN', 'Yu Mincho', 'Noto Serif JP', serif"
+            font-size="30" letter-spacing="5"
+            fill="#111111">2026</text>
+    </g>
+
+    <g id="L_12_21" data-name="12.21">
+      <text id="txt_12_21" data-name="12.21"
+            x="148" y="402"
+            font-family="Didot, 'Bodoni 72', 'Hiragino Mincho ProN', 'Yu Mincho', 'Noto Serif JP', serif"
+            font-size="148" letter-spacing="0"
+            fill="#111111">12.21</text>
+    </g>
+
+    <g id="L_AT" data-name="AT">
+      <text id="txt_at" data-name="AT"
+            x="583" y="352"
+            font-family="'Helvetica Neue', Helvetica, Arial, 'Hiragino Sans', 'Noto Sans JP', sans-serif"
+            font-size="22" font-weight="600" letter-spacing="5"
+            fill="#111111">AT</text>
+    </g>
+
+    <g id="L_akabane" data-name="赤羽ReNY alpha">
+      <text id="txt_akabane" data-name="赤羽ReNY alpha"
+            x="575" y="400"
+            font-family="'Hiragino Mincho ProN', 'Yu Mincho', 'Noto Serif JP', 'Times New Roman', serif"
+            font-size="40" letter-spacing="1.5"
+            fill="#111111">赤羽ReNY alpha</text>
+    </g>
+
+    <g id="L_onemanlive_kettei" data-name="ワンマンライブ決定！！">
+      <text id="txt_onemanlive_kettei" data-name="ワンマンライブ決定！！"
+            x="82" y="1390"
+            font-family="'Hiragino Mincho ProN', 'Yu Mincho', 'Noto Serif JP', serif"
+            font-size="86" font-weight="700" letter-spacing="-3"
+            fill="#111111">ワンマンライブ決定！！</text>
+    </g>
+
+  </g>
+
+  <!-- =====================================================================
+       レイヤー 5 : 効果
+       ===================================================================== -->
+  <g id="L_kouka" data-name="効果">
+
+    <!-- ========= 影 ========= -->
+    <g id="L_kage" data-name="影">
+      <rect id="kage_shashin_ue"   data-name="影_写真上"
+            x="0" y="428"  width="1043" height="24" fill="url(#grad_kage_ue)"/>
+      <rect id="kage_shashin_shita" data-name="影_写真下"
+            x="0" y="1288" width="1043" height="26" fill="url(#grad_kage_shita)"/>
+    </g>
+
+    <!-- ========= ブラシ（黒いブラシ風テクスチャ） ========= -->
+    <g id="L_brush" data-name="ブラシ">
+      <g id="brush_migishita" data-name="ブラシ_右下">
+        <path id="brush_wash" data-name="ブラシ_ベース"
+              d="M1043 1500 L1043 1386 L1015 1394 L991 1411 L968 1406 L943 1423 L921 1419 L898 1439 L886 1463 L898 1481 L889 1500 Z"
+              fill="#3D3D3D" fill-opacity="0.13"/>
+        <path id="brush_suji_01" data-name="ブラシ_筋01" d="M1034.1 1496.2 L1096.2 1476.5 L1094.1 1474.2 L1033.1 1491.0 Z" fill="#1F1F1F" fill-opacity="0.324"/>
+        <path id="brush_suji_02" data-name="ブラシ_筋02" d="M881.6 1381.2 L907.0 1369.7 L907.6 1367.1 L880.5 1377.9 Z" fill="#3A3A3A" fill-opacity="0.248"/>
+        <path id="brush_suji_03" data-name="ブラシ_筋03" d="M1015.9 1475.2 L1052.0 1459.7 L1051.8 1459.4 L1014.9 1474.8 Z" fill="#4A4A4A" fill-opacity="0.19"/>
+        <path id="brush_suji_04" data-name="ブラシ_筋04" d="M925.9 1406.1 L956.0 1395.0 L954.4 1389.6 L924.6 1401.0 Z" fill="#2B2B2B" fill-opacity="0.288"/>
+        <path id="brush_suji_05" data-name="ブラシ_筋05" d="M985.6 1451.8 L1031.5 1435.1 L1031.2 1432.4 L986.3 1447.9 Z" fill="#2B2B2B" fill-opacity="0.234"/>
+        <path id="brush_suji_06" data-name="ブラシ_筋06" d="M991.9 1468.0 L1041.9 1456.0 L1041.2 1453.6 L992.4 1463.8 Z" fill="#1F1F1F" fill-opacity="0.28"/>
+        <path id="brush_suji_07" data-name="ブラシ_筋07" d="M897.3 1388.4 L947.7 1367.7 L946.1 1366.3 L895.7 1386.4 Z" fill="#2B2B2B" fill-opacity="0.294"/>
+        <path id="brush_suji_08" data-name="ブラシ_筋08" d="M937.8 1417.5 L972.0 1405.8 L971.1 1403.4 L935.0 1414.1 Z" fill="#4A4A4A" fill-opacity="0.301"/>
+        <path id="brush_suji_09" data-name="ブラシ_筋09" d="M894.4 1384.1 L930.2 1371.6 L930.2 1368.1 L891.2 1381.0 Z" fill="#4A4A4A" fill-opacity="0.215"/>
+        <path id="brush_suji_10" data-name="ブラシ_筋10" d="M971.9 1444.7 L1026.6 1424.9 L1024.5 1422.2 L968.2 1437.1 Z" fill="#2B2B2B" fill-opacity="0.252"/>
+        <path id="brush_suji_11" data-name="ブラシ_筋11" d="M912.8 1403.7 L944.9 1394.3 L943.7 1392.5 L911.2 1401.6 Z" fill="#2B2B2B" fill-opacity="0.249"/>
+        <path id="brush_suji_12" data-name="ブラシ_筋12" d="M952.3 1435.3 L989.4 1426.0 L987.1 1423.2 L950.9 1430.8 Z" fill="#3A3A3A" fill-opacity="0.335"/>
+        <path id="brush_suji_13" data-name="ブラシ_筋13" d="M1003.9 1463.2 L1077.5 1426.7 L1077.0 1427.4 L1001.2 1461.2 Z" fill="#3A3A3A" fill-opacity="0.22"/>
+        <path id="brush_suji_14" data-name="ブラシ_筋14" d="M1002.9 1461.9 L1063.7 1435.0 L1064.0 1432.3 L999.8 1460.1 Z" fill="#3A3A3A" fill-opacity="0.37"/>
+        <path id="brush_suji_15" data-name="ブラシ_筋15" d="M1019.4 1483.8 L1093.1 1453.6 L1092.4 1452.4 L1018.4 1476.4 Z" fill="#3A3A3A" fill-opacity="0.269"/>
+        <path id="brush_suji_16" data-name="ブラシ_筋16" d="M916.9 1404.6 L974.9 1389.0 L974.7 1388.0 L915.3 1400.5 Z" fill="#4A4A4A" fill-opacity="0.115"/>
+        <path id="brush_suji_17" data-name="ブラシ_筋17" d="M1003.4 1484.9 L1076.5 1451.5 L1075.1 1447.2 L1001.4 1479.9 Z" fill="#2B2B2B" fill-opacity="0.277"/>
+        <path id="brush_suji_18" data-name="ブラシ_筋18" d="M1028.1 1499.9 L1104.8 1460.9 L1105.1 1458.7 L1026.0 1496.7 Z" fill="#3A3A3A" fill-opacity="0.49"/>
+        <path id="brush_suji_19" data-name="ブラシ_筋19" d="M1007.4 1475.5 L1046.9 1454.7 L1045.6 1453.7 L1006.8 1469.4 Z" fill="#4A4A4A" fill-opacity="0.229"/>
+        <path id="brush_suji_20" data-name="ブラシ_筋20" d="M1022.6 1498.0 L1044.2 1492.9 L1042.3 1488.4 L1022.2 1489.3 Z" fill="#2B2B2B" fill-opacity="0.451"/>
+        <path id="brush_suji_21" data-name="ブラシ_筋21" d="M954.9 1433.4 L991.3 1424.0 L990.5 1421.0 L954.3 1425.8 Z" fill="#3A3A3A" fill-opacity="0.347"/>
+        <path id="brush_suji_22" data-name="ブラシ_筋22" d="M1016.0 1478.2 L1081.7 1449.8 L1082.1 1447.7 L1015.3 1473.5 Z" fill="#1F1F1F" fill-opacity="0.296"/>
+        <path id="brush_suji_23" data-name="ブラシ_筋23" d="M1017.5 1467.6 L1087.3 1437.5 L1086.1 1433.6 L1014.1 1462.2 Z" fill="#3A3A3A" fill-opacity="0.271"/>
+        <path id="brush_suji_24" data-name="ブラシ_筋24" d="M946.2 1435.0 L989.4 1414.0 L989.2 1411.5 L943.8 1431.6 Z" fill="#2B2B2B" fill-opacity="0.184"/>
+        <path id="brush_suji_25" data-name="ブラシ_筋25" d="M1023.9 1475.1 L1075.6 1459.9 L1073.1 1458.9 L1021.9 1472.9 Z" fill="#1F1F1F" fill-opacity="0.35"/>
+        <path id="brush_suji_26" data-name="ブラシ_筋26" d="M914.0 1412.7 L963.6 1392.0 L963.0 1388.8 L913.2 1408.9 Z" fill="#3A3A3A" fill-opacity="0.328"/>
+        <path id="brush_suji_27" data-name="ブラシ_筋27" d="M903.4 1405.0 L944.0 1388.2 L942.5 1383.6 L901.2 1401.5 Z" fill="#1F1F1F" fill-opacity="0.242"/>
+        <path id="brush_suji_28" data-name="ブラシ_筋28" d="M895.1 1396.8 L928.9 1389.5 L928.4 1387.0 L893.9 1396.2 Z" fill="#1F1F1F" fill-opacity="0.125"/>
+        <path id="brush_suji_29" data-name="ブラシ_筋29" d="M1033.1 1494.4 L1059.0 1484.9 L1058.0 1483.6 L1033.5 1491.3 Z" fill="#2B2B2B" fill-opacity="0.29"/>
+        <path id="brush_suji_30" data-name="ブラシ_筋30" d="M1003.8 1474.8 L1057.6 1456.0 L1054.2 1450.9 L1001.2 1468.8 Z" fill="#4A4A4A" fill-opacity="0.461"/>
+        <path id="brush_suji_31" data-name="ブラシ_筋31" d="M976.4 1454.2 L1034.3 1432.7 L1035.0 1429.5 L974.2 1451.0 Z" fill="#4A4A4A" fill-opacity="0.311"/>
+        <path id="brush_suji_32" data-name="ブラシ_筋32" d="M898.0 1400.2 L923.1 1387.4 L921.1 1385.0 L895.0 1395.4 Z" fill="#2B2B2B" fill-opacity="0.273"/>
+        <path id="brush_suji_33" data-name="ブラシ_筋33" d="M959.4 1430.2 L1000.6 1415.0 L999.6 1413.8 L956.4 1421.6 Z" fill="#2B2B2B" fill-opacity="0.186"/>
+        <path id="brush_suji_34" data-name="ブラシ_筋34" d="M1033.0 1489.2 L1092.9 1460.8 L1090.0 1458.5 L1029.6 1482.2 Z" fill="#2B2B2B" fill-opacity="0.28"/>
+        <path id="brush_suji_35" data-name="ブラシ_筋35" d="M1029.5 1503.1 L1082.6 1492.3 L1080.6 1486.7 L1026.2 1496.0 Z" fill="#1F1F1F" fill-opacity="0.297"/>
+        <path id="brush_suji_36" data-name="ブラシ_筋36" d="M1027.7 1478.1 L1085.4 1452.7 L1083.8 1449.6 L1025.7 1475.1 Z" fill="#3A3A3A" fill-opacity="0.496"/>
+        <path id="brush_tsubu_01" data-name="ブラシ_粒01" d="M1022.4 1483.9 L1031.6 1476.6 L1029.5 1474.1 L1020.4 1482.9 Z" fill="#1F1F1F" fill-opacity="0.411"/>
+        <path id="brush_tsubu_02" data-name="ブラシ_粒02" d="M883.9 1384.3 L889.4 1384.5 L889.8 1382.0 L884.3 1381.6 Z" fill="#1F1F1F" fill-opacity="0.383"/>
+        <path id="brush_tsubu_03" data-name="ブラシ_粒03" d="M1009.9 1488.2 L1018.7 1484.2 L1017.7 1481.5 L1008.7 1484.6 Z" fill="#1F1F1F" fill-opacity="0.235"/>
+        <path id="brush_tsubu_04" data-name="ブラシ_粒04" d="M898.2 1408.7 L905.7 1399.8 L905.3 1397.7 L896.7 1406.1 Z" fill="#1F1F1F" fill-opacity="0.263"/>
+        <path id="brush_tsubu_05" data-name="ブラシ_粒05" d="M988.8 1464.0 L997.5 1460.8 L997.0 1458.6 L988.7 1461.1 Z" fill="#1F1F1F" fill-opacity="0.245"/>
+        <path id="brush_tsubu_06" data-name="ブラシ_粒06" d="M974.9 1457.1 L987.3 1458.0 L988.4 1456.9 L975.0 1455.2 Z" fill="#1F1F1F" fill-opacity="0.358"/>
+        <path id="brush_tsubu_07" data-name="ブラシ_粒07" d="M1011.4 1474.3 L1015.6 1469.4 L1014.0 1468.6 L1009.3 1472.1 Z" fill="#1F1F1F" fill-opacity="0.397"/>
+        <path id="brush_tsubu_08" data-name="ブラシ_粒08" d="M1020.6 1476.1 L1029.2 1467.8 L1029.2 1466.0 L1019.7 1475.1 Z" fill="#1F1F1F" fill-opacity="0.265"/>
+        <path id="brush_tsubu_09" data-name="ブラシ_粒09" d="M936.2 1427.6 L943.9 1421.1 L943.6 1420.9 L935.2 1426.1 Z" fill="#1F1F1F" fill-opacity="0.252"/>
+        <path id="brush_tsubu_10" data-name="ブラシ_粒10" d="M982.5 1449.6 L992.0 1445.2 L991.8 1444.4 L981.9 1447.4 Z" fill="#1F1F1F" fill-opacity="0.38"/>
+        <path id="brush_tsubu_11" data-name="ブラシ_粒11" d="M1015.7 1472.9 L1022.0 1471.8 L1021.7 1470.6 L1015.4 1472.2 Z" fill="#1F1F1F" fill-opacity="0.232"/>
+        <path id="brush_tsubu_12" data-name="ブラシ_粒12" d="M873.2 1372.7 L883.4 1367.2 L882.2 1366.7 L872.2 1370.4 Z" fill="#1F1F1F" fill-opacity="0.329"/>
+        <path id="brush_tsubu_13" data-name="ブラシ_粒13" d="M892.4 1390.6 L897.1 1386.7 L896.2 1385.7 L891.0 1388.2 Z" fill="#1F1F1F" fill-opacity="0.413"/>
+        <path id="brush_tsubu_14" data-name="ブラシ_粒14" d="M903.1 1409.0 L911.8 1405.1 L910.5 1402.7 L901.2 1407.8 Z" fill="#1F1F1F" fill-opacity="0.288"/>
+        <path id="brush_tsubu_15" data-name="ブラシ_粒15" d="M947.8 1427.9 L958.3 1427.9 L957.4 1426.0 L947.0 1425.8 Z" fill="#1F1F1F" fill-opacity="0.22"/>
+        <path id="brush_tsubu_16" data-name="ブラシ_粒16" d="M1015.7 1482.4 L1023.5 1479.1 L1022.7 1476.9 L1014.0 1479.1 Z" fill="#1F1F1F" fill-opacity="0.426"/>
+        <path id="brush_tsubu_17" data-name="ブラシ_粒17" d="M965.9 1457.5 L970.0 1452.9 L968.7 1453.0 L963.3 1455.9 Z" fill="#1F1F1F" fill-opacity="0.275"/>
+        <path id="brush_tsubu_18" data-name="ブラシ_粒18" d="M1003.0 1477.0 L1014.4 1476.7 L1015.3 1474.8 L1003.0 1473.6 Z" fill="#1F1F1F" fill-opacity="0.274"/>
+        <path id="brush_tsubu_19" data-name="ブラシ_粒19" d="M1000.0 1464.3 L1010.3 1460.4 L1009.0 1458.7 L1000.2 1462.8 Z" fill="#1F1F1F" fill-opacity="0.477"/>
+        <path id="brush_tsubu_20" data-name="ブラシ_粒20" d="M871.2 1385.0 L878.6 1381.7 L878.1 1381.0 L871.7 1382.4 Z" fill="#1F1F1F" fill-opacity="0.479"/>
+      </g>
+      <g id="brush_shashin_fuchi" data-name="ブラシ_写真フチ">
+        <path id="brush_fuchi_shita" data-name="ブラシ_写真下端"
+              d="M0 1288 L1043 1288 L1043 1281 L962 1286 L880 1279 L792 1287 L706 1280 L618 1286 L530 1279 L442 1287 L354 1280 L266 1286 L178 1280 L90 1287 L0 1281 Z"
+              fill="#111111" fill-opacity="0.16"/>
+        <path id="brush_fuchi_ue" data-name="ブラシ_写真上端"
+              d="M0 452 L1043 452 L1043 458 L950 453 L858 459 L762 452 L668 458 L572 452 L478 459 L384 453 L288 459 L192 452 L96 458 L0 453 Z"
+              fill="#111111" fill-opacity="0.12"/>
+      </g>
+    </g>
+
+    <!-- ========= ノイズ ========= -->
+    <g id="L_noise" data-name="ノイズ" style="mix-blend-mode:multiply">
+      <rect id="noise_men" data-name="ノイズ面"
+            x="0" y="0" width="1043" height="1500"
+            fill="#FFFFFF" filter="url(#filter_noise)" opacity="0.045"/>
+    </g>
+
+  </g>
+
+</svg>
