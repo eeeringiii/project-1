@@ -28,23 +28,25 @@ export default async function FortunePage({ searchParams }: { searchParams: Prom
   const delta = f.score - yesterday.score;
   const trend = delta > 0 ? `▲ 昨日より+${delta}` : delta < 0 ? `▼ 昨日より${delta}` : '→ 昨日と同じ';
   const top = [...f.categories].sort((a, b) => b.score - a.score)[0];
+  const chip: Record<string, string> = {
+    大吉: 'var(--pink-soft)', 中吉: 'var(--grape-soft)', 小吉: 'var(--mint-soft)', 吉: 'var(--butter-soft)', 末吉: 'var(--grape-soft)',
+  };
 
   return (
-    <main>
-      <section className="resultHero">
-        <div className="shell">
-          <p className="eyebrow">TODAY&apos;S OSHI FORTUNE / {f.dateKey}</p>
-          <p>{f.displayDate}</p>
-          {f.typeLine && <p className="catch">{f.typeLine}</p>}
-          <div className="code" style={{ color: f.level.tone }}>{f.level.emoji} {f.level.name}</div>
-          <h1>{f.headline}</h1>
-          <p className="catch">総合スコア {f.score} / 100　<span style={{ color: delta > 0 ? '#86efac' : delta < 0 ? '#fca5a5' : '#d4d0dd' }}>{trend}</span></p>
+    <main className="resultPage">
+      <section className="typeHero shell" style={{ ['--chip' as string]: chip[f.level.name] ?? 'var(--grape-soft)' }}>
+        <p className="code">今日の推し活運勢 ・ {f.displayDate}</p>
+        {f.typeLine && <p style={{ color: 'var(--grape)', fontWeight: 800, fontSize: 14, margin: '6px 0 0' }}>{f.typeLine}</p>}
+        <h1>{f.level.emoji} {f.level.name}</h1>
+        <p className="catch">{f.headline}</p>
+        <p className="note"><span>総合スコア {f.score} / 100</span><span>{trend}</span></p>
+        <div style={{ marginTop: 16 }}>
           <FortuneShare
             level={f.level.name} headline={f.headline}
             topCategory={top.label} luckyAction={f.luckyAction} typeCode={f.typeCode}
           />
-          <FortunePersonalize activeTypeCode={f.typeCode} />
         </div>
+        <FortunePersonalize activeTypeCode={f.typeCode} />
       </section>
 
       <div className="shell resultGrid">
