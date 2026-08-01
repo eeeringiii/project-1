@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { OfferCta } from '@/components/OfferCta';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { DiagnosisSheet, SquareShareCard, StoryShareCard, abilityKeys, abilityLabels } from '@/components/DiagnosisArtwork';
 import { Share } from '@/components/Share';
@@ -77,6 +78,7 @@ export default function ResultClient({type}:{type:OshicoaType}){
       <aside className="abilityCard"><p className="eyebrow">ABILITY PROFILE</p><h2>ヲタク能力</h2>{abilityKeys.map(key=><div className="abilityRow" key={key}><div><span>{abilityLabels[key]}</span><b>{document.abilities[key]}</b></div><progress max="100" value={document.abilities[key]} aria-label={`${abilityLabels[key]} ${document.abilities[key]}点`}/></div>)}</aside>
       <article className="profileCard"><p className="eyebrow">TOP 5</p><h2>この生態あるある</h2><ol>{type.top5.map(item=><li key={item}>{item}</li>)}</ol><h2>強み</h2><ul>{type.strengths.map(item=><li key={item}>{item}</li>)}</ul><h2>愛おしい業</h2><ul>{type.sins.map(item=><li key={item}>{item}</li>)}</ul></article>
       <aside className="profileCard"><p className="eyebrow">COMPATIBILITY</p><h2>相性がよい生態</h2><p><Link href={`/types/${type.compatibility.bestTypeCode}`}>{getCompatibilityName(type)}</Link> — {type.compatibility.description}</p>{current&&<div className="phaseNote"><b>現在の関係フェーズ：{current.phase.name}</b><p>{current.phase.description}<br/>{current.phase.advice}</p></div>}<Link className="button" href="/diagnosis" onClick={()=>reset(true)}>もう一度診断する</Link></aside>
+      <OfferCta type={type} placement="result"/>
     </section>
   </main>
 }

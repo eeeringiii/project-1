@@ -1,1 +1,11 @@
-import type {MetadataRoute}from'next';import {oshicoaTypes}from'@/data/types';export default function sitemap():MetadataRoute.Sitemap{const base=process.env.NEXT_PUBLIC_SITE_URL||'https://oshicoa16.example.com';return ['','/diagnosis','/types','/about','/privacy','/terms','/compatibility'].map(url=>({url:base+url,lastModified:new Date()})).concat(oshicoaTypes.map(t=>({url:`${base}/types/${t.code}`,lastModified:new Date()})))}
+import type { MetadataRoute } from 'next';
+import { oshicoaTypes } from '@/data/types';
+import { SITE_URL } from '@/lib/site';
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  const staticPaths = ['', '/diagnosis', '/types', '/about', '/privacy', '/terms', '/compatibility'];
+  return [
+    ...staticPaths.map(path => ({ url: SITE_URL + path, lastModified: new Date() })),
+    ...oshicoaTypes.map(type => ({ url: `${SITE_URL}/types/${type.code}`, lastModified: new Date() })),
+  ];
+}

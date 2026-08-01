@@ -373,6 +373,17 @@ main h1{margin:4px 0 14px}
 .ctaBand h2{font-size:clamp(24px,6vw,38px);margin:8px 0 12px}
 .ctaBand p{color:var(--ink-soft)}
 
+/* 有料コンテンツへの導線。周りのカードに埋もれないよう、色面で1段強くする。 */
+.offerCta{
+  background:linear-gradient(160deg,var(--grape-soft),var(--milk));
+  border:2px solid var(--outline);border-radius:28px;
+  padding:26px;box-shadow:var(--pop);
+}
+.offerCta h2{font-size:clamp(20px,4.5vw,26px);margin:6px 0 12px;line-height:1.5}
+.offerCta p{color:var(--ink-soft);line-height:1.9}
+.offerCta .button{margin-top:18px}
+.offerPrice{margin-top:12px;font-size:13px;font-weight:800;color:var(--ink-soft)}
+
 /* ---------------- スマホ ---------------- */
 @media(max-width:820px){
   .grid,.grid4,.resultGrid,.ecologyProfile{grid-template-columns:1fr}
