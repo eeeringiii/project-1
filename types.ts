@@ -1,4 +1,4 @@
-export const typeCodes = ['RCGT','RCGS','RCMT','RCMS','RPGT','RPGS','RPMT','RPMS','CEGT','CEGS','CEMT','CEMS','CPGT','CPGS','CPMT','CPMS'] as const;
+export const typeCodes = ['REGT','REGS','REMT','REMS','RPGT','RPGS','RPMT','RPMS','CEGT','CEGS','CEMT','CEMS','CPGT','CPGS','CPMT','CPMS'] as const;
 export type TypeCode = typeof typeCodes[number];
 export type AxisKey = 'R'|'C'|'E'|'P'|'G'|'M'|'T'|'S';
 export type ChartMetricId = 'event'|'spending'|'evangelism'|'interpretation'|'fandom'|'recognition'|'afterglow'|'archive';
