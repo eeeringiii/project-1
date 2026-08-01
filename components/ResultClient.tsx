@@ -1,11 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { DiagnosisSheet, SquareShareCard, StoryShareCard, abilityKeys, abilityLabels } from '@/components/DiagnosisArtwork';
 import { Share } from '@/components/Share';
 import { createDiagnosisDocument, getCompatibilityName } from '@/lib/diagnosis/document';
 import { downloadSvgAsPng } from '@/lib/download-svg';
+import { getTypeTheme } from '@/lib/theme';
 import { useDiagnosisStore } from '@/stores/diagnosis';
 import { OshicoaType } from '@/types';
 
@@ -17,17 +18,40 @@ export default function ResultClient({type}:{type:OshicoaType}){
   const document=useMemo(()=>createDiagnosisDocument(type,current),[type,current]);
   const [active,setActive]=useState<CardKind>('sheet');
   const [saving,setSaving]=useState(false);
+  // キャラクター画像（public/characters/コード.png）が用意できているかを確認し、
+  // 無い場合はタイプのマークを表示する（画像を置けば自動で切り替わります）
+  const [loadedCharacter,setLoadedCharacter]=useState<string>();
+  useEffect(()=>{
+    let alive=true;
+    const src=document.characterImage;
+    const image=new Image();
+    image.onload=()=>{if(alive)setLoadedCharacter(src)};
+    image.src=src;
+    return()=>{alive=false};
+  },[document.characterImage]);
+  const hasCharacter=loadedCharacter===document.characterImage;
   const sheetRef=useRef<SVGSVGElement>(null),squareRef=useRef<SVGSVGElement>(null),storyRef=useRef<SVGSVGElement>(null);
   const cards={sheet:{ref:sheetRef,width:1080,height:1620,name:`oshicoa16-${type.code}-diagnosis.png`},square:{ref:squareRef,width:1200,height:1200,name:`oshicoa16-${type.code}-x.png`},story:{ref:storyRef,width:1080,height:1920,name:`oshicoa16-${type.code}-story.png`}};
   const save=async(kind:CardKind)=>{setSaving(true);try{const card=cards[kind];await downloadSvgAsPng(card.ref.current,card.width,card.height,card.name)}finally{setSaving(false)}};
 
+  const theme=getTypeTheme(type.code);
+
   return <main className="resultPage">
     <section className="resultIntro shell">
       <p className="eyebrow">YOUR OTAKU ECOLOGY</p>
-      <p>{document.oshiName?`${document.oshiName}を推しているときのあなたは`:'あなたのヲタク生態は'}</p>
-      <div className="resultIdentity">
-        <div aria-label={`${type.name}のキャラクター`} style={{backgroundImage:`url(${document.characterImage})`,width:'min(34vw,240px)',aspectRatio:'4 / 5',flex:'0 0 auto',backgroundSize:'contain',backgroundRepeat:'no-repeat',backgroundPosition:'center bottom'}} />
-        <div><h1>{type.name}</h1><p className="resultCode">{type.code}　生態レア度 {'★'.repeat(document.rarity)}{'☆'.repeat(5-document.rarity)}</p><p className="catch">{type.catchphrase}</p></div>
+      <p>{document.oshiName?`${document.oshiName}を推しているときのあなたは…`:'あなたのヲタク生態は…'}</p>
+      <div className="resultIdentity" style={{['--chip' as string]:theme.chip}}>
+        <div className={hasCharacter?'characterSlot':'characterSlot isEmpty'}>
+          {hasCharacter
+            // eslint-disable-next-line @next/next/no-img-element
+            ? <img src={document.characterImage} alt={`${type.name}のキャラクター`}/>
+            : <span className="characterMark" aria-hidden>{theme.mark}</span>}
+        </div>
+        <div>
+          <h1>{type.name}</h1>
+          <p className="resultCode">{type.code}　生態レア度 {'★'.repeat(document.rarity)}{'☆'.repeat(5-document.rarity)}</p>
+          <p className="catch">{type.catchphrase}</p>
+        </div>
       </div>
       <div className="resultTags">{document.karmaTags.map(tag=><span className="tag" key={tag}>#{tag}</span>)}</div>
       <Share type={type} tags={current?.tags??[]} name={document.oshiName}/>
