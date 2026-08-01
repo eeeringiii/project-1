@@ -9,7 +9,9 @@
 
 ## P0 — 公開前に必須（現状バグ）
 
-### 1. 診断の 23% がクラッシュし、4タイプに永久に到達できない
+> **状態: 1・2 とも修正済み。** 以下は記録として残す（対応内容は各項目末尾）。
+
+### 1. 診断の 23% がクラッシュし、4タイプに永久に到達できない ✅ 修正済み
 
 **症状**: 24問すべて回答した直後、結果画面に行かず無言で `/diagnosis`（プロフィール入力）へ戻される。
 
@@ -35,16 +37,57 @@ crash message: Cannot read properties of undefined (reading 'chartBaseValues')
 
 つまり **16タイプ中4タイプ（覇権プロデューサー / 孤高の参謀 / ファンサ収集家 / 秘密の特別枠）は誰も診断されない**。
 
-**対応にオーナー判断が必要**（型コードが変わるため）:
+#### 対応内容（案A を採用）
 
-- 案A: `RC**` を `RE**` にリネーム。共鳴(R)×体験(E) という読みは
-  「孤高の参謀」「ファンサ収集家」の内容とも整合する。
-  既存の共有URL用に `/types/RCGT → /types/REGT` の redirect を `next.config.ts` に追加
-- 案B: 2文字目の軸設計そのものを見直す
+`RC**` を `RE**`（共鳴 R × 体験 E）にリネーム。他の3象限が
+`RP*`=共鳴×所有 / `CE*`=接続×体験 / `CP*`=接続×所有 と綺麗に対応しているのに対し、
+欠けていた象限がちょうど R×E だったため。4タイプの内容
+（ファンサ収集家＝その3秒の体験、秘密の特別枠＝瞬間の記憶）とも整合する。
 
-**再発防止**: `determineType()` の出力が必ず `typeCodes` に含まれることを検証するテストを1本入れる。これがあれば即検出できた（→ P4-20）。
+| 旧 | 新 | タイプ |
+|---|---|---|
+| RCGT | REGT | 覇権プロデューサー |
+| RCGS | REGS | 孤高の参謀 |
+| RCMT | REMT | ファンサ収集家 |
+| RCMS | REMS | 秘密の特別枠 |
 
-### 2. 別プロジェクト（カロリー管理アプリ）の残骸が本番にデプロイされている
+**再発防止（型レベルで構造的に不可能にした）**
+
+`types.ts` で軸ペアを単一の真実とし、`TypeCode` をそこから機械的に導出:
+
+```ts
+export const axisPairs = [['R','C'],['E','P'],['G','M'],['T','S']] as const;
+export type TypeCode = `${...axisPairs[0]}${...axisPairs[1]}${...axisPairs[2]}${...axisPairs[3]}`;
+export const typeCodes: readonly TypeCode[] = /* 4軸の総当たりから生成 */;
+```
+
+あわせて `determineType()` の `as TypeCode` キャストを外し、`pick()` をジェネリック化。
+4回の `pick` から組み立てた文字列型が `TypeCode` と一致することを
+TypeScript が検証するため、**存在しないコードを生成するコードはコンパイルが通らない**。
+
+検証（2文字目をわざと `pick('E','C')` に壊した状態で `tsc`）:
+
+```
+lib/diagnosis/index.ts(7,97): error TS2322:
+  Type '"REGT" | "RCGT" | ... | "CCMS"' is not assignable to type '"REGT" | "REGS" | ... | "CPMS"'.
+```
+
+旧バグとまったく同じ状態が、いまはビルドで止まる。
+
+**旧URL対応**: `next.config.ts` に `/types/RC** → /types/RE**` と
+`/result/RC** → /result/RE**` の恒久リダイレクト（308）を追加。
+`getType()` にも旧コードのエイリアスを持たせたので `/api/og?type=RCGT` も解決する。
+
+**修正後の実測**（実コードでランダム回答 200,000 回）:
+
+```
+success: 200,000 / CRASHED: 0
+到達不能な定義済みタイプ: なし
+未定義コードの生成: なし
+旧URL: /types/RCGT → 308 → /types/REGT
+```
+
+### 2. 別プロジェクト（カロリー管理アプリ）の残骸が本番にデプロイされている ✅ 修正済み
 
 `npm run build` のルート一覧に以下がそのまま載る:
 
@@ -69,8 +112,33 @@ crash message: Cannot read properties of undefined (reading 'chartBaseValues')
 | `public/icon-192.png` / `icon-512.png` | 上記アプリのアイコン |
 | `package.json` の `@anthropic-ai/sdk` | この2ルート専用の依存 |
 
-**対応**: 上記をすべて削除し、`@anthropic-ai/sdk` を依存から外す。
-`manifest.json` は OSHICOA 用に書き直す（現状 `layout.tsx` から参照もされていない）。
+#### 対応内容
+
+上記をすべて削除し、`@anthropic-ai/sdk` を `package.json` から除外
+（OSHICOA 側のコードからの参照は0件だったので影響なし）。
+
+`manifest.json` と `icon-*.png` は中身が別アプリのもので、
+`layout.tsx` からも参照されていなかったため削除した。
+OSHICOA 用の PWA マニフェストとアイコンは、
+ブランドアイコンが用意できた時点で新規に作る（README でも PWA は未実装扱い）。
+
+**修正後のビルド出力**（`/api/analyze-food` と `/api/feedback` が消えている）:
+
+```
+┌ ○ /
+├ ○ /_not-found
+├ ○ /about
+├ ƒ /api/og
+├ ○ /compatibility
+...
+└ ● /types/[typeCode]
+  ├ /types/REGT
+  ├ /types/REGS
+  ├ /types/REMT
+  └ [+13 more paths]
+```
+
+実際に叩いた結果: `POST /api/analyze-food` → 404、`POST /api/feedback` → 404。
 
 ---
 
@@ -306,13 +374,17 @@ AGENTS.md の「非エンジニアのオーナーが後から更新しやすい�
 
 ---
 
-## 参考: 現状の品質ゲート
+## 参考: 品質ゲート
 
 ```
 npm run lint   ✅ 通る
 npm run build  ✅ 通る（型エラーなし）
 ```
 
-**lint と build が通っていても P0-1 は検出されない。** 型レベルでは
-`determineType` の戻り値が `as TypeCode` でキャストされているため、
-実行時の不整合がコンパイル時に見えない。
+P0-1 の修正前は、lint と build が通っていても不正な型コードが検出できなかった
+（`determineType` の戻り値が `as TypeCode` でキャストされ、実行時の不整合が
+コンパイル時に見えなかった）。現在はキャストを外し、軸ペアから `TypeCode` を
+導出しているため、同種の不整合はビルドで止まる。
+
+ただしタグ・フェーズの到達不能（P2-7、P2-11）や軸バランス（P3-13）は
+型では守れないので、テスト（P4-20）は引き続き必要。

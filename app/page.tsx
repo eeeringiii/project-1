@@ -23,7 +23,7 @@ const faqs: [string, string][] = [
   ['結果画像を投稿できますか', 'SNS投稿用の画像を端末へ保存できます。'],
 ];
 
-const heroStickers = ['CEMT', 'RPMS', 'RCGT', 'CEMS', 'CPMT', 'RPGS'];
+const heroStickers = ['CEMT', 'RPMS', 'REGT', 'CEMS', 'CPMT', 'RPGS'];
 
 export default function Home() {
   return (

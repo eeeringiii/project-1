@@ -10,10 +10,10 @@ import { TypeCode } from '@/types';
 export interface TypeTheme { chip: string; mark: string }
 
 export const typeThemes: Record<TypeCode, TypeTheme> = {
-  RCGT: { chip: '#ffdfea', mark: '📣' },
-  RCGS: { chip: '#e2e6ff', mark: '🎯' },
-  RCMT: { chip: '#ffe2d5', mark: '🫰' },
-  RCMS: { chip: '#efe0ff', mark: '🔐' },
+  REGT: { chip: '#ffdfea', mark: '📣' },
+  REGS: { chip: '#e2e6ff', mark: '🎯' },
+  REMT: { chip: '#ffe2d5', mark: '🫰' },
+  REMS: { chip: '#efe0ff', mark: '🔐' },
   RPGT: { chip: '#d9f3ec', mark: '🕊️' },
   RPGS: { chip: '#e5ecff', mark: '🗃️' },
   RPMT: { chip: '#ffeecb', mark: '📷' },
