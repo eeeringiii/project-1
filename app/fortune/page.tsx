@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import Link from 'next/link';
 import { getFortune, prevDateKey } from '@/lib/fortune';
 import { getType } from '@/data/types';
@@ -28,13 +29,17 @@ export default async function FortunePage({ searchParams }: { searchParams: Prom
   const delta = f.score - yesterday.score;
   const trend = delta > 0 ? `▲ 昨日より+${delta}` : delta < 0 ? `▼ 昨日より${delta}` : '→ 昨日と同じ';
   const top = [...f.categories].sort((a, b) => b.score - a.score)[0];
-  const chip: Record<string, string> = {
-    大吉: 'var(--pink-soft)', 中吉: 'var(--grape-soft)', 小吉: 'var(--mint-soft)', 吉: 'var(--butter-soft)', 末吉: 'var(--grape-soft)',
-  };
+
+  // シェア用URLはサーバー側で確定させる（クライアントで location を読むとハイドレーションがズレるため）。
+  const h = await headers();
+  const host = h.get('x-forwarded-host') ?? h.get('host') ?? '';
+  const proto = h.get('x-forwarded-proto') ?? (host.startsWith('localhost') ? 'http' : 'https');
+  const shareUrl = `${proto}://${host}/fortune${f.typeCode ? `?type=${f.typeCode}` : ''}`;
 
   return (
     <main className="resultPage">
-      <section className="typeHero shell" style={{ ['--chip' as string]: chip[f.level.name] ?? 'var(--grape-soft)' }}>
+      {/* ヒーローの色は data/fortune.ts の LEVELS[].tone。OG画像と同じ値を使う。 */}
+      <section className="typeHero shell" style={{ ['--chip' as string]: f.level.tone }}>
         <p className="code">今日の推し活運勢 ・ {f.displayDate}</p>
         {f.typeLine && <p style={{ color: 'var(--grape)', fontWeight: 800, fontSize: 14, margin: '6px 0 0' }}>{f.typeLine}</p>}
         <h1>{f.level.emoji} {f.level.name}</h1>
@@ -43,7 +48,7 @@ export default async function FortunePage({ searchParams }: { searchParams: Prom
         <div style={{ marginTop: 16 }}>
           <FortuneShare
             level={f.level.name} headline={f.headline}
-            topCategory={top.label} luckyAction={f.luckyAction} typeCode={f.typeCode}
+            topCategory={top.label} luckyAction={f.luckyAction} typeCode={f.typeCode} url={shareUrl}
           />
         </div>
         <FortunePersonalize activeTypeCode={f.typeCode} />

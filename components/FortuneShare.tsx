@@ -2,15 +2,14 @@
 import { getType } from '@/data/types';
 
 // 今日の運勢用のシェア文言。診断結果の Share と同じく X / LINE / コピー / Web Share に対応。
-export function FortuneShare({ level, headline, topCategory, luckyAction, typeCode }: {
-  level: string; headline: string; topCategory: string; luckyAction: string; typeCode?: string;
+// url はサーバー側（app/fortune/page.tsx）で組み立てて渡す。
+// ここで location を読むとサーバー描画とズレる（ハイドレーション不一致）ため、参照しないこと。
+export function FortuneShare({ level, headline, topCategory, luckyAction, typeCode, url }: {
+  level: string; headline: string; topCategory: string; luckyAction: string; typeCode?: string; url: string;
 }) {
   const typeName = typeCode ? getType(typeCode)?.name : undefined;
   const lead = typeName ? `【${typeName}】の今日の推し活運勢は` : '今日の推し活運勢は';
   const text = `${lead}「${level}」🔮\n${headline}\n\n今日の一番は${topCategory}。\nラッキー推し活は「${luckyAction}」\n\n#OSHICOA16 #今日の推し活運勢`;
-  const url = typeof window === 'undefined'
-    ? ''
-    : `${location.origin}/fortune${typeCode ? `?type=${typeCode}` : ''}`;
   const copy = async () => {
     try { await navigator.clipboard.writeText(url); alert('URLをコピーしました'); }
     catch { prompt('このURLをコピーしてください', url); }

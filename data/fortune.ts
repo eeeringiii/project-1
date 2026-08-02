@@ -17,7 +17,9 @@ export interface FortuneLevel {
   name: string;      // 大吉・中吉 など
   emoji: string;
   min: number;       // この総合スコア以上でこの運勢（降順で評価）
-  tone: string;      // OG画像などの色味
+  // 運勢ページのヒーローとOG画像で共通に使うパステル色（みるくポップの --*-soft と揃える）。
+  // 色を変えたいときはこの値だけ書き換えればページ・OGの両方に反映されます。
+  tone: string;
   headlines: readonly string[];
 }
 
@@ -32,27 +34,27 @@ export interface FortuneColor { name: string; hex: string }
 
 // 総合スコアの高い順に並べる（getFortune が min で最初に一致したものを採用）。
 export const LEVELS: readonly FortuneLevel[] = [
-  { name: '大吉', emoji: '✨', min: 85, tone: '#f0abfc', headlines: [
+  { name: '大吉', emoji: '✨', min: 85, tone: '#ffe0ec', headlines: [
     '供給の神は、今日あなたの味方。',
     '推しからの電波、受信中。',
     '認知、あるかもしれない。覚悟して。',
   ] },
-  { name: '中吉', emoji: '🌸', min: 68, tone: '#f9a8d4', headlines: [
+  { name: '中吉', emoji: '🌸', min: 68, tone: '#eae0ff', headlines: [
     'いい供給の波が、来ている。',
     '推し活が一歩、前に進む日。',
     '手を伸ばせば、推しに届く距離。',
   ] },
-  { name: '小吉', emoji: '🍀', min: 50, tone: '#86efac', headlines: [
+  { name: '小吉', emoji: '🍀', min: 50, tone: '#d5f5f1', headlines: [
     '小さな幸せが、そっと供給される。',
     '平常運転こそ、尊い推し活。',
     'コツコツ積めば、ちゃんと報われる。',
   ] },
-  { name: '吉', emoji: '☘️', min: 32, tone: '#7dd3fc', headlines: [
+  { name: '吉', emoji: '☘️', min: 32, tone: '#ffeecb', headlines: [
     '派手さはなくても、推しがいれば十分。',
     '推しを想う時間が、今日のお守り。',
     '無理のないペースで、愛を続けよう。',
   ] },
-  { name: '末吉', emoji: '🌱', min: 0, tone: '#c4b5fd', headlines: [
+  { name: '末吉', emoji: '🌱', min: 0, tone: '#e4eefb', headlines: [
     '今日は充電の日。推しは逃げない。',
     '空回りしそうな日。まず深呼吸。',
     '守りの推し活で、明日の自分を守ろう。',

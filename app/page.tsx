@@ -101,6 +101,16 @@ export default function Home() {
         <p style={{ marginTop: 22 }}><Link className="button ghost" href="/types">16タイプをすべて見る</Link></p>
       </section>
 
+      {/* 毎日来てもらうための入口。診断済みなら /fortune 側で自分のタイプに切り替わります。 */}
+      <section className="shell section" style={{ paddingBottom: 0 }}>
+        <div className="ctaBand" style={{ background: 'var(--mint-soft)' }}>
+          <p className="eyebrow">EVERYDAY</p>
+          <h2>今日の推し活運勢、<br />もう見た？</h2>
+          <p>推し運・現場運・チケット運・課金運を毎日おとどけ。診断済みなら、あなたの16タイプ別に占います。</p>
+          <Link className="button" href="/fortune">今日の運勢を見る →</Link>
+        </div>
+      </section>
+
       <section className="band">
         <div className="shell section">
           <p className="eyebrow">FAQ</p>
