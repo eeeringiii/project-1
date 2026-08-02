@@ -10,6 +10,8 @@ import type {
   ContentSource,
   MediaAsset,
   PostVersion,
+  PublishingJob,
+  PublishingResult,
   SocialPost,
   StatusHistory,
   User,
@@ -22,6 +24,8 @@ import type {
   ContentSourceRow,
   MediaAssetRow,
   PostVersionRow,
+  PublishingJobRow,
+  PublishingResultRow,
   SocialPostRow,
   StatusHistoryRow,
   UserRow,
@@ -283,6 +287,56 @@ export const aiLogToRow = (l: AiGenerationLog): AiGenerationLogRow => ({
   error_message: l.errorMessage,
   created_by: l.createdBy || null,
   created_at: l.createdAt,
+});
+
+export const publishingJobFromRow = (r: PublishingJobRow): PublishingJob => ({
+  id: r.id,
+  socialPostId: r.social_post_id,
+  platform: r.platform,
+  scheduledAt: r.scheduled_at,
+  status: r.status,
+  retryCount: r.retry_count,
+  lastError: r.last_error,
+  startedAt: r.started_at,
+  completedAt: r.completed_at,
+  createdAt: r.created_at,
+  updatedAt: r.updated_at,
+});
+
+export const publishingJobToRow = (j: PublishingJob): PublishingJobRow => ({
+  id: j.id,
+  social_post_id: j.socialPostId,
+  platform: j.platform,
+  scheduled_at: j.scheduledAt,
+  status: j.status,
+  retry_count: j.retryCount,
+  last_error: j.lastError,
+  started_at: j.startedAt,
+  completed_at: j.completedAt,
+  created_at: j.createdAt,
+  updated_at: j.updatedAt,
+});
+
+export const publishingResultFromRow = (
+  r: PublishingResultRow,
+): PublishingResult => ({
+  id: r.id,
+  publishingJobId: r.publishing_job_id,
+  externalPostId: r.external_post_id,
+  publishedUrl: r.published_url,
+  responseData: r.response_data,
+  createdAt: r.created_at,
+});
+
+export const publishingResultToRow = (
+  r: PublishingResult,
+): PublishingResultRow => ({
+  id: r.id,
+  publishing_job_id: r.publishingJobId,
+  external_post_id: r.externalPostId,
+  published_url: r.publishedUrl,
+  response_data: r.responseData,
+  created_at: r.createdAt,
 });
 
 export const campaignToRow = (c: Campaign): CampaignRow => ({

@@ -28,6 +28,7 @@ import type {
   PostStatus,
   PostVersion,
   PublishingJob,
+  PublishingResult,
   SocialPost,
   StatusHistory,
   User,
@@ -35,6 +36,13 @@ import type {
 } from "@/types/domain";
 import type { GeneratedDraft } from "@/services/ai-generation";
 import { transition, makeVersion } from "@/services/status-flow";
+import {
+  canRetry,
+  createJob,
+  isDue,
+  requeue,
+  runJob,
+} from "@/services/publishing";
 import * as seed from "@/mock/seed";
 import type { ContentSourceInput } from "@/schemas";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
@@ -54,6 +62,7 @@ interface StoreState {
   postVersions: PostVersion[];
   approvals: Approval[];
   publishingJobs: PublishingJob[];
+  publishingResults: PublishingResult[];
   aiLogs: AiGenerationLog[];
   currentUserId: string;
 }
@@ -71,6 +80,7 @@ function buildSeedState(): StoreState {
     postVersions: seed.seedPostVersions,
     approvals: seed.seedApprovals,
     publishingJobs: seed.seedPublishingJobs,
+    publishingResults: [],
     aiLogs: [],
     currentUserId: seed.CURRENT_USER_ID,
   };
@@ -131,6 +141,9 @@ interface StoreApi {
   addAiLog: (
     log: Omit<AiGenerationLog, "id" | "artistId" | "createdBy" | "createdAt">,
   ) => void;
+
+  processDueJobs: () => { processed: number; succeeded: number; failed: number };
+  retryJob: (jobId: string) => boolean;
 }
 
 const StoreContext = createContext<StoreApi | null>(null);
@@ -378,17 +391,110 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         userId: state.currentUserId,
         comment,
       });
+
+      // 予約時は配信ジョブを生成（既存の未完了ジョブが無い場合）。取り消し時は待機中ジョブを取消。
+      const hasActiveJob = state.publishingJobs.some(
+        (j) =>
+          j.socialPostId === id &&
+          (j.status === "queued" || j.status === "running"),
+      );
+      const newJob: PublishingJob | null =
+        next === "scheduled" && !hasActiveJob ? createJob(updated) : null;
+
       setState((s) => ({
         ...s,
         posts: s.posts.map((p) => (p.id === id ? updated : p)),
         statusHistories: [history, ...s.statusHistories],
+        publishingJobs:
+          next === "cancelled"
+            ? s.publishingJobs.map((j) =>
+                j.socialPostId === id && j.status === "queued"
+                  ? { ...j, status: "cancelled", updatedAt: new Date().toISOString() }
+                  : j,
+              )
+            : newJob
+              ? [newJob, ...s.publishingJobs]
+              : s.publishingJobs,
       }));
       persist(async () => {
         await repo.upsertPost(updated);
         await repo.insertStatusHistory(history);
+        if (newJob) await repo.upsertPublishingJob(newJob);
       });
     },
-    [state.posts, state.currentUserId],
+    [state.posts, state.currentUserId, state.publishingJobs],
+  );
+
+  /** 予定時刻を過ぎた queued ジョブをまとめて実行（モックcronのクライアント版） */
+  const processDueJobs = useCallback((): {
+    processed: number;
+    succeeded: number;
+    failed: number;
+  } => {
+    const now = new Date();
+    const due = state.publishingJobs.filter((j) => isDue(j, now));
+    let succeeded = 0;
+    let failed = 0;
+    const jobUpdates = new Map<string, PublishingJob>();
+    const postUpdates = new Map<string, SocialPost>();
+    const newResults: PublishingResult[] = [];
+
+    for (const job of due) {
+      const post = state.posts.find((p) => p.id === job.socialPostId);
+      if (!post) continue;
+      const outcome = runJob(job, post);
+      jobUpdates.set(job.id, outcome.job);
+      postUpdates.set(post.id, outcome.post);
+      if (outcome.result) {
+        newResults.push(outcome.result);
+        succeeded += 1;
+      } else {
+        failed += 1;
+      }
+    }
+
+    if (due.length > 0) {
+      setState((s) => ({
+        ...s,
+        publishingJobs: s.publishingJobs.map((j) => jobUpdates.get(j.id) ?? j),
+        posts: s.posts.map((p) => postUpdates.get(p.id) ?? p),
+        publishingResults: [...newResults, ...s.publishingResults],
+      }));
+      persist(async () => {
+        for (const j of jobUpdates.values()) await repo.upsertPublishingJob(j);
+        for (const p of postUpdates.values()) await repo.upsertPost(p);
+        for (const r of newResults) await repo.insertPublishingResult(r);
+      });
+    }
+    return { processed: due.length, succeeded, failed };
+  }, [state.publishingJobs, state.posts]);
+
+  /** 失敗ジョブを再試行（再キュー→即時実行） */
+  const retryJob = useCallback(
+    (jobId: string): boolean => {
+      const job = state.publishingJobs.find((j) => j.id === jobId);
+      if (!job || !canRetry(job)) return false;
+      const post = state.posts.find((p) => p.id === job.socialPostId);
+      if (!post) return false;
+      const outcome = runJob(requeue(job), post);
+      setState((s) => ({
+        ...s,
+        publishingJobs: s.publishingJobs.map((j) =>
+          j.id === jobId ? outcome.job : j,
+        ),
+        posts: s.posts.map((p) => (p.id === post.id ? outcome.post : p)),
+        publishingResults: outcome.result
+          ? [outcome.result, ...s.publishingResults]
+          : s.publishingResults,
+      }));
+      persist(async () => {
+        await repo.upsertPublishingJob(outcome.job);
+        await repo.upsertPost(outcome.post);
+        if (outcome.result) await repo.insertPublishingResult(outcome.result);
+      });
+      return outcome.result !== null;
+    },
+    [state.publishingJobs, state.posts],
   );
 
   const deletePost = useCallback((id: string) => {
@@ -511,6 +617,8 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     deleteBrandRule,
     createCampaign,
     addAiLog,
+    processDueJobs,
+    retryJob,
   };
 
   return <StoreContext.Provider value={api}>{children}</StoreContext.Provider>;

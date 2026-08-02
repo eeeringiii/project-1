@@ -103,7 +103,7 @@ UI / ドメインロジック / データアクセス / バリデーション / 
 | Phase 1 | 画面とモックデータ | ✅ 完了 |
 | Phase 2 | Supabase 連携（Auth/DB/Storage/RLS/CRUD） | ✅ 接続レディ（`.env.local` 設定で有効化） |
 | Phase 3 | Anthropic API 連携（媒体別プロンプト/Zod検証/再生成/履歴） | ✅ 実装済み（`ANTHROPIC_API_KEY` 未設定時はモック生成） |
-| Phase 4 | 予約投稿ジョブ基盤（モック実行・リトライ・結果保存） | 予定 |
+| Phase 4 | 予約投稿ジョブ基盤（モック実行・リトライ・結果保存） | ✅ 実装済み（`配信ジョブ`画面＋`/api/cron/publish`） |
 | Phase 5 | 外部SNS API 連携（**設計のみ**、`docs/phase5-external-apis.md`） | 設計 |
 
 詳細な開発ルールは [`CLAUDE.md`](./CLAUDE.md) を参照してください。

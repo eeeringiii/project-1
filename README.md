@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# OSHICOA 16
 
-## Getting Started
+推しが変わっても、あなたの「推し方の本性」を16のヲタク生態として解析する、プライバシー優先の診断Webアプリです。課金額や現場数を評価せず、愛がどこへ向かうかを扱います。
 
-First, run the development server:
+## 技術
+
+Next.js 16 (App Router)、TypeScript、Tailwind CSS v4、SVG レーダーチャート、ブラウザ標準の localStorage / Web Share / Clipboard API を使用しています。Vercel にそのままデプロイできます。
+
+## 開発
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run build
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`NEXT_PUBLIC_SITE_URL` を設定すると canonical、sitemap、共有 URL の基準 URL に使用します。Google Analytics / GTM の ID は未設定でも動作する構成です（分析スクリプトの実装は導入時に追加します）。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 構成
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `data/questions.ts`: 24問の質問、8軸・業タグ・レーダー補正
+- `data/types.ts`: 16タイプの文章、能力値、相性の初期データ
+- `data/tags.ts` / `data/phases.ts`: 30の業タグと8つの関係フェーズ
+- `lib/diagnosis/index.ts`: 集計、同点規則、タイプ・タグ・フェーズ・チャート算出
+- `stores/diagnosis.ts`: バージョン付き端末内状態。推し名・回答をサーバー送信しません
+- `app/api/og/route.tsx`: `?type=CEMS` 形式の動的 OG 画像
 
-## Learn More
+## 診断ロジック
 
-To learn more about Next.js, take a look at the following resources:
+回答は「3 / 1 / -1 / -3」。質問ごとの重みを 4 組の対立軸（R/C、E/P、G/M、T/S）へ集計し、強い側をタイプコードにします。同点は強い回答数、最後に定義済みの固定優先則で決めるため、ランダム性はありません。業タグは複数質問の合算で上位2件を返し、該当が不足しても必ず2件を返します。チャートはタイプ基本値に質問補正を足し、0〜100へ制限します。
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+質問・タイプ・タグ・フェーズはすべてデータファイルで分離しているため、CMSや48問版へ置き換え可能です。相性の詳細点数データ、note URL、GA/GTM、PNG 化された結果画像、PWA キャッシュ、E2E・ユニットテストは将来拡張のための未実装項目です。
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 仮データ
 
-## Deploy on Vercel
+タイプごとの推定割合、相性の説明、プレミアム CTA、各タイプの能力値は初期仮データです。結果画像は日本語フォントの配信差異を避けるため、現在 SVG として保存します。公開前にブランド用フォントと実測統計へ差し替えてください。
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## デプロイ
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+GitHub へ push 後、Vercel でリポジトリを Import し、必要なら `NEXT_PUBLIC_SITE_URL` を設定してデプロイします。Build Command は `npm run build` です。

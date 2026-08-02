@@ -236,3 +236,12 @@ export interface PublishingJob {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface PublishingResult {
+  id: string;
+  publishingJobId: string;
+  externalPostId: string | null;
+  publishedUrl: string | null;
+  responseData: Record<string, unknown> | null;
+  createdAt: string;
+}
