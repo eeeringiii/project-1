@@ -4,16 +4,18 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { oshicoaTypes } from '@/data/types';
 import { getTypeTheme } from '@/lib/theme';
+import { typeAxes } from '@/lib/diagnosis';
+import type { AxisKey } from '@/types';
 
-const keys: [string, string][] = [
+const keys: [AxisKey, string][] = [
   ['R', '共鳴'], ['C', '接続'], ['E', '体験'], ['P', '所有'],
   ['G', '成長支援'], ['M', '自己充足'], ['T', '連帯'], ['S', '単独'],
 ];
 
 export default function Types() {
-  const [filters, setFilters] = useState<string[]>([]);
-  const shown = oshicoaTypes.filter(type => filters.every(key => type.code.includes(key)));
-  const toggle = (key: string) => setFilters(current => current.includes(key) ? current.filter(item => item !== key) : [...current, key]);
+  const [filters, setFilters] = useState<AxisKey[]>([]);
+  const shown = oshicoaTypes.filter(type => filters.every(key => typeAxes(type.code).includes(key)));
+  const toggle = (key: AxisKey) => setFilters(current => current.includes(key) ? current.filter(item => item !== key) : [...current, key]);
 
   return (
     <main className="shell section">
