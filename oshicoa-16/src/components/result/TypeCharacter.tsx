@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import type { TypeCode } from "@/types";
 import TypeVisual from "@/components/result/TypeVisual";
 
@@ -10,6 +10,58 @@ type Props = {
   size?: number;
   className?: string;
 };
+
+/**
+ * 読み込みに成功したキャラクター画像を覚えておく小さなストア。
+ * 同じ画像を何度も取りに行かず、一度確認できたタイプは再表示時に
+ * 抽象ビジュアルへ戻ってちらつくこともない。
+ */
+const resolvedByCode = new Map<TypeCode, string>();
+const requested = new Set<TypeCode>();
+const listeners = new Set<() => void>();
+
+const subscribe = (listener: () => void) => {
+  listeners.add(listener);
+  return () => {
+    listeners.delete(listener);
+  };
+};
+
+/** `.webp` → `.png` の順に実在を確認し、見つかったURLをストアへ記録する。 */
+function prefetchCharacter(code: TypeCode) {
+  if (typeof window === "undefined" || requested.has(code)) return;
+  requested.add(code);
+
+  const candidates = [`/characters/${code}.webp`, `/characters/${code}.png`];
+  const tryLoad = (i: number) => {
+    if (i >= candidates.length) return;
+    const probe = new Image();
+    probe.onload = () => {
+      if (probe.naturalWidth <= 0) {
+        tryLoad(i + 1);
+        return;
+      }
+      resolvedByCode.set(code, candidates[i]);
+      listeners.forEach((listener) => listener());
+    };
+    probe.onerror = () => tryLoad(i + 1);
+    probe.src = candidates[i];
+  };
+  tryLoad(0);
+}
+
+/** 実在が確認できたキャラクター画像のURL。未確認の間は null（抽象ビジュアルを表示）。 */
+function useCharacterImage(code: TypeCode) {
+  useEffect(() => {
+    prefetchCharacter(code);
+  }, [code]);
+
+  return useSyncExternalStore(
+    subscribe,
+    () => resolvedByCode.get(code) ?? null,
+    () => null,
+  );
+}
 
 /**
  * タイプごとのキャラクター画像。
@@ -25,33 +77,7 @@ type Props = {
  * 共有画像生成（generateResultImage.ts）と同じ、実績のある読み込み確認方式。
  */
 export default function TypeCharacter({ code, name, size = 280, className = "" }: Props) {
-  // 実在が確認できたキャラクター画像のURL。未確認の間は null（抽象ビジュアルを表示）。
-  const [resolvedSrc, setResolvedSrc] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    setResolvedSrc(null);
-
-    const candidates = [`/characters/${code}.webp`, `/characters/${code}.png`];
-    const tryLoad = (i: number) => {
-      if (cancelled || i >= candidates.length) return;
-      const probe = new Image();
-      probe.onload = () => {
-        if (cancelled) return;
-        if (probe.naturalWidth > 0) setResolvedSrc(candidates[i]);
-        else tryLoad(i + 1);
-      };
-      probe.onerror = () => {
-        if (!cancelled) tryLoad(i + 1);
-      };
-      probe.src = candidates[i];
-    };
-    tryLoad(0);
-
-    return () => {
-      cancelled = true;
-    };
-  }, [code]);
+  const resolvedSrc = useCharacterImage(code);
 
   if (!resolvedSrc) {
     return <TypeVisual code={code} size={size} className={className} />;
