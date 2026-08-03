@@ -32,7 +32,8 @@ export default function Questions() {
 
   // 設問が変わるたびに先頭へ戻す。追従ヘッダーに設問文が隠れるのを防ぐため、
   // 前の設問のスクロール位置を持ち越さない。
-  useEffect(()=>{scrollTo(0,0)},[index]);
+  // smooth スクロール指定があるので、設問送りではアニメーションさせず即座に戻す
+  useEffect(()=>{scrollTo({top:0,left:0,behavior:'instant'})},[index]);
 
   useEffect(()=>{
     const handleKey=(event:KeyboardEvent)=>{
