@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { TypeCharacter, characterImagePath, prefetchCharacter } from '@/components/TypeCharacter';
+import { TypeCharacter, prefetchCharacter } from '@/components/TypeCharacter';
 import { questions } from '@/data/questions';
 import { oshicoaTypes } from '@/data/types';
 import { createResult, options } from '@/lib/diagnosis';
@@ -47,7 +47,7 @@ export default function Questions() {
 
   // 次に出るキャラを裏で読み込んでおく（切り替わった瞬間の差し替わりを防ぐ）
   useEffect(()=>{
-    [1,2].forEach(step=>prefetchCharacter(characterImagePath(castAt(index+step).code)));
+    [1,2].forEach(step=>prefetchCharacter(castAt(index+step).code));
   },[index]);
 
   if(loading)return <main className="shell question">
