@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { TypeCharacter } from '@/components/TypeCharacter';
 import { oshicoaTypes } from '@/data/types';
 import { axisChips, getTypeTheme } from '@/lib/theme';
 
@@ -89,7 +90,7 @@ export default function Home() {
             const theme = getTypeTheme(type.code);
             return (
               <Link className="type" href={`/types/${type.code}`} key={type.code} style={{ ['--chip' as string]: theme.chip }}>
-                <span className="typeMark" aria-hidden>{theme.mark}</span>
+                <TypeCharacter type={type} className="typeThumb" loading="lazy" alt="" />
                 <span className="code">{type.code}</span>
                 <h3>{type.name}</h3>
                 <p>{type.catchphrase}</p>

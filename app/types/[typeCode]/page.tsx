@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getType, oshicoaTypes } from '@/data/types';
 import { Radar } from '@/components/Radar';
+import { TypeCharacter } from '@/components/TypeCharacter';
 import { getTypeTheme } from '@/lib/theme';
 
 export function generateStaticParams() {
@@ -18,7 +19,7 @@ export default async function TypePage({ params }: { params: Promise<{ typeCode:
   return (
     <main className="shell">
       <section className="typeHero" style={{ ['--chip' as string]: theme.chip }}>
-        <span className="typeMark" aria-hidden>{theme.mark}</span>
+        <TypeCharacter type={type} className="typeHeroChar" alt="" />
         <p className="code" style={{ marginTop: 12 }}>ECOLOGY FILE / {type.code}</p>
         <h1>{type.name}</h1>
         <p className="catch">{type.catchphrase}</p>
