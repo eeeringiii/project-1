@@ -3,10 +3,15 @@
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { TypeCharacter, characterImagePath, prefetchCharacter } from '@/components/TypeCharacter';
 import { questions } from '@/data/questions';
+import { oshicoaTypes } from '@/data/types';
 import { createResult, options } from '@/lib/diagnosis';
 import { useDiagnosisStore } from '@/stores/diagnosis';
 import { AnswerValue } from '@/types';
+
+/** 24問のあいだ、16タイプのキャラを順番に登場させる（見た目だけ。診断結果とは無関係） */
+const castAt = (index: number) => oshicoaTypes[index % oshicoaTypes.length];
 
 export default function Questions() {
   const router=useRouter();
@@ -14,6 +19,7 @@ export default function Questions() {
   const [index,setIndex]=useState(Math.min(answers.length,23));
   const [loading,setLoading]=useState(false);
   const q=questions[index];
+  const cast=castAt(index);
 
   const choose=useCallback((value:AnswerValue)=>{
     answer({questionId:q.id,value});
@@ -39,8 +45,15 @@ export default function Questions() {
     return()=>removeEventListener('keydown',handleKey);
   },[choose]);
 
+  // 次に出るキャラを裏で読み込んでおく（切り替わった瞬間の差し替わりを防ぐ）
+  useEffect(()=>{
+    [1,2].forEach(step=>prefetchCharacter(characterImagePath(castAt(index+step).code)));
+  },[index]);
+
   if(loading)return <main className="shell question">
-    <p className="loadingArt" aria-hidden>🔮</p>
+    <div className="loadingCast" aria-hidden>
+      {[0,5,11].map(step=><TypeCharacter key={step} type={castAt(index+step)}/>)}
+    </div>
     <p className="eyebrow" style={{display:'block',width:'fit-content',margin:'0 auto 10px'}}>ANALYSIS IN PROGRESS</p>
     <h1 style={{textAlign:'center',margin:'0 0 16px'}}>あなたのヲタク生態を解析中…</h1>
     <p className="lead" style={{textAlign:'center',margin:'auto'}}>愛の向かう先を計測<br/>現場行動パターンを照合<br/>ヲタクの業を抽出</p>
@@ -49,6 +62,14 @@ export default function Questions() {
   return <main className="shell question">
     <div className="progress"><b style={{width:`${((index+1)/24)*100}%`}}/></div>
     <p className="progressMeta"><span>Q{index+1} / 24</span><span>のこり{24-index-1}問 ✧</span></p>
+    <div className="questionCast" key={cast.code}>
+      <TypeCharacter type={cast} className="questionCharacter"/>
+      <p className="castMeta">
+        <span className="castNo">生態サンプル {String((index%oshicoaTypes.length)+1).padStart(2,'0')} / 16</span>
+        <b>{cast.name}</b>
+        <span className="castCatch">{cast.shortDescription}</span>
+      </p>
+    </div>
     <h1>{q.text}</h1>
     <div className="answers">{options.map(([label,value],i)=><button className="answer" key={label} onClick={()=>choose(value)}><small>{i+1}</small>{label}</button>)}</div>
     <div className="questionFoot">

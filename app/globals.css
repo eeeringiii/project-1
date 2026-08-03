@@ -248,6 +248,19 @@ main h1{margin:4px 0 14px}
 .progress b{display:block;height:100%;background:linear-gradient(90deg,var(--pink),var(--grape));border-radius:999px;transition:width .3s ease}
 .progressMeta{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:900;color:var(--ink-soft);margin-top:10px}
 .question h1{font-size:clamp(21px,5.4vw,32px);line-height:1.6;margin:24px 0 22px}
+
+/* 24問のあいだ、16タイプのキャラが順番に登場する枠 */
+.questionCast{display:flex;align-items:center;gap:14px;margin:18px 0 0;animation:castIn .34s ease both}
+.questionCast+h1{margin-top:16px}
+.questionCharacter{flex:0 0 auto;width:104px;aspect-ratio:4/5}
+.questionCharacter.isEmpty{width:78px;aspect-ratio:1;border-radius:26px}
+.questionCharacter .characterMark{font-size:34px}
+.castMeta{display:grid;gap:3px;margin:0;min-width:0}
+.castNo{font-size:11px;font-weight:900;letter-spacing:.1em;color:var(--grape)}
+.castMeta b{font-size:16px;font-weight:900;line-height:1.3;color:var(--ink)}
+.castCatch{font-size:12.5px;font-weight:700;line-height:1.5;color:var(--ink-soft)}
+@keyframes castIn{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+
 .answers{display:grid;gap:10px}
 .answer{
   display:flex;align-items:center;gap:12px;
@@ -266,6 +279,13 @@ main h1{margin:4px 0 14px}
 .questionFoot{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:24px;font-size:13px;font-weight:700;color:var(--ink-soft)}
 .loadingArt{font-size:56px;text-align:center;margin:30px 0 10px;animation:bounce 1.1s infinite ease-in-out}
 @keyframes bounce{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-14px) rotate(4deg)}}
+/* 解析中に3体のキャラが跳ねる */
+.loadingCast{display:flex;justify-content:center;gap:12px;margin:28px 0 18px}
+.loadingCast .charFigure{width:92px;aspect-ratio:4/5;animation:bounce 1.2s infinite ease-in-out}
+.loadingCast .charFigure:nth-child(2){animation-delay:.16s}
+.loadingCast .charFigure:nth-child(3){animation-delay:.32s}
+.loadingCast .charFigure.isEmpty{width:68px;aspect-ratio:1;border-radius:24px}
+.loadingCast .characterMark{font-size:30px}
 
 /* ---------------- タイプ一覧 / 詳細 ---------------- */
 .filters{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 22px}
@@ -319,6 +339,14 @@ main h1{margin:4px 0 14px}
 /* キャラクター画像が未配置のときは、正方形のマークバッジとして表示 */
 .characterSlot.isEmpty{width:min(26vw,112px);aspect-ratio:1;border-radius:28px}
 .characterMark{font-size:clamp(40px,10vw,56px);line-height:1;filter:drop-shadow(0 6px 10px rgba(58,42,77,.15))}
+/* TypeCharacter の共通ガワ。大きさ・形は使う側のクラスで指定する */
+.charFigure{
+  display:grid;place-items:center;overflow:hidden;
+  border:2px solid var(--outline);border-radius:22px;
+  background:var(--chip,var(--pink-soft));
+  box-shadow:3px 4px 0 rgba(58,42,77,.16);
+}
+.charFigure img{width:100%;height:100%;object-fit:contain;object-position:center bottom}
 .resultIdentity h1{font-size:clamp(28px,7.5vw,50px);margin:0 0 8px;line-height:1.2}
 .resultCode{font-size:12.5px;font-weight:900;letter-spacing:.08em;color:var(--grape);margin:0 0 8px}
 .resultIdentity .catch{font-size:clamp(15px,4vw,20px);font-weight:800;color:var(--ink);margin:0}
@@ -387,6 +415,11 @@ main h1{margin:4px 0 14px}
   .resultIdentity{flex-direction:column;align-items:flex-start;gap:14px;padding:18px}
   .characterSlot{width:min(48vw,180px)}
   .characterSlot.isEmpty{width:96px}
+  .questionCharacter{width:88px}
+  .questionCharacter.isEmpty{width:68px}
+  .castMeta b{font-size:15px}
+  .loadingCast{gap:8px}
+  .loadingCast .charFigure{width:76px}
   .profileCard,.abilityCard{padding:20px}
   .profileCard dl div{grid-template-columns:1fr;gap:4px}
   .resultPage .button,.form .button,.heroCta .button,.ctaBand .button{width:100%}
