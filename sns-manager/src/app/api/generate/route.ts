@@ -110,6 +110,12 @@ export async function POST(request: Request) {
       const message = await client.messages.create({
         model: MODEL,
         max_tokens: 2500,
+        // 既定モデルの Sonnet 5 は thinking 未指定だと adaptive thinking が走り、
+        // 出力トークンを余分に消費する。さらに max_tokens は「思考＋本文」の合計上限
+        // なので、思考が長引くとJSONが途中で切れて 502 になり1回分が丸ごと無駄になる。
+        // 投稿案生成は定型の構造化出力タスクなので思考は不要。
+        thinking: { type: "disabled" },
+        output_config: { effort: "low" },
         system,
         messages: [{ role: "user", content: userPrompt }],
       });

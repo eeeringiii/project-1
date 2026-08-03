@@ -3,6 +3,35 @@ import { NextRequest, NextResponse } from "next/server";
 
 const client = new Anthropic();
 
+/**
+ * 出力スキーマ。structured outputs でモデル側に強制させることで、
+ * 「JSONが壊れて解析できず1回分のAPI呼び出しが丸ごと無駄になる」ケースを防ぐ。
+ */
+const NUTRITION_SCHEMA = {
+  type: "object",
+  properties: {
+    foods: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          name: { type: "string", description: "食べ物の名前（日本語）" },
+          calories: { type: "number", description: "kcal" },
+          protein: { type: "number", description: "たんぱく質(g)" },
+          carbs: { type: "number", description: "炭水化物(g)" },
+          fat: { type: "number", description: "脂質(g)" },
+        },
+        required: ["name", "calories", "protein", "carbs", "fat"],
+        additionalProperties: false,
+      },
+    },
+    totalCalories: { type: "number", description: "合計カロリー(kcal)" },
+    notes: { type: "string", description: "コメントや注意事項（日本語）" },
+  },
+  required: ["foods", "totalCalories", "notes"],
+  additionalProperties: false,
+} as const;
+
 export async function POST(req: NextRequest) {
   try {
     const { imageBase64, mediaType } = await req.json();
@@ -12,8 +41,15 @@ export async function POST(req: NextRequest) {
     }
 
     const response = await client.messages.create({
-      model: "claude-opus-4-8",
+      model: "claude-sonnet-5",
       max_tokens: 1024,
+      // 画像からの抽出タスクなので思考は不要。Sonnet 5 は thinking 未指定だと
+      // adaptive thinking が既定で走り、出力トークンを余分に消費する。
+      thinking: { type: "disabled" },
+      output_config: {
+        effort: "low",
+        format: { type: "json_schema", schema: NUTRITION_SCHEMA },
+      },
       messages: [
         {
           role: "user",
@@ -28,37 +64,21 @@ export async function POST(req: NextRequest) {
             },
             {
               type: "text",
-              text: `この食べ物の写真を分析して、以下の情報をJSON形式で返してください。日本語で回答してください。
-
-{
-  "foods": [
-    {
-      "name": "食べ物の名前",
-      "calories": 数値（kcal）,
-      "protein": 数値（g）,
-      "carbs": 数値（g）,
-      "fat": 数値（g）
-    }
-  ],
-  "totalCalories": 合計カロリー数値,
-  "notes": "コメントや注意事項"
-}
-
-写真に複数の食べ物がある場合はそれぞれ分けてリストアップしてください。推定値で構いません。JSONのみ返してください。`,
+              text: "この食べ物の写真を分析してください。複数の食べ物が写っている場合はそれぞれ分けてリストアップします。栄養値は推定値で構いません。日本語で回答してください。",
             },
           ],
         },
       ],
     });
 
-    const text = response.content[0].type === "text" ? response.content[0].text : "";
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) {
+    // structured outputs によりスキーマ準拠のJSONが保証されるため、
+    // 従来の正規表現による切り出しは不要。
+    const text = response.content.find((b) => b.type === "text")?.text ?? "";
+    if (!text) {
       return NextResponse.json({ error: "解析に失敗しました" }, { status: 500 });
     }
 
-    const result = JSON.parse(jsonMatch[0]);
-    return NextResponse.json(result);
+    return NextResponse.json(JSON.parse(text));
   } catch (error) {
     console.error("Error analyzing food:", error);
     return NextResponse.json({ error: "解析中にエラーが発生しました" }, { status: 500 });

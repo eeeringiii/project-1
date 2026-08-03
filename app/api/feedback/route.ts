@@ -18,7 +18,10 @@ export async function POST(req: NextRequest) {
       .join("\n");
 
     const response = await client.messages.create({
-      model: "claude-opus-4-8",
+      // 200文字の定型アドバイス生成。Haiku 4.5 で十分な品質が出るタスクで、
+      // Opus 比で入出力とも約1/5のトークン単価。
+      // （Haiku 4.5 は output_config.effort 非対応なので指定しない）
+      model: "claude-haiku-4-5",
       max_tokens: 512,
       messages: [
         {

@@ -4,6 +4,24 @@
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
 
+# Repository map (read this first)
+
+This repository holds **four independent apps**. These instructions describe the
+one at the repository root. Do not explore or modify the others unless the task
+explicitly names them — each has its own `package.json` and its own rules.
+
+| Path | What it is | Scope of this file |
+| --- | --- | --- |
+| `app/`, `components/`, `data/`, `lib/`, `stores/`, `public/` | **OSHICOA 16** (root app) | ✅ these instructions |
+| `sns-manager/` | SNS運用ツール（別アプリ） | ❌ see `sns-manager/CLAUDE.md` |
+| `taisei-site/` | 別サイト | ❌ out of scope |
+| `oshicoa-16/` | 旧/別バージョンの作業ディレクトリ | ❌ out of scope |
+| `秘書用/` | メモ・日報（コードではない） | ❌ out of scope |
+
+`npm run lint` / `npm run build` at the root cover **only** the root app —
+the other three are excluded in `eslint.config.mjs` and must be built from
+their own directories.
+
 # OSHICOA 16 project instructions
 
 ## Product goal

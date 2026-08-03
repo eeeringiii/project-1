@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Read",
+      "Bash(ls *)",
+      "Bash(wc *)",
+      "Bash(du *)",
+      "Bash(rg *)",
+      "Bash(find *)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git show *)",
+      "Bash(git branch *)",
+      "Bash(git ls-files *)",
+      "Bash(npm run lint)",
+      "Bash(npm run build)",
+      "Bash(npm run typecheck)",
+      "Bash(npm install *)",
+      "Bash(npm ci *)",
+      "Bash(npx tsc *)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"${CLAUDE_PROJECT_DIR:-.}\" && { [ -d node_modules ] || npm install --no-audit --no-fund; } >/tmp/claude-npm-install.log 2>&1 || true",
+            "async": true,
+            "timeout": 600,
+            "statusMessage": "依存関係を準備中 (npm install)..."
+          }
+        ]
+      }
+    ]
+  }
+}
