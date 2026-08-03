@@ -373,9 +373,122 @@ main h1{margin:4px 0 14px}
 .ctaBand h2{font-size:clamp(24px,6vw,38px);margin:8px 0 12px}
 .ctaBand p{color:var(--ink-soft)}
 
+/* ---------------- 今日のヲタク運（占い） ---------------- */
+.fortune{margin:30px 0 34px}
+.fortuneHead{margin-bottom:14px}
+.fortuneEyebrow{background:var(--butter-soft);color:#965f00}
+.fortuneHead h2{font-size:clamp(24px,6vw,36px);margin:0 0 6px}
+.fortuneDate{color:var(--ink-soft);font-size:12.5px;font-weight:700;margin:0}
+
+.fortuneCard{
+  position:relative;overflow:hidden;
+  background:var(--milk);border:2px solid var(--outline);border-radius:30px;
+  padding:24px;box-shadow:var(--pop);
+}
+/* 上段だけを色帯にする。高さは中身に合わせて自動で伸びます */
+.fortuneCardTop{
+  display:flex;align-items:flex-start;gap:14px;
+  margin:-24px -24px 0;padding:22px 24px 18px;
+  background:var(--chip,var(--pink-soft));
+}
+.fortuneWho{flex:1 1 auto;min-width:0;padding-top:2px}
+.fortuneWho .code{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 4px;
+  font-size:11px;font-weight:900;letter-spacing:.16em;color:var(--ink);
+}
+.fortuneMine{
+  background:var(--milk);border:1.5px solid var(--outline);border-radius:999px;
+  padding:2px 9px;font-size:10.5px;letter-spacing:.04em;
+}
+.fortuneWho h3{font-size:clamp(20px,5vw,28px);margin:0}
+
+.fortuneScore{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.fortuneLevel{
+  display:inline-block;padding:5px 14px;border-radius:999px;white-space:nowrap;
+  background:var(--chip,var(--pink-soft));border:2px solid var(--outline);
+  font-size:14px;font-weight:900;box-shadow:2px 3px 0 rgba(58,42,77,.14);
+}
+.fortuneRank{display:flex;align-items:baseline;gap:3px;font-weight:900;color:var(--ink)}
+.fortuneRank b{font-size:30px;line-height:1}
+.fortuneRank small{font-size:11.5px;color:var(--ink-soft)}
+
+.fortuneHeadline{font-size:clamp(17px,4.6vw,23px);font-weight:900;line-height:1.6;margin:20px 0 18px}
+
+.fortuneCats{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 16px;padding:0}
+.fortuneCats li{background:#fffdfe;border:1.5px solid var(--line);border-radius:18px;padding:14px 16px}
+.fortuneCatHead{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.fortuneCatHead b{font-size:13.5px}
+.fortuneStars{color:#e09200;font-size:14px;letter-spacing:.06em;white-space:nowrap}
+.fortuneCats p{margin:0;color:var(--ink-soft);font-size:13px;line-height:1.75}
+
+.fortuneLucky{
+  display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin:0;
+  background:var(--mint-soft);border:2px dashed var(--outline);border-radius:18px;
+  padding:14px 16px;font-size:14px;font-weight:700;line-height:1.7;
+}
+.fortuneLucky b{flex:none;font-size:11.5px;letter-spacing:.1em;background:var(--milk);border-radius:999px;padding:4px 11px}
+
+.fortuneActions{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-top:18px}
+.fortuneSwitch{flex:1 1 260px;display:grid;gap:6px}
+.fortuneSwitch>span{font-size:11.5px;font-weight:900;color:var(--ink-soft)}
+.fortuneSwitch select{
+  width:100%;background:#fffdfe;border:2px solid var(--line);border-radius:14px;
+  color:var(--ink);padding:12px 40px 12px 14px;font-size:15px;font-family:inherit;font-weight:700;
+  appearance:none;cursor:pointer;
+  background-image:linear-gradient(45deg,transparent 50%,var(--grape) 50%),linear-gradient(135deg,var(--grape) 50%,transparent 50%);
+  background-position:calc(100% - 21px) 21px,calc(100% - 15px) 21px;
+  background-size:6px 6px,6px 6px;background-repeat:no-repeat;
+}
+.fortuneSwitch select:focus{outline:none;border-color:var(--pink);box-shadow:0 0 0 4px var(--pink-soft)}
+
+.fortuneRanking{
+  margin-top:14px;overflow:hidden;
+  background:var(--milk);border:2px solid var(--outline);border-radius:24px;box-shadow:var(--pop);
+}
+.fortuneRanking summary{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  list-style:none;cursor:pointer;padding:16px 20px;font-weight:900;font-size:14px;
+}
+.fortuneRanking summary::-webkit-details-marker{display:none}
+.fortuneRanking summary:after{content:'▾';color:var(--grape);font-size:14px;transition:transform .16s ease}
+.fortuneRanking[open] summary:after{transform:rotate(180deg)}
+.fortuneRanking ol{list-style:none;margin:0;padding:0 12px 12px}
+.fortuneRanking li{border-top:1.5px dashed var(--line)}
+.fortuneRanking button{
+  width:100%;display:flex;align-items:center;gap:12px;
+  min-height:52px;padding:8px;border:0;border-radius:14px;background:none;
+  color:var(--ink);font-family:inherit;text-align:left;cursor:pointer;
+}
+.fortuneRanking button:hover{background:var(--grape-soft)}
+.fortuneRanking button.active{background:var(--pink-soft)}
+.fortuneRowRank{flex:none;width:30px;text-align:right;font-weight:900;font-size:16px;color:#d1447c}
+.fortuneRowMark{flex:none;font-size:20px}
+.fortuneRowName{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;line-height:1.4}
+.fortuneRowName b{font-size:14.5px}
+.fortuneRowName small{font-size:10.5px;font-weight:900;letter-spacing:.14em;color:var(--ink-soft)}
+.fortuneRanking .fortuneLevel{font-size:12px;padding:3px 10px;box-shadow:1px 2px 0 rgba(58,42,77,.14)}
+
+.fortuneNote{margin-top:14px}
+
+/* タイプ一覧カードの「今日◯位」バッジ */
+.typeRank{
+  position:absolute;top:16px;right:16px;
+  background:var(--milk);border:2px solid var(--outline);border-radius:999px;
+  padding:4px 11px;font-size:10.5px;font-weight:900;letter-spacing:.04em;
+  box-shadow:2px 2px 0 rgba(58,42,77,.14);
+}
+.typeRank b{font-size:14px;letter-spacing:0}
+
+.srOnly{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+
 /* ---------------- スマホ ---------------- */
 @media(max-width:820px){
   .grid,.grid4,.resultGrid,.ecologyProfile{grid-template-columns:1fr}
+  .fortuneCard{padding:18px}
+  .fortuneCardTop{margin:-18px -18px 0;padding:16px 18px 14px}
+  .fortuneCats{grid-template-columns:1fr}
+  .fortuneActions .button{width:100%}
+  .typeRank{top:12px;right:12px}
   .navlinks{display:none}
   .nav{padding:10px 12px}
   .logo{font-size:15px}
