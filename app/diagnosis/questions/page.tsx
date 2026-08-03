@@ -30,6 +30,10 @@ export default function Questions() {
     }else setIndex(current=>current+1);
   },[answer,answers,index,profile,q.id,router,setResult]);
 
+  // 設問が変わるたびに先頭へ戻す。追従ヘッダーに設問文が隠れるのを防ぐため、
+  // 前の設問のスクロール位置を持ち越さない。
+  useEffect(()=>{scrollTo(0,0)},[index]);
+
   useEffect(()=>{
     const handleKey=(event:KeyboardEvent)=>{
       const number=Number(event.key);

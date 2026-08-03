@@ -3,6 +3,7 @@
 import { forwardRef, ReactNode } from 'react';
 import { BaseAbilityId } from '@/types';
 import { DiagnosisDocument } from '@/lib/diagnosis/document';
+import { useCharacterImage } from '@/lib/use-character-image';
 
 const abilityLabels: Record<BaseAbilityId,string> = {field:'現場行動力',spending:'積み耐性',evangelism:'布教力',analysis:'解釈力',community:'同担連帯力',recognition:'認知欲',afterglow:'余韻持続力',archive:'記録保存力'};
 const abilityKeys = Object.keys(abilityLabels) as BaseAbilityId[];
@@ -18,6 +19,9 @@ function Decorations({width,height}:{width:number;height:number}) {
 }
 
 function CharacterArtwork({document,x,y,width,height}:{document:DiagnosisDocument;x:number;y:number;width:number;height:number}) {
+  // 画像が未配置のときは領域を空のままにする（壊れた画像アイコンを出さない）
+  const ready=useCharacterImage(document.characterImage);
+  if(!ready) return null;
   return <image
     href={document.characterImage}
     x={x}

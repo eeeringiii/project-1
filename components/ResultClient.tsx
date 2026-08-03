@@ -1,12 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { DiagnosisSheet, SquareShareCard, StoryShareCard, abilityKeys, abilityLabels } from '@/components/DiagnosisArtwork';
 import { Share } from '@/components/Share';
 import { createDiagnosisDocument, getCompatibilityName } from '@/lib/diagnosis/document';
 import { downloadSvgAsPng } from '@/lib/download-svg';
 import { getTypeTheme } from '@/lib/theme';
+import { useCharacterImage } from '@/lib/use-character-image';
 import { useDiagnosisStore } from '@/stores/diagnosis';
 import { OshicoaType } from '@/types';
 
@@ -18,18 +19,8 @@ export default function ResultClient({type}:{type:OshicoaType}){
   const document=useMemo(()=>createDiagnosisDocument(type,current),[type,current]);
   const [active,setActive]=useState<CardKind>('sheet');
   const [saving,setSaving]=useState(false);
-  // キャラクター画像（public/characters/コード.png）が用意できているかを確認し、
-  // 無い場合はタイプのマークを表示する（画像を置けば自動で切り替わります）
-  const [loadedCharacter,setLoadedCharacter]=useState<string>();
-  useEffect(()=>{
-    let alive=true;
-    const src=document.characterImage;
-    const image=new Image();
-    image.onload=()=>{if(alive)setLoadedCharacter(src)};
-    image.src=src;
-    return()=>{alive=false};
-  },[document.characterImage]);
-  const hasCharacter=loadedCharacter===document.characterImage;
+  // キャラクター画像が未配置の場合はタイプのマークを表示する（画像を置けば自動で切り替わります）
+  const hasCharacter=useCharacterImage(document.characterImage);
   const sheetRef=useRef<SVGSVGElement>(null),squareRef=useRef<SVGSVGElement>(null),storyRef=useRef<SVGSVGElement>(null);
   const cards={sheet:{ref:sheetRef,width:1080,height:1620,name:`oshicoa16-${type.code}-diagnosis.png`},square:{ref:squareRef,width:1200,height:1200,name:`oshicoa16-${type.code}-x.png`},story:{ref:storyRef,width:1080,height:1920,name:`oshicoa16-${type.code}-story.png`}};
   const save=async(kind:CardKind)=>{setSaving(true);try{const card=cards[kind];await downloadSvgAsPng(card.ref.current,card.width,card.height,card.name)}finally{setSaving(false)}};
