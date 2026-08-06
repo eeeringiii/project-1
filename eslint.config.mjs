@@ -16,8 +16,6 @@ const eslintConfig = defineConfig([
     // 各ディレクトリ内で lint する。ルートの lint 対象からは外す。
     "sns-manager/**",
     "taisei-site/**",
-    // oshicoa-16 も同じ扱い（tsconfig.json の exclude にはすでに入っている）。
-    "oshicoa-16/**",
   ]),
 ]);
 
