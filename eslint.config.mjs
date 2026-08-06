@@ -12,8 +12,12 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // 独立したサブプロジェクト。それぞれ自前の eslint.config.mjs / tsconfig.json を持ち、
+    // 各ディレクトリ内で lint する。ルートの lint 対象からは外す。
     "sns-manager/**",
     "taisei-site/**",
+    // oshicoa-16 も同じ扱い（tsconfig.json の exclude にはすでに入っている）。
+    "oshicoa-16/**",
   ]),
 ]);
 
