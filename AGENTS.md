@@ -63,9 +63,16 @@ When improving result pages, generally prioritize:
 For any meaningful change:
 - Run `npm run lint`
 - Run `npm run build`
+- Run `npm test`
 - Fix errors caused by the change
 - Check that `/`, diagnosis flow, result pages, `/types`, and dynamic OG output still work when relevant
-- Do not claim completion if build/lint is failing because of the change
+- Do not claim completion if build/lint/test is failing because of the change
+
+`lib/diagnosis/index.test.ts` pins the diagnosis behaviour, including a golden
+table that fixes the resulting type, 業タグ, and phase for a set of fixed answers.
+If it fails during a visual or copy task, treat that as an accident, not as a
+test to update — it means scoring, weights, or tie-breaking moved (rule 2).
+Only update the golden table when the scoring change is deliberate, and say so.
 
 ## Working style
 When a task is broad, first inspect the current implementation and then make the full set of coherent changes rather than stopping after a superficial first edit.
