@@ -18,6 +18,7 @@ export default function Questions() {
   const {answers,answer,profile,setResult}=useDiagnosisStore();
   const [index,setIndex]=useState(Math.min(answers.length,23));
   const [loading,setLoading]=useState(false);
+  const [failed,setFailed]=useState(false);
   const q=questions[index];
   const cast=castAt(index);
 
@@ -31,7 +32,12 @@ export default function Questions() {
           const result=createResult(ordered,profile);
           setResult(result);
           router.push(`/result/${result.typeCode}`);
-        }catch{router.push('/diagnosis')}
+        }catch(error){
+          // 解析に失敗しても /diagnosis へ飛ばさない。あちらの開始ボタンが回答を消してしまうため、
+          // 24問はこの画面に残したまま、原因を出して再試行できるようにする。
+          console.error('診断の解析に失敗しました',error);
+          setLoading(false);setFailed(true);
+        }
       },900);
     }else setIndex(current=>current+1);
   },[answer,answers,index,profile,q.id,router,setResult]);
@@ -57,6 +63,15 @@ export default function Questions() {
     <p className="eyebrow" style={{display:'block',width:'fit-content',margin:'0 auto 10px'}}>ANALYSIS IN PROGRESS</p>
     <h1 style={{textAlign:'center',margin:'0 0 16px'}}>あなたのヲタク生態を解析中…</h1>
     <p className="lead" style={{textAlign:'center',margin:'auto'}}>愛の向かう先を計測<br/>現場行動パターンを照合<br/>ヲタクの業を抽出</p>
+  </main>;
+
+  if(failed)return <main className="shell question">
+    <p className="eyebrow" style={{display:'block',width:'fit-content',margin:'0 auto 10px'}}>ANALYSIS FAILED</p>
+    <h1 style={{textAlign:'center',margin:'0 0 16px'}}>解析につまずきました</h1>
+    <p className="lead" style={{textAlign:'center',margin:'0 auto 24px'}}>24問の回答はこの端末に残っています。<br/>もう一度おためしください。</p>
+    <div className="questionFoot" style={{justifyContent:'center'}}>
+      <button className="button" onClick={()=>{setFailed(false);choose(answers.find(item=>item.questionId===q.id)?.value??1)}}>もう一度解析する</button>
+    </div>
   </main>;
 
   return <main className="shell question">

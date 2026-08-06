@@ -39,7 +39,6 @@
   "exclude": [
     "node_modules",
     "sns-manager",
-    "taisei-site",
-    "oshicoa-16"
+    "taisei-site"
   ]
 }
