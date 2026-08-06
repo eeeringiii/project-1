@@ -53,6 +53,17 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="shell">
+        <Link className="fortuneStrip" href="/fortune">
+          <span className="fortuneStripMark" aria-hidden>🔮</span>
+          <span className="fortuneStripBody">
+            <b>今日の推し活運勢</b>
+            <small>推し運・現場運・チケット運・課金運を毎日。</small>
+          </span>
+          <span className="fortuneStripGo" aria-hidden>→</span>
+        </Link>
+      </section>
+
       <section className="band">
         <div className="shell section">
           <p className="eyebrow">THE CONTRADICTIONS</p>

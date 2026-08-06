@@ -405,6 +405,41 @@ main h1{margin:4px 0 14px}
 .phaseNote{border-top:1.5px dashed var(--line);margin:20px 0;padding-top:16px}
 .phaseNote p{color:var(--ink-soft);line-height:1.8}
 
+/* ---------------- 今日の運勢 ---------------- */
+/* トップページの導線。ヘッダーのナビはスマホで隠れるので、ここが主な入口になる */
+.fortuneStrip{
+  display:flex;align-items:center;gap:14px;
+  background:linear-gradient(100deg,#ffdfea,#eae0ff 60%,#d5f5f1);
+  border:2px solid var(--outline);border-radius:26px;
+  padding:15px 20px;box-shadow:var(--pop);margin:4px 0;
+  transition:transform .15s ease,box-shadow .15s ease;
+}
+.fortuneStrip:hover{transform:translate(-1px,-2px);box-shadow:6px 7px 0 rgba(58,42,77,.2)}
+.fortuneStripMark{font-size:30px;line-height:1;flex:0 0 auto}
+.fortuneStripBody{display:grid;gap:2px;min-width:0}
+.fortuneStripBody b{font-size:16px;font-weight:900;line-height:1.4}
+.fortuneStripBody small{font-size:12.5px;font-weight:700;line-height:1.6;color:var(--ink-soft)}
+.fortuneStripGo{margin-left:auto;flex:0 0 auto;font-size:18px;font-weight:900;color:var(--grape)}
+
+/* ヒーローの地色は運勢レベルの色（data/fortune.ts の tone）を --chip で受け取る */
+.fortuneHero{text-align:center}
+.fortuneHero h1{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+.fortuneEmoji{font-size:.85em;line-height:1}
+.fortuneTypeLine{font-size:13.5px;font-weight:900;color:var(--grape);margin:10px 0 0}
+.fortuneHero .note{justify-content:center}
+.fortuneShare{margin-top:18px}
+.fortuneHero .shareRow{justify-content:center}
+.fortuneHint{font-size:12.5px;line-height:1.8;color:var(--ink-soft);border-top:1.5px dashed var(--line);margin:18px 0 16px;padding-top:14px}
+.fortuneHint a{color:var(--grape);font-weight:900;text-decoration:underline}
+/* 4つの運勢。能力値バー（.abilityRow）を流用しつつ、下にコメントを添える */
+.fortuneRow{border-top:1.5px dashed var(--line);padding-top:14px;margin-top:16px}
+.fortuneRow:first-of-type{border-top:0;padding-top:0}
+.fortuneRow p{margin:8px 0 0;font-size:13.5px;line-height:1.8;color:var(--ink-soft)}
+.colorChip{
+  display:inline-block;width:15px;height:15px;border-radius:5px;
+  border:1.5px solid var(--outline);margin-right:8px;vertical-align:-2px;
+}
+
 /* 最後のCTA */
 .ctaBand{
   text-align:center;background:var(--milk);
@@ -439,6 +474,12 @@ main h1{margin:4px 0 14px}
   .resultPage .button,.form .button,.heroCta .button,.ctaBand .button{width:100%}
   .shareRow .button{flex:1 1 44%;width:auto;padding:0 12px}
   .note{font-size:12px}
+  .fortuneStrip{gap:12px;padding:14px 16px}
+  .fortuneStripMark{font-size:26px}
+  .fortuneStripBody b{font-size:15px}
+  .fortuneStripBody small{font-size:12px}
+  .fortuneHero{padding:26px 18px}
+  .fortuneHero .shareRow .button{flex:1 1 44%}
 }
 
 @media(prefers-reduced-motion:reduce){
