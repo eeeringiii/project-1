@@ -53,12 +53,20 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="shell">
+      <section className="shell miniStrips">
         <Link className="fortuneStrip" href="/fortune">
           <span className="fortuneStripMark" aria-hidden>🔮</span>
           <span className="fortuneStripBody">
             <b>今日の推し活運勢</b>
             <small>推し運・現場運・チケット運・課金運を毎日。</small>
+          </span>
+          <span className="fortuneStripGo" aria-hidden>→</span>
+        </Link>
+        <Link className="fortuneStrip bingoStrip" href="/bingo">
+          <span className="fortuneStripMark" aria-hidden>🎯</span>
+          <span className="fortuneStripBody">
+            <b>ヲタク業ビンゴ</b>
+            <small>あなたの業、いくつ当てはまる？ 診断なしで遊べます。</small>
           </span>
           <span className="fortuneStripGo" aria-hidden>→</span>
         </Link>
