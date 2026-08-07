@@ -1,10 +1,22 @@
-import { ChartMetricId, OshicoaType, TypeCode } from '@/types';
+import { BaseAbilityId, ChartMetricId, OshicoaType, TypeCode } from '@/types';
 const raw:[TypeCode,string,string,string,string[]][] = [
 ['RCGT','覇権プロデューサー','はけんプロデューサー','推しを売れさせるまでが、私の推し活。',['拡散・再生・投票を、推しの未来へつなげる','頼まれていないのに運営目線になる。']],['RCGS','孤高の参謀','ここうのさんぼう','騒がない。でも、必要な数字は全部作る。',['無言で積み、戦略で支える','推しより運営のミスが気になる。']],['RCMT','ファンサ収集家','ファンサしゅうしゅうか','あの日の3秒で、あと3年は生きられる。',['会えた実感を宝物として保存する','「今の、私にやったよね？」を永久に検証する。']],['RCMS','秘密の特別枠','ひみつのとくべつわく','誰にも言わないけど、私と推しには物語がある。',['ひそかな出来事を自分の記憶で守る','些細な出来事を、運命として保存する。']],
 ['RPGT','布教宣教師','ふきょうせんきょうし','まだ推していない人を見ると、説明したくなる。',['相手ごとの最適な入口を見つける','会話のすべてを推しにつなげる。']],['RPGS','地下アーカイバー','ちかアーカイバー','消える前に、全部残しておかなければ。',['過去の供給を丁寧に掘り、記録する','公式より過去の情報に詳しい。']],['RPMT','思い出編集長','おもいでへんしゅうちょう','推しとの日々を、人生のアルバムにする。',['現場の空気ごと、美しく残していく','現場より先に写真を撮る場所を探す。']],['RPMS','聖遺物コレクター','せいいぶつコレクター','物ではない。推しが存在した証拠です。',['限定品と保存状態への愛が深い','同じ写真でも、仕様が違えば別物。']],
 ['CEGT','現場総隊長','げんばそうたいちょう','行ける現場ではない。行く現場です。',['現場と仲間の熱量を動かす','「無理」は、チケットを取ってから考える。']],['CEGS','単独遠征兵','たんどくえんせいへい','ひとりなら、誰にも予定を止められない。',['自分の判断で、推しだけを見に行く','全国を移動しているのに旅行だと思っていない。']],['CEMT','多幸感パリピ','たこうかんパリピ','推しが笑った。今日はもう優勝。',['会場の一体感を仲間と分け合う','すべての供給に「無理」「天才」と言う。']],['CEMS','余韻の亡霊','よいんのぼうれい','終演したけど、私はまだあの会場にいる。',['終演後も感情を深く反芻する','次の日の仕事中も、脳内アンコール中。']],
 ['CPGT','課金騎士団長','かきんきしだんちょう','愛は金額だけじゃない。でも、数字は裏切らない。',['勝負所を見極め、仲間と応援する','金額を聞かれると「全然だよ」と言う。']],['CPGS','無言の大口','むごんのおおぐち','語らない。届けばそれでいい。',['ひっそり活動継続を支えたい','段ボールの数で家族にバレる。']],['CPMT','交換界の外交官','こうかんかいのがいこうかん','推しを引くまでがガチャ。推しを揃えるまでが人生。',['交換のネットワークで誰かの推しを助ける','硬質ケースとスリーブを常備している。']],['CPMS','祭壇の守護神','さいだんのしゅごしん','今日も推しが美しく存在している。それでいい。',['自分の空間で供給を静かに愛でる','グッズの置き場所はないが、買わない選択肢もない。']]];
 const metrics:ChartMetricId[]=['event','spending','evangelism','interpretation','fandom','recognition','afterglow','archive'];
+// レーダーチャートの8項目と baseAbilities の8項目は、名前が違うだけで同じ軸を指しています。
+// lib/diagnosis/document.ts の変換表と対になっているので、片方を変えるときは必ず両方直してください。
+const metricToAbility:Record<ChartMetricId,BaseAbilityId>={
+  event:'field',
+  spending:'spending',
+  evangelism:'evangelism',
+  interpretation:'analysis',
+  fandom:'community',
+  recognition:'recognition',
+  afterglow:'afterglow',
+  archive:'archive',
+};
 type EcologyData = Pick<OshicoaType,'catchphrase'|'habitat'|'mainFood'|'habitPhrase'|'specialAbility'|'weakness'|'extremeBehavior'|'top5'|'strengths'|'sins'|'karmaTagCandidates'|'baseAbilities'>;
 const ecologyData:Record<TypeCode,EcologyData>={
 RCGT:{catchphrase:'「推しの夢、本人より先に叶える気でいる。」',habitat:'告知解禁直後のSNS。気づけば宣伝動線まで考えている。',mainFood:'数字が伸びた瞬間と、推しが世間に見つかる瞬間。',habitPhrase:'「これ、もっと伸ばせるよね？」',specialAbility:'推しの魅力を「ファンじゃない人にも刺さる言葉」に変換できる。',weakness:'良い素材があるのに活かしきれていない運営。',extremeBehavior:'頼まれてもいないのに、告知タイミング・投稿案・新規導線まで脳内で組み始める。',top5:['告知を見ると内容より先に「もっと伸ばせそう」が浮かぶ','再生数・フォロワー・売上などの数字を自然に追っている','推しが世間から評価されると自分のこと以上に嬉しい','新規ファンが増えるきっかけを常に探している','「この売り方、もったいない」が口から出そうになる'],strengths:['推しの魅力を客観的に見る力','長期的な成長まで考えられる視点','布教を実際の行動に変える力'],sins:['推しの仕事なのに自分までKPIを背負い始める','運営より告知スケジュールを把握していることがある','売れてほしすぎて、勝手に責任まで感じてしまう'],karmaTagCandidates:['tag-7','tag-21'],baseAbilities:{field:78,spending:70,evangelism:96,analysis:78,community:82,recognition:45,afterglow:52,archive:65}},
@@ -26,7 +38,12 @@ CPMS:{catchphrase:'「推しの居場所は、私が一番きれいにする。�
 };
 
 export const oshicoaTypes:OshicoaType[]=raw.map(([code,name,reading,,points],i)=>{
-  const chartBaseValues=Object.fromEntries(metrics.map((m,j)=>[m,45+((i*11+j*9)%42)])) as Record<ChartMetricId,number>;
+  // チャートの初期値はタイプごとに手書きした baseAbilities をそのまま使います。
+  // ここを計算式にするとレーダーがキャラクター設定と一致しなくなるので、数値を変えたいときは
+  // 上の ecologyData 内の baseAbilities を編集してください。
+  const chartBaseValues=Object.fromEntries(
+    metrics.map(m=>[m,ecologyData[code].baseAbilities[metricToAbility[m]]])
+  ) as Record<ChartMetricId,number>;
   return {
     code,
     name,
