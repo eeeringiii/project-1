@@ -61,6 +61,7 @@ function mockExternalRef(platform: Platform) {
     tiktok: "https://tiktok.com/@sample/video/",
     youtube: "https://youtu.be/",
     website: "https://example.com/news/",
+    note: "https://note.com/sample_artist/n/",
   };
   return { externalPostId: id, publishedUrl: `${base[platform]}${id}` };
 }

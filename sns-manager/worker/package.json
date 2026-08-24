@@ -1,0 +1,20 @@
+{
+  "name": "sns-manager-note-worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "note（note.com）自動公開ワーカー。Node ランタイム（GitHub Actions 等）で実行する。Vercel サーバーレスでは動かない。",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "publish-notes": "tsx run.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.110.7",
+    "playwright": "^1.49.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "tsx": "^4.19.2",
+    "typescript": "^5"
+  }
+}
