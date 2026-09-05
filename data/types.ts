@@ -25,6 +25,21 @@ CPMT:{catchphrase:'「推しを迎えるためなら、初対面とも即交渉�
 CPMS:{catchphrase:'「推しの居場所は、私が一番きれいにする。」',habitat:'推し棚、祭壇、ディスプレイスペースの前。',mainFood:'アクスタ、ぬい、写真、統一された世界観。',habitPhrase:'「配置、ちょっと変えようかな。」',specialAbility:'普通のグッズを、一つの世界観として美しく並べ直す。',weakness:'日焼け、埃、傷、左右のズレ。',extremeBehavior:'グッズの収納ではなく、グッズに合わせて家具を買い替える。',top5:['推し棚の配置変更だけでかなり時間が溶ける','色味が合わない小物が気になって仕方ない','グッズのためのグッズを買う','写真を撮る前に数ミリ単位で位置を直す','新しいグッズが出ると「どこに置くか」まで考えて買う'],strengths:['世界観を作るセンス','物を大切に扱う力','好きを空間として表現する力'],sins:['グッズよりディスプレイ用品にお金がかかることがある','数ミリのズレが気になって撮影が終わらない','収納不足をグッズ過多ではなく家具不足と判断する'],karmaTagCandidates:['tag-6'],baseAbilities:{field:40,spending:88,evangelism:32,analysis:62,community:35,recognition:35,afterglow:72,archive:98}}
 };
 
+/**
+ * 相性の理由。R系（共鳴）i 番目と C系（接続）i+8 番目が対になるため、
+ * i%8 で両側から同じ文を引ける。どちらから読んでも成立する書き方にしています。
+ */
+const compatibilityReasons=[
+  '数字で前へ運ぶ人と、現場で前へ運ぶ人。推しを押し上げる両輪になります。',
+  'どちらも単独で強い二人。干渉せずに、結果と姿勢で信頼し合えます。',
+  '3秒を何度も再生する人と、その場で爆発する人。幸福が二倍に増幅します。',
+  '記憶の中で守る人と、余韻の中で生き続ける人。静かな感情が通じ合います。',
+  '言葉で広げる人と、行動で支える人。布教と支援の二段構えになります。',
+  '記録で残す人と、黙って買い支える人。語らず続ける者同士で分かり合えます。',
+  '思い出を編む人と、人と人をつなぐ人。輪の内側と外側を補い合えます。',
+  '証拠として集める人と、聖域として並べる人。「存在した証」を守る価値観が近い。',
+];
+
 export const oshicoaTypes:OshicoaType[]=raw.map(([code,name,reading,,points],i)=>{
   const chartBaseValues=Object.fromEntries(metrics.map((m,j)=>[m,45+((i*11+j*9)%42)])) as Record<ChartMetricId,number>;
   return {
@@ -37,7 +52,7 @@ export const oshicoaTypes:OshicoaType[]=raw.map(([code,name,reading,,points],i)=
     traits:[points[0],'自分の納得できる推し方を持つ','好きの理由を日常に持ち帰れる'],
     habits:[...points,'供給を自分なりの方法で受け取る','次の楽しみを静かに準備する'],
     shadowTraits:[points[1],'熱量が高い日は、少し休む余白も大切。','比較ではなく自分の満足を基準にする。'],
-    compatibility:{bestTypeCode:raw[(i+8)%16][0],description:'違う熱量の置き場所が、お互いの推し活を豊かにします。'},
+    compatibility:{bestTypeCode:raw[(i+8)%16][0],description:compatibilityReasons[i%8]},
     estimatedRatio:5+i%4,
     chartBaseValues,
     premiumCtaTitle:'あなたが推しにここまで心を動かされる、本当の理由を読む。',
