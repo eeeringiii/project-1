@@ -559,3 +559,21 @@ main h1{margin:4px 0 14px}
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
 }
+
+/* ---------------- 有料note導線（PremiumCta） ----------------
+   NEXT_PUBLIC_PREMIUM_NOTE_URL を設定したときだけ表示されます。 */
+.premiumCta{
+  margin:26px 0;padding:28px 24px;
+  border:2px solid var(--outline);border-radius:var(--radius);
+  background:linear-gradient(135deg,var(--grape-soft),var(--pink-soft));
+  box-shadow:var(--pop);
+}
+.premiumCta h2{font-size:clamp(20px,3.6vw,26px);margin:4px 0 10px;line-height:1.5}
+.premiumCta .premiumLead{color:var(--ink-soft);line-height:1.8;margin:0 0 16px}
+.premiumCta .premiumPoints{margin:0 0 20px;padding-left:20px;list-style:disc}
+.premiumCta .premiumPoints li{margin:7px 0;line-height:1.7;color:var(--ink-soft)}
+.premiumCta .premiumPoints li::marker{color:var(--pink)}
+.premiumCta .premiumFoot{margin:12px 0 0;font-size:13px;color:var(--ink-soft)}
+.premiumCta.compact{margin:18px 0 0;padding:20px}
+.premiumCta.compact h2{font-size:clamp(17px,3vw,21px);margin-bottom:8px}
+.premiumCta.compact .premiumLead{margin-bottom:14px;font-size:14px}
