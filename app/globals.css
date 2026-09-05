@@ -507,6 +507,40 @@ main h1{margin:4px 0 14px}
   border-top:1.5px dashed var(--line);margin:0 0 16px;padding-top:14px;
 }
 
+/* ---------------- ヲタク履歴書 ---------------- */
+.resumeHead{text-align:center;margin-bottom:26px}
+.resumeHead h1{font-size:clamp(30px,7vw,46px);margin:4px 0 12px}
+.resumeHead .lead{margin:0 auto}
+
+/* 広い画面では入力とプレビューを並べ、狭い画面では入力→プレビューの順に積む */
+.resumeLayout{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+.resumeForm h2,.resumePreview h2{font-size:clamp(20px,4vw,26px);margin:2px 0 12px}
+.resumeMeta{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px;font-size:12.5px;font-weight:800;color:var(--ink-soft)}
+.resumeMeta span{background:var(--milk);border:1.5px solid var(--line);border-radius:999px;padding:6px 12px}
+
+.resumeForm textarea{
+  width:100%;min-height:74px;resize:vertical;
+  padding:12px 14px;border:2px solid var(--line);border-radius:16px;
+  background:var(--milk);color:var(--ink);
+  font-family:inherit;font-size:15px;font-weight:500;line-height:1.7;
+}
+.resumeForm textarea:focus{outline:none;border-color:var(--grape)}
+
+/* プレビューは追従させて、入力しながら変化が見えるようにする */
+.resumePreview{position:sticky;top:78px}
+.resumeCardArt{
+  width:100%;height:auto;display:block;
+  border:2px solid var(--outline);border-radius:var(--radius);
+  box-shadow:var(--pop);background:var(--milk);
+}
+.resumeActions{margin-top:16px}
+.resumeHint{
+  font-size:12.5px;line-height:1.8;color:var(--ink-soft);
+  border-top:1.5px dashed var(--line);margin:16px 0 0;padding-top:14px;
+}
+.resumeHint a{color:var(--grape);font-weight:900;text-decoration:underline}
+.resumeError{margin:12px 0 0;font-size:13px;font-weight:800;color:#c2306a}
+
 /* 最後のCTA */
 .ctaBand{
   text-align:center;background:var(--milk);
@@ -554,6 +588,10 @@ main h1{margin:4px 0 14px}
   .bingoRankNote{font-size:13px;padding:12px 14px}
   .bingoActions .button{flex:1 1 44%;width:auto;padding:0 12px}
   .bingoFoot .button{width:100%}
+  /* 履歴書は入力→プレビューの1列。プレビューの追従は狭い画面では邪魔なので解除 */
+  .resumeLayout{grid-template-columns:1fr;gap:28px}
+  .resumePreview{position:static}
+  .resumeActions .button{flex:1 1 44%;width:auto;padding:0 12px}
 }
 
 @media(prefers-reduced-motion:reduce){
