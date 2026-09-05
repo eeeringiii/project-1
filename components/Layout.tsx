@@ -8,6 +8,7 @@ export function Header() {
         <Link href="/types">16タイプ</Link>
         <Link href="/fortune">今日の運勢</Link>
         <Link href="/bingo">業ビンゴ</Link>
+        <Link href="/resume">履歴書</Link>
         <Link href="/about">診断について</Link>
         <Link href="/compatibility">相性診断</Link>
       </nav>
@@ -22,7 +23,7 @@ export function Footer() {
       <div className="shell footerInner">
         <span>OSHICOA 16 — 推し方の本性を、生態解析する。</span>
         <span>
-          <Link href="/types">16タイプ</Link>　<Link href="/fortune">今日の運勢</Link>　<Link href="/bingo">業ビンゴ</Link>　<Link href="/about">診断について</Link>　<Link href="/terms">利用規約</Link>　<Link href="/privacy">プライバシー</Link>
+          <Link href="/types">16タイプ</Link>　<Link href="/fortune">今日の運勢</Link>　<Link href="/bingo">業ビンゴ</Link>　<Link href="/resume">履歴書</Link>　<Link href="/about">診断について</Link>　<Link href="/terms">利用規約</Link>　<Link href="/privacy">プライバシー</Link>
         </span>
       </div>
     </footer>

@@ -2,12 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useDiagnosisStore } from '@/stores/diagnosis';
-
-const selects: [string, string, string[]][] = [
-  ['genre', 'ジャンル', ['男性アイドル', '女性アイドル', 'アーティスト', '俳優', '声優', 'VTuber', '配信者', 'アニメ・ゲームキャラクター', 'スポーツ選手', 'その他']],
-  ['duration', '推している期間', ['1か月未満', '1〜6か月', '6か月〜1年', '1〜3年', '3〜5年', '5年以上']],
-  ['frequency', '現場頻度', ['ほとんど行かない', '年に数回', '2〜3か月に1回', '月1回程度', '月2〜3回', '行ける限り行く']],
-];
+import { profileSelects } from '@/data/profile';
 
 export default function Diagnosis() {
   const router = useRouter();
@@ -25,7 +20,7 @@ export default function Diagnosis() {
           <label htmlFor="oshi-name">推しの名前</label>
           <input id="oshi-name" value={profile.name || ''} onChange={event => update('name', event.target.value)} placeholder="〇〇くん、〇〇ちゃん、〇〇さん" />
         </div>
-        {selects.map(([key, label, values]) => (
+        {profileSelects.map(([key, label, values]) => (
           <div className="field" key={key}>
             <label htmlFor={`oshi-${key}`}>{label}</label>
             <select id={`oshi-${key}`} value={profile[key as keyof typeof profile] || ''} onChange={event => update(key, event.target.value)}>
