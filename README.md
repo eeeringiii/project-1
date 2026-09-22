@@ -15,7 +15,7 @@ npm run build
 npm run lint
 ```
 
-`NEXT_PUBLIC_SITE_URL` を設定すると canonical、sitemap、共有 URL の基準 URL に使用します。Google Analytics / GTM の ID は未設定でも動作する構成です（分析スクリプトの実装は導入時に追加します）。
+`NEXT_PUBLIC_SITE_URL` を設定すると canonical、sitemap、共有 URL の基準 URL に使用します。`NEXT_PUBLIC_PREMIUM_NOTE_URL` に有料note の URL を設定すると、結果ページと各タイプページに購入 CTA が表示されます（未設定なら CTA は出ません）。価格表示は `NEXT_PUBLIC_PREMIUM_NOTE_PRICE`（既定 500）で変えられます。Google Analytics / GTM の ID は未設定でも動作する構成です（分析スクリプトの実装は導入時に追加します）。
 
 ## 構成
 

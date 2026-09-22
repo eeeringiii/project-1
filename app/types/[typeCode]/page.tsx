@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getType, oshicoaTypes } from '@/data/types';
+import { PremiumCta } from '@/components/PremiumCta';
 import { Radar } from '@/components/Radar';
 import { TypeCharacter } from '@/components/TypeCharacter';
 import { getTypeTheme } from '@/lib/theme';
@@ -52,6 +53,8 @@ export default async function TypePage({ params }: { params: Promise<{ typeCode:
           </div>
         </div>
       </div>
+
+      <PremiumCta type={type} placement="type_page"/>
     </main>
   );
 }

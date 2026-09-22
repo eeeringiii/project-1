@@ -26,30 +26,52 @@ const faqs: [string, string][] = [
 
 const heroStickers = ['CEMT', 'RPMS', 'RCGT', 'CEMS', 'CPMT', 'RPGS'];
 
+/** ヒーローに重ねるキャラクター。色味が散るように4体を選んでいる。 */
+const heroCast = ['RCMT', 'CEMS', 'CPMS', 'CEGT'];
+
 export default function Home() {
   return (
     <main>
-      <section className="shell hero">
-        <p className="heroBadge">✧ 全24問・約3分・登録なし</p>
-        <h1>OSHICOA <em>16</em></h1>
-        <h2>推しが変わっても、<br /><mark>あなたの“推し方”のクセ</mark>は変わらない。</h2>
-        <p className="lead">現場、積み、布教、同担、供給、ファンサ、解釈。あなたを動かしている「ヲタクの核」を、16の生態に分類します。</p>
-        <p className="heroCta">
-          <Link className="button" href="/diagnosis">無料で診断する →</Link>
-          <Link className="button ghost" href="/types">16タイプを見る</Link>
-        </p>
-        <p className="note"><span>💗 課金額で判定しません</span><span>🔒 入力は端末のなかだけ</span><span>📸 結果画像を保存できる</span></p>
-        <div className="stickerRow">
-          {heroStickers.map(code => {
-            const type = oshicoaTypes.find(item => item.code === code);
-            const theme = getTypeTheme(code);
-            return type ? (
-              <span className="sticker" key={code} style={{ ['--chip' as string]: theme.chip }}>
-                <b>{theme.mark}</b>{type.name}
-              </span>
-            ) : null;
-          })}
-          <span className="sticker">…ぜんぶで16タイプ</span>
+      <section className="hero">
+        <div className="heroDeco" aria-hidden>
+          <div className="heroCodes">{oshicoaTypes.map(type => <span key={type.code}>{type.code}</span>)}</div>
+          <span className="heroGlow" />
+        </div>
+
+        <div className="shell heroInner">
+          <div className="heroText">
+            <p className="heroBadge">✧ 全24問・約3分・登録なし</p>
+            <h1>OSHICOA <em>16</em></h1>
+            <h2>推しが変わっても、<br /><mark>あなたの“推し方”のクセ</mark>は変わらない。</h2>
+            <p className="lead">現場、積み、布教、同担、供給、ファンサ、解釈。あなたを動かしている「ヲタクの核」を、16の生態に分類します。</p>
+            <p className="heroCta">
+              <Link className="button" href="/diagnosis">無料で診断する →</Link>
+              <Link className="button ghost" href="/types">16タイプを見る</Link>
+            </p>
+            <p className="note"><span>💗 課金額で判定しません</span><span>🔒 入力は端末のなかだけ</span><span>📸 結果画像を保存できる</span></p>
+          </div>
+
+          <div className="heroArt" aria-hidden>
+            {heroCast.map(code => {
+              const type = oshicoaTypes.find(item => item.code === code);
+              return type ? <TypeCharacter key={code} type={type} className={`heroChar ${code.toLowerCase()}`} alt="" /> : null;
+            })}
+          </div>
+        </div>
+
+        <div className="shell">
+          <div className="stickerRow">
+            {heroStickers.map(code => {
+              const type = oshicoaTypes.find(item => item.code === code);
+              const theme = getTypeTheme(code);
+              return type ? (
+                <span className="sticker" key={code} style={{ ['--chip' as string]: theme.chip }}>
+                  <b>{theme.mark}</b>{type.name}
+                </span>
+              ) : null;
+            })}
+            <span className="sticker">…ぜんぶで16タイプ</span>
+          </div>
         </div>
       </section>
 
