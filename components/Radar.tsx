@@ -13,8 +13,12 @@ export function Radar({ scores }: { scores: Record<ChartMetricId, number> }) {
     const angle = -Math.PI / 2 + i * Math.PI * 2 / data.length;
     return [150 + Math.cos(angle) * r, 150 + Math.sin(angle) * r];
   };
+  // 一番外側のリング（半径120）が100点。スコアをそのまま半径に使うと満点でも
+  // 外周に届かないので、0〜100点を0〜120の半径に変換します。
+  const outerRing = 120;
+  const radius = (score: number) => Math.max(0, Math.min(100, score)) / 100 * outerRing;
   const ring = (r: number) => data.map((_, i) => polar(i, r).join(',')).join(' ');
-  const value = data.map((metric, i) => polar(i, scores[metric]).join(',')).join(' ');
+  const value = data.map((metric, i) => polar(i, radius(scores[metric])).join(',')).join(' ');
 
   return (
     <div className="radarCard">
@@ -31,7 +35,7 @@ export function Radar({ scores }: { scores: Record<ChartMetricId, number> }) {
         })}
         <polygon points={value} fill="rgba(255,111,163,.3)" stroke="#8b63e8" strokeWidth="3" strokeLinejoin="round" />
         {data.map((metric, i) => {
-          const [x, y] = polar(i, scores[metric]);
+          const [x, y] = polar(i, radius(scores[metric]));
           return <circle key={metric} cx={x} cy={y} r="4" fill="#fff" stroke="#8b63e8" strokeWidth="2.5" />;
         })}
       </svg>
