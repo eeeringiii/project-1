@@ -1,17 +1,11 @@
 'use client';
 
-import { useMemo, useState, useSyncExternalStore } from 'react';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useOrigin } from '@/lib/use-origin';
 import {
   BINGO_CENTER, BINGO_FREE_TEXT, bingoRankFor, buildBingoCard, countBingoLines,
 } from '@/data/bingo';
-
-// 共有URLには絶対URLが必要だが、origin はブラウザでしか分からない。
-// SSRとクライアントで直接出し分けるとハイドレーションがズレるため、
-// FortuneShare / stores/diagnosis.ts と同じ useSyncExternalStore で読む。
-const subscribe = () => () => {};
-const getOrigin = () => location.origin;
-const getServerOrigin = () => '';
 
 /**
  * ヲタク業ビンゴ本体。
@@ -24,7 +18,7 @@ export function BingoCard({ initialCard }: { initialCard: string[] }) {
   const [card, setCard] = useState(initialCard);
   const [filled, setFilled] = useState<Set<number>>(() => new Set([BINGO_CENTER]));
 
-  const origin = useSyncExternalStore(subscribe, getOrigin, getServerOrigin);
+  const origin = useOrigin();
   const { count: bingoCount, cells: litCells } = useMemo(() => countBingoLines(filled), [filled]);
   const rank = bingoRankFor(filled.size);
 

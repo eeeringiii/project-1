@@ -1,10 +1,12 @@
 'use client';
 
 import { OshicoaType, OtakuTag } from '@/types';
+import { useOrigin } from '@/lib/use-origin';
 
 export function Share({ type, tags, name }: { type: OshicoaType; tags: OtakuTag[]; name?: string }) {
   const text = `${name ? `${name}を推しているときの` : '私の'}ヲタク生態は「${type.code}｜${type.name}」でした。\n\n${type.catchphrase}\n\n業タグ：${tags.map(tag => '#' + tag.name).join(' ')}\n#OSHICOA16 #ヲタク生態診断`;
-  const url = typeof window === 'undefined' ? '' : `${location.origin}/types/${type.code}`;
+  const origin = useOrigin();
+  const url = origin ? `${origin}/types/${type.code}` : '';
   const copy = async () => {
     try { await navigator.clipboard.writeText(url); alert('URLをコピーしました'); }
     catch { prompt('このURLをコピーしてください', url); }
