@@ -1,19 +1,14 @@
 'use client';
 
-import { useRef, useState, useSyncExternalStore } from 'react';
+import { useRef, useState } from 'react';
 import Link from 'next/link';
 import { profileSelects } from '@/data/profile';
 import { ResumeInput, resumeFields, resumeFilledCount, resumeTotalFields } from '@/data/resume';
 import { getType } from '@/data/types';
 import { downloadSvgAsPng } from '@/lib/download-svg';
+import { useOrigin } from '@/lib/use-origin';
 import { useDiagnosisStore } from '@/stores/diagnosis';
 import { RESUME_CARD_HEIGHT, RESUME_CARD_WIDTH, ResumeCard } from '@/components/ResumeCard';
-
-// 共有URLに必要な origin はブラウザでしか分からない。SSRと出し分けるとハイドレーションが
-// ズレるため、FortuneShare / BingoCard と同じ useSyncExternalStore で読む。
-const subscribe = () => () => {};
-const getOrigin = () => location.origin;
-const getServerOrigin = () => '';
 
 /**
  * ヲタク履歴書の作成画面。入力するとその場でカードに反映され、PNGで保存できる。
@@ -31,7 +26,7 @@ export function ResumeBuilder() {
   const [saveError, setSaveError] = useState(false);
   const cardRef = useRef<SVGSVGElement>(null);
 
-  const origin = useSyncExternalStore(subscribe, getOrigin, getServerOrigin);
+  const origin = useOrigin();
   const type = result ? getType(result.typeCode) : undefined;
 
   const prefilled = Boolean(profile.name || profile.genre || profile.duration || profile.frequency);

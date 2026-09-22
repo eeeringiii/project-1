@@ -1,14 +1,6 @@
 'use client';
 
-import { useSyncExternalStore } from 'react';
-
-// 共有URLは絶対URLが必要だが、origin はブラウザでしか分からない。
-// SSRとクライアントで直接出し分けるとハイドレーションがズレるため、
-// stores/diagnosis.ts と同じ useSyncExternalStore で安全に読む
-// （SSR/初期表示は空文字、ハイドレーション後に実際の origin へ切り替わる）。
-const subscribe = () => () => {};
-const getOrigin = () => location.origin;
-const getServerOrigin = () => '';
+import { useOrigin } from '@/lib/use-origin';
 
 /**
  * 今日の運勢用のシェアボタン。診断結果の Share と同じ並び（X / LINE / コピー / その他）。
@@ -18,7 +10,7 @@ export function FortuneShare({ level, emoji, headline, topCategory, luckyAction,
   level: string; emoji: string; headline: string; topCategory: string;
   luckyAction: string; typeCode?: string; typeName?: string;
 }) {
-  const origin = useSyncExternalStore(subscribe, getOrigin, getServerOrigin);
+  const origin = useOrigin();
   const url = origin ? `${origin}/fortune${typeCode ? `?type=${typeCode}` : ''}` : '';
 
   const lead = typeName ? `【${typeName}】の今日の推し活運勢は` : '今日の推し活運勢は';
